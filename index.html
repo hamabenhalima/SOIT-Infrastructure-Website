@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>SOIT | Infrastructure & Travaux</title>
+
+    <!-- Font Awesome 6 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+
+    <!-- Google Fonts Poppins -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- LightGallery CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/css/lightgallery.min.css"
+    />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- ============ HEADER SECTION ============ -->
+    <header class="header">
+      <a href="#home" class="logo">
+        <img src="images/SOIT LOGO.jpg" alt="SOIT Logo" class="logo-img" />
+      </a>
+
+      <nav class="navbar">
+        <a href="#home">Accueil</a>
+        <a href="#about">À propos</a>
+        <a href="#services">Services</a>
+        <a href="#projects">Projets</a>
+        <a href="#reviews">Nos Clients</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="icons">
+        <div id="menu-btn" class="fas fa-bars"></div>
+        <div id="info-btn" class="fas fa-info-circle"></div>
+        <div id="search-btn" class="fas fa-search"></div>
+        <div id="login-btn" class="fas fa-user"></div>
+      </div>
+    </header>
+
+    <!-- ============ SEARCH FORM ============ -->
+    <form action="#" class="search-form">
+      <input type="search" placeholder="Rechercher ici..." id="search-box" />
+      <label for="search-box" class="fas fa-search"></label>
+    </form>
+
+    <!-- ============ LOGIN FORM ============ -->
+    <div class="login-form-container">
+      <!-- Login Form -->
+      <form action="#" class="login-form" id="login-form">
+        <h3>Connexion</h3>
+        <input
+          type="email"
+          id="login-email"
+          placeholder="E-mail"
+          class="box"
+          required
+        />
+        <input
+          type="password"
+          id="login-password"
+          placeholder="Mot de passe"
+          class="box"
+          required
+        />
+        <div class="flex">
+          <input type="checkbox" id="remember-me" />
+          <label for="remember-me">Se souvenir de moi</label>
+          <a href="#" id="forgot-password-link">Mot de passe oublié ?</a>
+        </div>
+        <button type="submit" class="btn">Se connecter</button>
+        <p>Pas de compte ? <a href="#" id="show-register">Créez-en un</a></p>
+      </form>
+
+      <!-- Registration Form -->
+      <form action="#" class="register-form" id="register-form">
+        <h3>Inscription</h3>
+        <input
+          type="text"
+          id="reg-firstname"
+          placeholder="Prénom"
+          class="box"
+          required
+        />
+        <input
+          type="text"
+          id="reg-lastname"
+          placeholder="Nom"
+          class="box"
+          required
+        />
+        <input
+          type="text"
+          id="reg-username"
+          placeholder="Nom d'utilisateur"
+          class="box"
+          required
+        />
+        <input
+          type="email"
+          id="reg-email"
+          placeholder="E-mail"
+          class="box"
+          required
+        />
+        <input
+          type="password"
+          id="reg-password"
+          placeholder="Mot de passe"
+          class="box"
+          required
+        />
+        <input
+          type="password"
+          id="reg-confirm-password"
+          placeholder="Confirmer le mot de passe"
+          class="box"
+          required
+        />
+        <button type="submit" class="btn">S'inscrire</button>
+        <p>Déjà un compte ? <a href="#" id="show-login">Se connecter</a></p>
+      </form>
+
+      <!-- Forgot Password Form -->
+      <form action="#" class="forgot-form" id="forgot-form">
+        <h3>Réinitialisation du mot de passe</h3>
+        <p style="font-size: 1.4rem; color: #666; margin-bottom: 2rem">
+          Entrez votre email pour réinitialiser votre mot de passe
+        </p>
+        <input
+          type="email"
+          id="forgot-email"
+          placeholder="Votre E-mail"
+          class="box"
+          required
+        />
+        <button type="submit" class="btn">Envoyer le lien</button>
+        <p><a href="#" id="back-to-login">Retour à la connexion</a></p>
+      </form>
+    </div>
+
+    <!-- ============ CONTACT INFO SIDEBAR ============ -->
+    <div class="contact-info">
+      <div class="close-info" id="close-info">
+        <i class="fas fa-times"></i>
+      </div>
+      <div class="info">
+        <i class="fas fa-phone"></i>
+        <h3>Téléphone</h3>
+        <p><a href="tel:+21673340550">+216 73 340 550</a></p>
+        <p><a href="tel:+21673340379">+216 73 340 379</a></p>
+      </div>
+      <div class="info">
+        <i class="fas fa-envelope"></i>
+        <h3>E-mail</h3>
+        <p><a href="mailto:groupesoit@gmail.com">groupesoit@gmail.com</a></p>
+        <p>
+          <a href="mailto:groupesoit.comercial@gmail.com"
+            >groupesoit.comercial@gmail.com</a
+          >
+        </p>
+      </div>
+      <div class="info">
+        <i class="fas fa-map-marker-alt"></i>
+        <h3>Adresse</h3>
+        <p>
+          <a
+            href="https://maps.google.com/?q=La+Road+de+Tunis,+Km+12+(4022)+à+Akouda,+Sousse"
+            target="_blank"
+            >La Route de Tunis, Km 12 (4022) à Akouda, Sousse</a
+          >
+        </p>
+      </div>
+      <div class="share">
+        <a
+          href="https://www.facebook.com/votre-page"
+          target="_blank"
+          class="fab fa-facebook-f"
+        ></a>
+        <a
+          href="https://twitter.com/votre-compte"
+          target="_blank"
+          class="fab fa-twitter"
+        ></a>
+        <a
+          href="https://www.instagram.com/votre-compte"
+          target="_blank"
+          class="fab fa-instagram"
+        ></a>
+        <a
+          href="https://www.linkedin.com/in/st%C3%A9-soit-s-a-r-l-1abb571a7/"
+          target="_blank"
+          class="fab fa-linkedin"
+        ></a>
+      </div>
+    </div>
+
+    <!-- ============ HOME SECTION ============ -->
+    <section class="home" id="home">
+      <div class="home-slider">
+        <div
+          class="slide"
+          style="
+            background: url(&quot;images/1.png.jpg&quot;) no-repeat center
+              center/cover;
+          "
+        >
+          <div class="content">
+            <h3>
+              Nous fournissons des services professionnels de qualité en
+              infrastructure et travaux publics
+            </h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            <a href="#about" class="btn">Commencez maintenant</a>
+          </div>
+        </div>
+        <div
+          class="slide"
+          style="
+            background: url(&quot;images/2.jpg&quot;) no-repeat center
+              center/cover;
+          "
+        >
+          <div class="content">
+            <h3>Transformer les rêves en réalité</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <a href="#about" class="btn">Commencez maintenant</a>
+          </div>
+        </div>
+        <div
+          class="slide"
+          style="
+            background: url(&quot;images/3.jpg&quot;) no-repeat center
+              center/cover;
+          "
+        >
+          <div class="content">
+            <h3>De la conception à la construction</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            <a href="#about" class="btn">Commencez maintenant</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT SECTION ============ -->
+    <section class="about" id="about">
+      <h1 class="heading">Qui sommes-nous ?</h1>
+      <div class="row">
+        <div class="video">
+          <video src="videos/3741-174188012.mp4" loop muted autoplay></video>
+        </div>
+        <div class="content">
+          <h3>
+            Nous réalisons vos projets d'infrastructure avec qualité, expertise
+            et professionnalisme.
+          </h3>
+          <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
+          <a href="#services" class="btn">En savoir plus</a>
+        </div>
+      </div>
+      <div class="box-container">
+        <div class="box">
+          <h3>+30</h3>
+          <p>ans d'expérience</p>
+        </div>
+        <div class="box">
+          <h3>+100</h3>
+          <p>projets réalisés</p>
+        </div>
+        <div class="box">
+          <h3>+250</h3>
+          <p>clients nous font confiance</p>
+        </div>
+        <div class="box">
+          <h3>+200</h3>
+          <p>professionnels qualifiés</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SERVICES SECTION ============ -->
+    <section class="services" id="services">
+      <h1 class="heading">Nos services</h1>
+      <div class="box-container">
+        <div class="box">
+          <img
+            src="images/Construction de routes et chaussées icon.jpg"
+            alt="Construction de routes"
+          />
+          <h3>Construction de routes et chaussées</h3>
+          <p>
+            Travaux routiers et infrastructures de transport modernes et
+            durables.
+          </p>
+        </div>
+        <div class="box">
+          <img
+            src="images/Construction de ponts icon.avif"
+            alt="Construction de ponts"
+          />
+          <h3>Construction de ponts</h3>
+          <p>Conception et réalisation de ponts solides et sécurisés.</p>
+        </div>
+        <div class="box">
+          <img
+            src="images/Travaux publics & terrassement.jpg"
+            alt="Travaux publics"
+          />
+          <h3>Travaux publics & terrassement</h3>
+          <p>Préparation de terrains, excavation et travaux de génie civil.</p>
+        </div>
+        <div class="box">
+          <img src="images/Réseaux et infrastructures.png" alt="Réseaux" />
+          <h3>Réseaux et infrastructures</h3>
+          <p>
+            Installation des réseaux d'eau, assainissement et infrastructures
+            urbaines.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROJECTS SECTION ============ -->
+    <section class="projects" id="projects">
+      <h1 class="heading">Nos réalisations</h1>
+      <div class="box-container">
+        <a href="#" class="box"
+          ><div class="image">
+            <img src="images/projet1.jpg" alt="Projet 1" />
+          </div>
+          <div class="content">
+            <div class="info">
+              <h3>Infrastructure Routière</h3>
+              <p>Travaux de voirie</p>
+            </div>
+            <i class="fas fa-plus"></i></div
+        ></a>
+        <a href="#" class="box"
+          ><div class="image">
+            <img src="images/projet2.jpg" alt="Projet 2" />
+          </div>
+          <div class="content">
+            <div class="info">
+              <h3>Construction de Ponts</h3>
+              <p>Ponts modernes</p>
+            </div>
+            <i class="fas fa-plus"></i></div
+        ></a>
+        <a href="#" class="box"
+          ><div class="image">
+            <img src="images/projet3.jpg" alt="Projet 3" />
+          </div>
+          <div class="content">
+            <div class="info">
+              <h3>Travaux Publics</h3>
+              <p>Terrassement</p>
+            </div>
+            <i class="fas fa-plus"></i></div
+        ></a>
+        <a href="#" class="box"
+          ><div class="image">
+            <img src="images/projet4.jpg" alt="Projet 4" />
+          </div>
+          <div class="content">
+            <div class="info">
+              <h3>Réseaux Urbains</h3>
+              <p>Installation réseaux</p>
+            </div>
+            <i class="fas fa-plus"></i></div
+        ></a>
+      </div>
+    </section>
+
+    <!-- ============ REVIEWS SECTION ============ -->
+    <section class="reviews" id="reviews">
+      <h1 class="heading">Ce que disent nos clients</h1>
+
+      <div class="reviews-slider-container">
+        <div class="reviews-slider">
+          <div class="slide">
+            <p>
+              Excellent travail ! L'équipe est très professionnelle et les
+              délais ont été respectés. Je recommande vivement leurs services
+              pour tous vos projets d'infrastructure.
+            </p>
+            <div class="user">
+              <img src="images/perso1.jpg" alt="Client" />
+              <div>
+                <h3>Ahmed</h3>
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <p>
+              Une entreprise de confiance qui a su réaliser notre projet de
+              construction de routes dans les délais impartis. Qualité au
+              rendez-vous !
+            </p>
+            <div class="user">
+              <img src="images/perso4.jpg" alt="Client" />
+              <div>
+                <h3>Sofia</h3>
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <p>
+              Professionnalisme et expertise. Je suis très satisfait des travaux
+              réalisés par SOIT. Une équipe à l'écoute et réactive.
+            </p>
+            <div class="user">
+              <img src="images/perso3.jpg" alt="Client" />
+              <div>
+                <h3>Karim</h3>
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <p>
+              Service impeccable et professionnel. Les travaux ont été réalisés
+              avec soin et dans les délais. Merci à toute l'équipe !
+            </p>
+            <div class="user">
+              <img src="images/perso6.jpg" alt="Client" />
+              <div>
+                <h3>Nadia Ben Salem</h3>
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <p>
+              Très bonne expérience avec SOIT. L'équipe est compétente et à
+              l'écoute des besoins du client. Je les recommande.
+            </p>
+            <div class="user">
+              <img src="images/perso2.jpg" alt="Client" />
+              <div>
+                <h3>Mohamed Ali</h3>
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide">
+            <p>
+              Un partenaire fiable pour tous vos travaux d'infrastructure.
+              Qualité et professionnalisme sont au rendez-vous.
+            </p>
+            <div class="user">
+              <img src="images/perso5.jpg" alt="Client" />
+              <div>
+                <h3>Leila Ben Ahmed</h3>
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slider-btn slider-prev">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="slider-btn slider-next">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="slider-dots"></div>
+    </section>
+
+    <!-- ============ BLOG SECTION ============ -->
+    <section class="blogs" id="blogs">
+      <h1 class="heading">Actualités</h1>
+      <div class="blogs-slider-container">
+        <div class="blogs-slider">
+          <div class="slide">
+            <div class="image">
+              <img src="images/blog1.jpg" alt="Blog post 1" />
+            </div>
+            <div class="content">
+              <h3>Nouveau projet d'infrastructure</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Ratione quae consequatur officia asperiores.
+              </p>
+              <a href="#" class="btn">En savoir plus</a>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="image">
+              <img src="images/blog2.jpg" alt="Blog post 2" />
+            </div>
+            <div class="content">
+              <h3>Innovation dans la construction</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Ratione quae consequatur officia asperiores.
+              </p>
+              <a href="#" class="btn">En savoir plus</a>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="image">
+              <img src="images/blog3.jpg" alt="Blog post 3" />
+            </div>
+            <div class="content">
+              <h3>Technologies vertes</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Ratione quae consequatur officia asperiores.
+              </p>
+              <a href="#" class="btn">En savoir plus</a>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="image">
+              <img src="images/blog4.jpg" alt="Blog post 4" />
+            </div>
+            <div class="content">
+              <h3>Sécurité sur les chantiers</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Ratione quae consequatur officia asperiores.
+              </p>
+              <a href="#" class="btn">En savoir plus</a>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="image">
+              <img src="images/blog5.jpg" alt="Blog post 5" />
+            </div>
+            <div class="content">
+              <h3>Projets urbains</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Ratione quae consequatur officia asperiores.
+              </p>
+              <a href="#" class="btn">En savoir plus</a>
+            </div>
+          </div>
+          <div class="slide">
+            <div class="image">
+              <img src="images/blog6.jpg" alt="Blog post 6" />
+            </div>
+            <div class="content">
+              <h3>Partenariats stratégiques</h3>
+              <p>
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Ratione quae consequatur officia asperiores.
+              </p>
+              <a href="#" class="btn">En savoir plus</a>
+            </div>
+          </div>
+        </div>
+
+        <button class="blog-slider-btn blog-slider-prev">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="blog-slider-btn blog-slider-next">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div class="blog-slider-dots"></div>
+    </section>
+    <!-- ============ CONTACT SECTION ============ -->
+    <section class="contact" id="contact">
+      <h1 class="heading">Contactez-nous</h1>
+      <div class="row">
+        <iframe
+          class="map"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.9978137489047!2d10.550683474848261!3d35.898069218033704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd8986821cc149%3A0x473129e67fa70f08!2zU29jacOpdMOpIFNPSVQ!5e0!3m2!1sen!2stn!4v1776413143737!5m2!1sen!2stn"
+          allowfullscreen=""
+          loading="lazy"
+          title="SOIT Location Map"
+        ></iframe>
+        <form id="contact-form">
+          <h3>N'hésitez pas à nous contacter</h3>
+          <input
+            type="text"
+            id="contact-name"
+            placeholder="Votre nom"
+            class="box"
+            required
+          />
+          <input
+            type="email"
+            id="contact-email"
+            placeholder="Votre email"
+            class="box"
+            required
+          />
+          <input
+            type="tel"
+            id="contact-phone"
+            placeholder="Votre téléphone"
+            class="box"
+          />
+          <textarea
+            id="contact-message"
+            placeholder="Votre message"
+            class="box"
+            required
+          ></textarea>
+          <button type="submit" class="btn">Envoyer un message</button>
+          <div id="form-status" style="margin-top: 1rem; display: none"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ SCRIPTS ============ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/js/lightgallery.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+      if (document.querySelector(".projects .box-container")) {
+        lightGallery(document.querySelector(".projects .box-container"));
+      }
+    </script>
+  </body>
+</html>
