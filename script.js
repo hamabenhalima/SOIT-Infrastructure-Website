@@ -1,8 +1,55 @@
 // ============ API CONFIGURATION ============
 const API_URL = "https://soit-backend.onrender.com/api";
+
+// ============ CUSTOM TOAST NOTIFICATION ============
+function showMessage(message, type = "success") {
+  // Create container if it doesn't exist
+  let container = document.querySelector(".toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  // Create message element
+  const messageDiv = document.createElement("div");
+  messageDiv.className = `alert-message alert-${type}`;
+
+  // Add icon based on type
+  let icon = "";
+  switch (type) {
+    case "success":
+      icon = '<i class="fas fa-check-circle"></i>';
+      break;
+    case "error":
+      icon = '<i class="fas fa-times-circle"></i>';
+      break;
+    case "warning":
+      icon = '<i class="fas fa-exclamation-triangle"></i>';
+      break;
+    case "info":
+      icon = '<i class="fas fa-info-circle"></i>';
+      break;
+    default:
+      icon = '<i class="fas fa-bell"></i>';
+  }
+
+  messageDiv.innerHTML = `${icon}<span>${message}</span>`;
+  container.appendChild(messageDiv);
+
+  // Remove after 5 seconds
+  setTimeout(() => {
+    messageDiv.remove();
+    // Remove container if empty
+    if (container.children.length === 0) {
+      container.remove();
+    }
+  }, 5000);
+}
+
 // ============ WAIT FOR PAGE TO LOAD ============
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("✅ Frontend loaded");
+  console.log("✅ Frontend loaded, API URL:", API_URL);
 
   // ============ GET ALL FORM ELEMENTS ============
   const loginBtn = document.querySelector("#login-btn");
@@ -16,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const backToLoginLink = document.getElementById("back-to-login");
 
   // ============ TOGGLE FORMS ============
-  // Show login form when clicking user icon
   if (loginBtn) {
     loginBtn.addEventListener("click", function () {
       console.log("🔘 Login button clicked");
@@ -26,44 +72,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Show registration form
   if (showRegisterLink) {
     showRegisterLink.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🔘 Show register form clicked");
       if (loginForm) loginForm.classList.remove("active");
       if (forgotForm) forgotForm.classList.remove("active");
       if (registerForm) registerForm.classList.add("active");
     });
   }
 
-  // Show login form from registration
   if (showLoginLink) {
     showLoginLink.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🔘 Show login form clicked");
       if (registerForm) registerForm.classList.remove("active");
       if (forgotForm) forgotForm.classList.remove("active");
       if (loginForm) loginForm.classList.add("active");
     });
   }
 
-  // Show forgot password form
   if (forgotPasswordLink) {
     forgotPasswordLink.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🔘 Forgot password link clicked");
       if (loginForm) loginForm.classList.remove("active");
       if (registerForm) registerForm.classList.remove("active");
       if (forgotForm) forgotForm.classList.add("active");
     });
   }
 
-  // Back to login from forgot password
   if (backToLoginLink) {
     backToLoginLink.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("🔘 Back to login clicked");
       if (forgotForm) forgotForm.classList.remove("active");
       if (loginForm) loginForm.classList.add("active");
     });
@@ -73,13 +111,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (loginForm) {
     loginForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-      console.log("🔐 Login form submitted");
 
       const email = document.getElementById("login-email")?.value.trim();
       const password = document.getElementById("login-password")?.value.trim();
 
       if (!email || !password) {
-        alert("❌ Veuillez entrer votre email et mot de passe");
+        showMessage("Veuillez entrer votre email et mot de passe", "warning");
         return;
       }
 
@@ -91,23 +128,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const data = await response.json();
-        console.log("Login response:", data);
 
         if (data.success) {
-          localStorage.setItem("token", data.token);
           localStorage.setItem("user", JSON.stringify(data.user));
-          alert(`✅ ${data.message}`);
+          showMessage(data.message, "success");
           loginForm.classList.remove("active");
           loginForm.reset();
 
           const icon = document.querySelector("#login-btn");
           if (icon) icon.innerHTML = '<i class="fas fa-user-check"></i>';
         } else {
-          alert(`❌ ${data.message}`);
+          showMessage(data.message, "error");
         }
       } catch (error) {
         console.error("Login error:", error);
-        alert("❌ Erreur de connexion au serveur");
+        showMessage("Erreur de connexion au serveur", "error");
       }
     });
   }
@@ -116,7 +151,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (registerForm) {
     registerForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-      console.log("📝 Registration form submitted");
 
       const firstName = document.getElementById("reg-firstname")?.value.trim();
       const lastName = document.getElementById("reg-lastname")?.value.trim();
@@ -128,17 +162,20 @@ document.addEventListener("DOMContentLoaded", function () {
       )?.value;
 
       if (!firstName || !lastName || !username || !email || !password) {
-        alert("❌ Veuillez remplir tous les champs");
+        showMessage("Veuillez remplir tous les champs", "warning");
         return;
       }
 
       if (password !== confirmPassword) {
-        alert("❌ Les mots de passe ne correspondent pas");
+        showMessage("Les mots de passe ne correspondent pas", "error");
         return;
       }
 
       if (password.length < 6) {
-        alert("❌ Le mot de passe doit contenir au moins 6 caractères");
+        showMessage(
+          "Le mot de passe doit contenir au moins 6 caractères",
+          "warning",
+        );
         return;
       }
 
@@ -150,10 +187,12 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const data = await response.json();
-        console.log("Registration response:", data);
 
         if (data.success) {
-          alert(`✅ ${data.message}\nBienvenue ${firstName} ${lastName} !`);
+          showMessage(
+            `${data.message} Bienvenue ${firstName} ${lastName} !`,
+            "success",
+          );
           registerForm.reset();
           registerForm.classList.remove("active");
           if (loginForm) loginForm.classList.add("active");
@@ -161,11 +200,11 @@ document.addEventListener("DOMContentLoaded", function () {
           const loginEmail = document.getElementById("login-email");
           if (loginEmail) loginEmail.value = email;
         } else {
-          alert(`❌ ${data.message}`);
+          showMessage(data.message, "error");
         }
       } catch (error) {
         console.error("Registration error:", error);
-        alert("❌ Erreur de connexion au serveur");
+        showMessage("Erreur de connexion au serveur", "error");
       }
     });
   }
@@ -174,12 +213,11 @@ document.addEventListener("DOMContentLoaded", function () {
   if (forgotForm) {
     forgotForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-      console.log("🔑 Forgot password form submitted");
 
       const email = document.getElementById("forgot-email")?.value.trim();
 
       if (!email) {
-        alert("❌ Veuillez entrer votre email");
+        showMessage("Veuillez entrer votre email", "warning");
         return;
       }
 
@@ -191,19 +229,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const data = await response.json();
-        console.log("Forgot password response:", data);
 
         if (data.success) {
-          alert(`✅ ${data.message}`);
+          showMessage(data.message, "success");
           forgotForm.reset();
           forgotForm.classList.remove("active");
           if (loginForm) loginForm.classList.add("active");
         } else {
-          alert(`❌ ${data.message}`);
+          showMessage(data.message, "error");
         }
       } catch (error) {
         console.error("Forgot password error:", error);
-        alert("❌ Erreur de connexion au serveur");
+        showMessage("Erreur de connexion au serveur", "error");
       }
     });
   }
@@ -215,7 +252,6 @@ document.addEventListener("DOMContentLoaded", function () {
   if (contactForm) {
     contactForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-      console.log("📧 Contact form submitted");
 
       const formData = {
         name: document.getElementById("contact-name")?.value || "",
@@ -225,22 +261,14 @@ document.addEventListener("DOMContentLoaded", function () {
       };
 
       if (!formData.name || !formData.email || !formData.message) {
-        if (formStatus) {
-          formStatus.style.display = "block";
-          formStatus.innerHTML =
-            '<p style="color: red;">❌ Veuillez remplir tous les champs</p>';
-          setTimeout(() => {
-            formStatus.style.display = "none";
-          }, 3000);
-        }
+        showMessage(
+          "Veuillez remplir tous les champs obligatoires (nom, email, message)",
+          "warning",
+        );
         return;
       }
 
-      if (formStatus) {
-        formStatus.style.display = "block";
-        formStatus.innerHTML =
-          '<p style="color: blue;">📤 Envoi en cours...</p>';
-      }
+      showMessage("Envoi en cours...", "info");
 
       try {
         const response = await fetch(`${API_URL}/contact`, {
@@ -250,23 +278,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const result = await response.json();
-        console.log("Contact response:", result);
 
         if (result.success) {
-          formStatus.innerHTML =
-            '<p style="color: green;">✅ Message envoyé avec succès !</p>';
+          showMessage(result.message, "success");
           contactForm.reset();
-          setTimeout(() => {
-            formStatus.style.display = "none";
-          }, 5000);
         } else {
-          formStatus.innerHTML =
-            '<p style="color: red;">❌ Erreur lors de l\'envoi</p>';
+          showMessage(result.message, "error");
         }
       } catch (error) {
         console.error("Contact error:", error);
-        formStatus.innerHTML =
-          '<p style="color: red;">❌ Erreur de connexion au serveur</p>';
+        showMessage("Erreur de connexion au serveur", "error");
       }
     });
   }
@@ -313,16 +334,17 @@ function logout() {
   if (loginIcon) {
     loginIcon.innerHTML = '<i class="fas fa-user"></i>';
   }
-  alert("✅ Déconnexion réussie !");
-  location.reload();
+  showMessage("Déconnexion réussie !", "success");
+  setTimeout(() => {
+    location.reload();
+  }, 1000);
 }
 
 // ============ CHECK LOGIN STATUS ON PAGE LOAD ============
 document.addEventListener("DOMContentLoaded", function () {
-  const token = localStorage.getItem("token");
   const user = localStorage.getItem("user");
 
-  if (token && user) {
+  if (user) {
     try {
       const userData = JSON.parse(user);
       const loginIcon = document.querySelector("#login-btn");
@@ -384,7 +406,7 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       const term = document.querySelector("#search-box")?.value;
       if (term) {
-        alert("Recherche: " + term);
+        showMessage(`Recherche: ${term}`, "info");
         searchForm.classList.remove("active");
       }
     });
@@ -533,7 +555,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// ============ REVIEWS SLIDER - WORKING ON ALL DEVICES ============
+// ============ REVIEWS SLIDER ============
 document.addEventListener("DOMContentLoaded", function () {
   const slider = document.querySelector(".reviews-slider");
   const slides = document.querySelectorAll(".reviews .slide");
@@ -541,10 +563,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const nextBtn = document.querySelector(".slider-next");
   const dotsContainer = document.querySelector(".slider-dots");
 
-  if (!slider || slides.length === 0) {
-    console.log("Reviews slider not found");
-    return;
-  }
+  if (!slider || slides.length === 0) return;
 
   let currentIndex = 0;
   let slidesToShow = getSlidesToShow();
@@ -639,11 +658,9 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSlider();
   }
 
-  // Event listeners
   if (prevBtn) prevBtn.addEventListener("click", prevSlide);
   if (nextBtn) nextBtn.addEventListener("click", nextSlide);
 
-  // Handle window resize
   let resizeTimer;
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimer);
@@ -652,39 +669,28 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 150);
   });
 
-  // Initialize
   createDots();
   updateSlider();
 
-  // Re-initialize after all images load
   window.addEventListener("load", function () {
     refreshSlider();
   });
 });
 
-// ============ BLOG SLIDER - WORKING ON ALL DEVICES ============
+// ============ BLOG SLIDER ============
 document.addEventListener("DOMContentLoaded", function () {
-  initBlogSlider();
-});
+  const blogSlider = document.querySelector(".blogs-slider");
+  const blogSlides = document.querySelectorAll(".blogs .slide");
+  const blogPrevBtn = document.querySelector(".blog-slider-prev");
+  const blogNextBtn = document.querySelector(".blog-slider-next");
+  const blogDotsContainer = document.querySelector(".blog-slider-dots");
 
-function initBlogSlider() {
-  const slider = document.querySelector(".blogs-slider");
-  const slides = document.querySelectorAll(".blogs .slide");
-  const prevBtn = document.querySelector(".blog-slider-prev");
-  const nextBtn = document.querySelector(".blog-slider-next");
-  const dotsContainer = document.querySelector(".blog-slider-dots");
-
-  if (!slider || slides.length === 0) {
-    console.log("Blog slider not found");
-    return;
-  }
-
-  console.log("Initializing blog slider, slides:", slides.length);
+  if (!blogSlider || blogSlides.length === 0) return;
 
   let currentIndex = 0;
   let slidesToShow = getSlidesToShow();
-  let totalSlides = slides.length;
-  let maxIndex = Math.max(0, totalSlides - slidesToShow);
+  let totalSlides = blogSlides.length;
+  let maxIndex = totalSlides - slidesToShow;
 
   function getSlidesToShow() {
     if (window.innerWidth <= 768) return 1;
@@ -693,23 +699,23 @@ function initBlogSlider() {
   }
 
   function getGap() {
-    const sliderStyle = window.getComputedStyle(slider);
+    const sliderStyle = window.getComputedStyle(blogSlider);
     return parseFloat(sliderStyle.gap) || 20;
   }
 
-  function updateSlider() {
+  function updateBlogSlider() {
     const gap = getGap();
-    const slideWidth = slides[0].offsetWidth;
+    const slideWidth = blogSlides[0].offsetWidth;
     const translateX = -currentIndex * (slideWidth + gap);
-    slider.style.transform = `translateX(${translateX}px)`;
-    updateDots();
-    updateButtons();
+    blogSlider.style.transform = `translateX(${translateX}px)`;
+    updateBlogDots();
+    updateBlogButtons();
   }
 
-  function createDots() {
-    if (!dotsContainer) return;
+  function createBlogDots() {
+    if (!blogDotsContainer) return;
     const numberOfDots = Math.ceil(totalSlides / slidesToShow);
-    dotsContainer.innerHTML = "";
+    blogDotsContainer.innerHTML = "";
     for (let i = 0; i < numberOfDots; i++) {
       const dot = document.createElement("div");
       dot.classList.add("blog-dot");
@@ -717,14 +723,14 @@ function initBlogSlider() {
       dot.addEventListener("click", () => {
         currentIndex = i * slidesToShow;
         if (currentIndex > maxIndex) currentIndex = maxIndex;
-        updateSlider();
+        updateBlogSlider();
       });
-      dotsContainer.appendChild(dot);
+      blogDotsContainer.appendChild(dot);
     }
   }
 
-  function updateDots() {
-    if (!dotsContainer) return;
+  function updateBlogDots() {
+    if (!blogDotsContainer) return;
     const dotIndex = Math.floor(currentIndex / slidesToShow);
     const dots = document.querySelectorAll(".blog-dot");
     dots.forEach((dot, index) => {
@@ -732,67 +738,63 @@ function initBlogSlider() {
     });
   }
 
-  function updateButtons() {
-    if (prevBtn) {
+  function updateBlogButtons() {
+    if (blogPrevBtn) {
       if (currentIndex === 0) {
-        prevBtn.setAttribute("disabled", "disabled");
+        blogPrevBtn.setAttribute("disabled", "disabled");
       } else {
-        prevBtn.removeAttribute("disabled");
+        blogPrevBtn.removeAttribute("disabled");
       }
     }
-    if (nextBtn) {
+    if (blogNextBtn) {
       if (currentIndex >= maxIndex) {
-        nextBtn.setAttribute("disabled", "disabled");
+        blogNextBtn.setAttribute("disabled", "disabled");
       } else {
-        nextBtn.removeAttribute("disabled");
+        blogNextBtn.removeAttribute("disabled");
       }
     }
   }
 
-  function nextSlide() {
+  function nextBlogSlide() {
     if (currentIndex < maxIndex) {
       currentIndex++;
-      updateSlider();
+      updateBlogSlider();
     }
   }
 
-  function prevSlide() {
+  function prevBlogSlide() {
     if (currentIndex > 0) {
       currentIndex--;
-      updateSlider();
+      updateBlogSlider();
     }
   }
 
-  function refreshSlider() {
+  function refreshBlogSlider() {
     const newSlidesToShow = getSlidesToShow();
     if (newSlidesToShow !== slidesToShow) {
       slidesToShow = newSlidesToShow;
-      maxIndex = Math.max(0, totalSlides - slidesToShow);
+      maxIndex = totalSlides - slidesToShow;
       currentIndex = Math.min(currentIndex, maxIndex);
-      createDots();
+      createBlogDots();
     }
-    updateSlider();
+    updateBlogSlider();
   }
 
-  // Event listeners
-  if (prevBtn) prevBtn.addEventListener("click", prevSlide);
-  if (nextBtn) nextBtn.addEventListener("click", nextSlide);
+  if (blogPrevBtn) blogPrevBtn.addEventListener("click", prevBlogSlide);
+  if (blogNextBtn) blogNextBtn.addEventListener("click", nextBlogSlide);
 
-  // Handle window resize
   let resizeTimer;
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
-      refreshSlider();
+      refreshBlogSlider();
     }, 150);
   });
 
-  // Initialize
-  createDots();
-  updateSlider();
+  createBlogDots();
+  updateBlogSlider();
 
-  // Re-initialize after all images load
   window.addEventListener("load", function () {
-    refreshSlider();
+    refreshBlogSlider();
   });
-}
+});

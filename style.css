@@ -345,52 +345,6 @@ body {
   margin: 1.5rem 0;
 }
 
-/* Style for "Pas de compte ? Créez-en un" link */
-.login-form p,
-.register-form p,
-.forgot-form p {
-  margin-top: 1.5rem;
-  font-size: 1.4rem;
-  color: var(--light-color);
-}
-
-.login-form p a,
-.register-form p a,
-.forgot-form p a {
-  color: var(--bleu);
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.login-form p a:hover,
-.register-form p a:hover,
-.forgot-form p a:hover {
-  color: var(--black);
-  text-decoration: underline;
-}
-
-/* Optional: Add an underline animation */
-.login-form p a::after,
-.register-form p a::after,
-.forgot-form p a::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--bleu);
-  transition: width 0.3s ease;
-}
-
-.login-form p a:hover::after,
-.register-form p a:hover::after,
-.forgot-form p a:hover::after {
-  width: 100%;
-}
-
 /* Responsive forms */
 @media (max-width: 500px) {
   .login-form,
@@ -1035,7 +989,7 @@ body {
   }
 }
 
-/* Reviews Section - SIMPLE WORKING VERSION */
+/* Reviews Section */
 .reviews {
   padding: 5rem 5%;
   background: var(--light-bg);
@@ -1054,38 +1008,17 @@ body {
 
 .reviews-slider {
   display: flex;
-  gap: 2rem;
   transition: transform 0.5s ease;
+  gap: 2rem;
 }
 
 .reviews .slide {
-  flex-shrink: 0;
+  flex: 0 0 calc(33.333% - 1.33rem);
+  min-width: 0;
   padding: 2rem;
   background: var(--white);
   border-radius: 1rem;
   box-shadow: var(--box-shadow);
-  box-sizing: border-box;
-}
-
-/* Desktop: 3 slides */
-@media (min-width: 993px) {
-  .reviews .slide {
-    width: calc((100% - 4rem) / 3);
-  }
-}
-
-/* Tablet: 2 slides */
-@media (min-width: 769px) and (max-width: 992px) {
-  .reviews .slide {
-    width: calc((100% - 2rem) / 2);
-  }
-}
-
-/* Mobile: 1 slide */
-@media (max-width: 768px) {
-  .reviews .slide {
-    width: 100%;
-  }
 }
 
 .reviews .slide p {
@@ -1140,7 +1073,6 @@ body {
   margin-right: 0.2rem;
 }
 
-/* Navigation Buttons */
 .slider-btn {
   position: absolute;
   top: 50%;
@@ -1165,12 +1097,6 @@ body {
   transform: translateY(-50%) scale(1.1);
 }
 
-.slider-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: translateY(-50%);
-}
-
 .slider-prev {
   left: -2rem;
 }
@@ -1179,7 +1105,6 @@ body {
   right: -2rem;
 }
 
-/* Slider Dots */
 .slider-dots {
   display: flex;
   justify-content: center;
@@ -1206,10 +1131,22 @@ body {
   background: var(--bleu);
 }
 
-/* Responsive buttons */
+@media (max-width: 992px) {
+  .reviews .slide {
+    flex: 0 0 calc(50% - 1rem);
+  }
+}
+
 @media (max-width: 768px) {
   .reviews {
     padding: 3rem 2rem;
+  }
+  .reviews .slide {
+    flex: 0 0 100%;
+  }
+  .reviews .slide p {
+    font-size: 1.4rem;
+    padding: 1.2rem;
   }
   .reviews .slide .user img {
     height: 5rem;
@@ -1245,7 +1182,7 @@ body {
   }
 }
 
-/* Blog Section - SIMPLE WORKING VERSION */
+/* Blog Section */
 .blogs {
   padding: 5rem 5%;
   background: var(--light-bg);
@@ -1264,38 +1201,18 @@ body {
 
 .blogs-slider {
   display: flex;
-  gap: 2rem;
   transition: transform 0.5s ease;
+  gap: 2rem;
 }
 
 .blogs .slide {
-  flex-shrink: 0;
+  flex: 0 0 calc(33.333% - 1.33rem);
+  min-width: 0;
   background: var(--white);
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: var(--box-shadow);
   transition: all 0.3s ease;
-}
-
-/* Desktop: 3 slides */
-@media (min-width: 993px) {
-  .blogs .slide {
-    width: calc((100% - 4rem) / 3);
-  }
-}
-
-/* Tablet: 2 slides */
-@media (min-width: 769px) and (max-width: 992px) {
-  .blogs .slide {
-    width: calc((100% - 2rem) / 2);
-  }
-}
-
-/* Mobile: 1 slide */
-@media (max-width: 768px) {
-  .blogs .slide {
-    width: 100%;
-  }
 }
 
 .blogs .slide:hover {
@@ -1353,7 +1270,6 @@ body {
   transform: scale(1.05);
 }
 
-/* Blog Navigation Buttons */
 .blog-slider-btn {
   position: absolute;
   top: 50%;
@@ -1378,12 +1294,6 @@ body {
   transform: translateY(-50%) scale(1.1);
 }
 
-.blog-slider-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: translateY(-50%);
-}
-
 .blog-slider-prev {
   left: -2rem;
 }
@@ -1392,7 +1302,6 @@ body {
   right: -2rem;
 }
 
-/* Blog Slider Dots */
 .blog-slider-dots {
   display: flex;
   justify-content: center;
@@ -1419,10 +1328,24 @@ body {
   background: var(--bleu);
 }
 
-/* Responsive */
+@media (max-width: 992px) {
+  .blogs .slide {
+    flex: 0 0 calc(50% - 1rem);
+  }
+}
+
 @media (max-width: 768px) {
   .blogs {
     padding: 3rem 2rem;
+  }
+  .blogs .slide {
+    flex: 0 0 100%;
+  }
+  .blogs .slide .content h3 {
+    font-size: 1.8rem;
+  }
+  .blogs .slide .content p {
+    font-size: 1.3rem;
   }
   .blog-slider-prev {
     left: 0rem;
@@ -1434,12 +1357,6 @@ body {
     width: 3rem;
     height: 3rem;
     font-size: 1.4rem;
-  }
-  .blogs .slide .content h3 {
-    font-size: 1.8rem;
-  }
-  .blogs .slide .content p {
-    font-size: 1.3rem;
   }
 }
 
@@ -1557,5 +1474,96 @@ body {
   }
   .contact .row form h3 {
     font-size: 1.8rem;
+  }
+}
+
+/* ============ CUSTOM TOAST NOTIFICATIONS ============ */
+.toast-container {
+  position: fixed;
+  top: 9rem;
+  right: 2rem;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.alert-message {
+  padding: 1.2rem 2rem;
+  border-radius: 1rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  animation:
+    slideInRight 0.3s ease,
+    fadeOut 0.3s ease 4.7s forwards;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: var(--box-shadow);
+  max-width: 35rem;
+  backdrop-filter: blur(10px);
+}
+
+.alert-message i {
+  font-size: 2rem;
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #00c851 0%, #007e33 100%);
+  color: white;
+  border-left: 0.5rem solid #004d1a;
+}
+
+.alert-error {
+  background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+  color: white;
+  border-left: 0.5rem solid #8b0000;
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #ffbb33 0%, #ff8800 100%);
+  color: #333;
+  border-left: 0.5rem solid #cc7000;
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #33b5e5 0%, #0099cc 100%);
+  color: white;
+  border-left: 0.5rem solid #006699;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 768px) {
+  .toast-container {
+    top: 7rem;
+    right: 1rem;
+    left: 1rem;
+  }
+
+  .alert-message {
+    max-width: none;
+    padding: 1rem 1.5rem;
+    font-size: 1.3rem;
   }
 }
