@@ -1,5 +1,5 @@
 // ============ API CONFIGURATION ============
-const API_URL = "http://localhost:3000/api";
+const API_URL = "https://soit-backend.onrender.com/api";
 
 // ============ WAIT FOR PAGE TO LOAD ============
 document.addEventListener("DOMContentLoaded", function () {
