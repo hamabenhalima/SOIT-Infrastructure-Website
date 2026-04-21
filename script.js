@@ -3,7 +3,6 @@ const API_URL = "https://soit-backend.onrender.com/api";
 
 // ============ CUSTOM TOAST NOTIFICATION ============
 function showMessage(message, type = "success") {
-  // Create container if it doesn't exist
   let container = document.querySelector(".toast-container");
   if (!container) {
     container = document.createElement("div");
@@ -11,11 +10,9 @@ function showMessage(message, type = "success") {
     document.body.appendChild(container);
   }
 
-  // Create message element
   const messageDiv = document.createElement("div");
   messageDiv.className = `alert-message alert-${type}`;
 
-  // Add icon based on type
   let icon = "";
   switch (type) {
     case "success":
@@ -37,13 +34,9 @@ function showMessage(message, type = "success") {
   messageDiv.innerHTML = `${icon}<span>${message}</span>`;
   container.appendChild(messageDiv);
 
-  // Remove after 5 seconds
   setTimeout(() => {
     messageDiv.remove();
-    // Remove container if empty
-    if (container.children.length === 0) {
-      container.remove();
-    }
+    if (container.children.length === 0) container.remove();
   }, 5000);
 }
 
@@ -65,7 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // ============ TOGGLE FORMS ============
   if (loginBtn) {
     loginBtn.addEventListener("click", function () {
-      console.log("🔘 Login button clicked");
       if (loginForm) loginForm.classList.add("active");
       if (registerForm) registerForm.classList.remove("active");
       if (forgotForm) forgotForm.classList.remove("active");
@@ -390,29 +382,6 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// ============ SEARCH FORM ============
-document.addEventListener("DOMContentLoaded", function () {
-  const searchBtn = document.querySelector("#search-btn");
-  const searchForm = document.querySelector(".search-form");
-  if (searchBtn && searchForm) {
-    searchBtn.addEventListener("click", function () {
-      searchForm.classList.toggle("active");
-      if (searchForm.classList.contains("active")) {
-        document.querySelector("#search-box")?.focus();
-      }
-    });
-
-    searchForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const term = document.querySelector("#search-box")?.value;
-      if (term) {
-        showMessage(`Recherche: ${term}`, "info");
-        searchForm.classList.remove("active");
-      }
-    });
-  }
-});
-
 // ============ INFO SIDEBAR ============
 document.addEventListener("DOMContentLoaded", function () {
   const infoBtn = document.querySelector("#info-btn");
@@ -466,6 +435,227 @@ document.addEventListener("DOMContentLoaded", function () {
       navbar.classList.remove("active");
     }
   });
+});
+
+// ============ SIMPLE SEARCH FUNCTIONALITY ============
+document.addEventListener("DOMContentLoaded", function () {
+  const searchForm = document.getElementById("search-form");
+  const searchInput = document.getElementById("search-box");
+  let currentHighlights = [];
+  let currentHighlightIndex = -1;
+  let searchResultsBar = null;
+
+  // Create search results bar
+  function createSearchBar() {
+    if (document.querySelector(".search-results-bar")) return;
+
+    const bar = document.createElement("div");
+    bar.className = "search-results-bar";
+    bar.innerHTML = `
+            <span id="search-result-count">0 résultat</span>
+            <button id="prev-result" disabled>◀ Précédent</button>
+            <button id="next-result" disabled>Suivant ▶</button>
+            <button id="clear-search" class="close-search">✕</button>
+        `;
+    document.body.appendChild(bar);
+    searchResultsBar = bar;
+
+    document
+      .getElementById("prev-result")
+      ?.addEventListener("click", previousHighlight);
+    document
+      .getElementById("next-result")
+      ?.addEventListener("click", nextHighlight);
+    document
+      .getElementById("clear-search")
+      ?.addEventListener("click", clearSearch);
+  }
+
+  // Clear all highlights
+  function clearHighlights() {
+    currentHighlights.forEach((el) => {
+      if (el && el.parentNode) {
+        const parent = el.parentNode;
+        const text = document.createTextNode(el.textContent);
+        parent.replaceChild(text, el);
+        parent.normalize();
+      }
+    });
+    currentHighlights = [];
+    currentHighlightIndex = -1;
+
+    if (searchResultsBar) {
+      searchResultsBar.classList.remove("show");
+    }
+  }
+
+  function clearSearch() {
+    clearHighlights();
+    if (searchInput) searchInput.value = "";
+    if (searchResultsBar) searchResultsBar.classList.remove("show");
+  }
+
+  function highlightText(searchTerm) {
+    clearHighlights();
+
+    if (!searchTerm || searchTerm.trim() === "") return;
+
+    const term = searchTerm.trim().toLowerCase();
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function (node) {
+          if (
+            node.parentElement.tagName === "SCRIPT" ||
+            node.parentElement.tagName === "STYLE" ||
+            node.parentElement.tagName === "BUTTON" ||
+            node.parentElement.classList?.contains("search-results-bar") ||
+            node.parentElement.classList?.contains("search-form")
+          ) {
+            return NodeFilter.FILTER_REJECT;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      },
+    );
+
+    const textNodes = [];
+    while (walker.nextNode()) {
+      textNodes.push(walker.currentNode);
+    }
+
+    textNodes.forEach((node) => {
+      const text = node.textContent;
+      const lowerText = text.toLowerCase();
+      let index = lowerText.indexOf(term);
+
+      if (index !== -1) {
+        const span = document.createElement("span");
+        let lastIndex = 0;
+        let html = "";
+
+        while (index !== -1) {
+          html += escapeHtml(text.substring(lastIndex, index));
+          const matchText = text.substr(index, term.length);
+          html += `<mark class="highlight">${escapeHtml(matchText)}</mark>`;
+          lastIndex = index + term.length;
+          index = lowerText.indexOf(term, lastIndex);
+        }
+        html += escapeHtml(text.substring(lastIndex));
+        span.innerHTML = html;
+        node.parentNode.replaceChild(span, node);
+      }
+    });
+
+    currentHighlights = Array.from(document.querySelectorAll(".highlight"));
+
+    if (currentHighlights.length > 0) {
+      const count = currentHighlights.length;
+      const resultText =
+        count === 1 ? "1 résultat trouvé" : `${count} résultats trouvés`;
+      const countSpan = document.getElementById("search-result-count");
+      if (countSpan) countSpan.textContent = resultText;
+
+      if (searchResultsBar) searchResultsBar.classList.add("show");
+
+      currentHighlightIndex = 0;
+      scrollToHighlight();
+      updateNavButtons();
+    } else if (searchTerm.trim() !== "") {
+      showMessage(`Aucun résultat trouvé pour "${searchTerm}"`, "info");
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function scrollToHighlight() {
+    if (
+      currentHighlights.length > 0 &&
+      currentHighlights[currentHighlightIndex]
+    ) {
+      document.querySelectorAll(".highlight-current").forEach((el) => {
+        el.classList.remove("highlight-current");
+      });
+
+      currentHighlights[currentHighlightIndex].classList.add(
+        "highlight-current",
+      );
+
+      currentHighlights[currentHighlightIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }
+
+  function updateNavButtons() {
+    const prevBtn = document.getElementById("prev-result");
+    const nextBtn = document.getElementById("next-result");
+
+    if (prevBtn) prevBtn.disabled = currentHighlightIndex <= 0;
+    if (nextBtn)
+      nextBtn.disabled = currentHighlightIndex >= currentHighlights.length - 1;
+  }
+
+  function nextHighlight() {
+    if (currentHighlightIndex < currentHighlights.length - 1) {
+      currentHighlightIndex++;
+      scrollToHighlight();
+      updateNavButtons();
+    }
+  }
+
+  function previousHighlight() {
+    if (currentHighlightIndex > 0) {
+      currentHighlightIndex--;
+      scrollToHighlight();
+      updateNavButtons();
+    }
+  }
+
+  // Handle search form submission
+  if (searchForm) {
+    searchForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const searchTerm = searchInput.value;
+      if (searchTerm && searchTerm.trim() !== "") {
+        createSearchBar();
+        highlightText(searchTerm);
+        searchForm.classList.remove("active");
+      } else {
+        showMessage("Veuillez entrer un terme de recherche", "warning");
+      }
+    });
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+      clearSearch();
+    }
+  });
+});
+
+// Search button toggle
+document.addEventListener("DOMContentLoaded", function () {
+  const searchBtn = document.querySelector("#search-btn");
+  const searchForm = document.querySelector(".search-form");
+
+  if (searchBtn && searchForm) {
+    searchBtn.addEventListener("click", function () {
+      searchForm.classList.toggle("active");
+      if (searchForm.classList.contains("active")) {
+        document.querySelector("#search-box")?.focus();
+      } else {
+        const clearBtn = document.getElementById("clear-search");
+        if (clearBtn) clearBtn.click();
+      }
+    });
+  }
 });
 
 // ============ GALLERY FUNCTIONALITY ============
