@@ -1742,3 +1742,82 @@ body {
     right: 1.5rem;
   }
 }
+/* Language Switch with Flags */
+#language-btn {
+  cursor: pointer;
+}
+
+.language-dropdown {
+  position: absolute;
+  top: 8rem;
+  right: 2rem;
+  background: white;
+  box-shadow: var(--box-shadow);
+  border-radius: 1rem;
+  padding: 1rem;
+  z-index: 1001;
+  min-width: 16rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.language-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  font-size: 1.4rem;
+  color: var(--black);
+}
+
+.language-option:hover {
+  background: var(--light-bg);
+}
+
+.language-option img {
+  width: 2rem;
+  height: 1.5rem;
+  border-radius: 0.2rem;
+  object-fit: cover;
+}
+
+.language-option.active {
+  background: var(--bleu);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .language-dropdown {
+    top: 6rem;
+    right: 1rem;
+  }
+}
+
+/* RTL Support for Arabic */
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="rtl"] .header .navbar a {
+  margin: 0 0 0 1rem;
+}
+
+html[dir="rtl"] .heading {
+  border-left: none;
+  border-right: 0.5rem solid var(--bleu);
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+html[dir="rtl"] .contact .row form .box {
+  text-align: right;
+}

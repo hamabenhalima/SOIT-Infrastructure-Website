@@ -1038,3 +1038,259 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 })();
+
+// ============ LANGUAGE SWITCH WITH FLAGS ============
+const translations = {
+  fr: {
+    home: "Accueil",
+    about: "À propos",
+    services: "Services",
+    projects: "Projets",
+    clients: "Nos Clients",
+    contact: "Contact",
+    aboutHeading: "Qui sommes-nous ?",
+    servicesHeading: "Nos services",
+    projectsHeading: "Nos réalisations",
+    reviewsHeading: "Ce que disent nos clients",
+    blogHeading: "Actualités",
+    contactHeading: "Contactez-nous",
+    learnMore: "En savoir plus",
+    startNow: "Commencez maintenant",
+    sendMessage: "Envoyer un message",
+    yourName: "Votre nom",
+    yourEmail: "Votre email",
+    yourPhone: "Votre téléphone",
+    yourMessage: "Votre message",
+    searchPlaceholder: "Rechercher sur le site...",
+    phone: "Téléphone",
+    emailLabel: "E-mail",
+    address: "Adresse",
+    loginTitle: "Connexion",
+    email: "E-mail",
+    password: "Mot de passe",
+    rememberMe: "Se souvenir de moi",
+    forgotPassword: "Mot de passe oublié ?",
+    noAccount: "Pas de compte ?",
+    createAccount: "Créez-en un",
+  },
+  en: {
+    home: "Home",
+    about: "About",
+    services: "Services",
+    projects: "Projects",
+    clients: "Our Clients",
+    contact: "Contact",
+    aboutHeading: "Who are we?",
+    servicesHeading: "Our Services",
+    projectsHeading: "Our Achievements",
+    reviewsHeading: "What our clients say",
+    blogHeading: "News",
+    contactHeading: "Contact Us",
+    learnMore: "Learn more",
+    startNow: "Start now",
+    sendMessage: "Send message",
+    yourName: "Your name",
+    yourEmail: "Your email",
+    yourPhone: "Your phone",
+    yourMessage: "Your message",
+    searchPlaceholder: "Search the site...",
+    phone: "Phone",
+    emailLabel: "Email",
+    address: "Address",
+    loginTitle: "Login",
+    email: "Email",
+    password: "Password",
+    rememberMe: "Remember me",
+    forgotPassword: "Forgot password?",
+    noAccount: "Don't have an account?",
+    createAccount: "Create one",
+  },
+  ar: {
+    home: "الرئيسية",
+    about: "من نحن",
+    services: "خدماتنا",
+    projects: "مشاريعنا",
+    clients: "عملاؤنا",
+    contact: "اتصل بنا",
+    aboutHeading: "من نحن؟",
+    servicesHeading: "خدماتنا",
+    projectsHeading: "إنجازاتنا",
+    reviewsHeading: "ماذا يقول عملاؤنا",
+    blogHeading: "أخبار",
+    contactHeading: "اتصل بنا",
+    learnMore: "اعرف المزيد",
+    startNow: "ابدأ الآن",
+    sendMessage: "إرسال رسالة",
+    yourName: "اسمك",
+    yourEmail: "بريدك الإلكتروني",
+    yourPhone: "هاتفك",
+    yourMessage: "رسالتك",
+    searchPlaceholder: "ابحث في الموقع...",
+    phone: "الهاتف",
+    emailLabel: "البريد الإلكتروني",
+    address: "العنوان",
+    loginTitle: "تسجيل الدخول",
+    email: "البريد الإلكتروني",
+    password: "كلمة المرور",
+    rememberMe: "تذكرني",
+    forgotPassword: "نسيت كلمة المرور؟",
+    noAccount: "ليس لديك حساب؟",
+    createAccount: "إنشاء حساب",
+  },
+};
+
+let currentLanguage = "fr";
+
+function updateLanguage(lang) {
+  currentLanguage = lang;
+  localStorage.setItem("language", lang);
+
+  // Update HTML direction for Arabic
+  if (lang === "ar") {
+    document.documentElement.setAttribute("dir", "rtl");
+  } else {
+    document.documentElement.setAttribute("dir", "ltr");
+  }
+
+  // Update navigation
+  const navLinks = document.querySelectorAll(".navbar a");
+  if (navLinks[0]) navLinks[0].textContent = translations[lang].home;
+  if (navLinks[1]) navLinks[1].textContent = translations[lang].about;
+  if (navLinks[2]) navLinks[2].textContent = translations[lang].services;
+  if (navLinks[3]) navLinks[3].textContent = translations[lang].projects;
+  if (navLinks[4]) navLinks[4].textContent = translations[lang].clients;
+  if (navLinks[5]) navLinks[5].textContent = translations[lang].contact;
+
+  // Update headings
+  const headings = document.querySelectorAll(".heading");
+  if (headings[0]) headings[0].textContent = translations[lang].aboutHeading;
+  if (headings[1]) headings[1].textContent = translations[lang].servicesHeading;
+  if (headings[2]) headings[2].textContent = translations[lang].projectsHeading;
+  if (headings[3]) headings[3].textContent = translations[lang].reviewsHeading;
+  if (headings[4]) headings[4].textContent = translations[lang].blogHeading;
+  if (headings[5]) headings[5].textContent = translations[lang].contactHeading;
+
+  // Update buttons
+  const btns = document.querySelectorAll(".btn");
+  btns.forEach((btn) => {
+    const text = btn.textContent;
+    if (
+      text.includes("Commencez") ||
+      text.includes("Start") ||
+      text.includes("ابدأ")
+    ) {
+      btn.textContent = translations[lang].startNow;
+    } else if (
+      text.includes("En savoir") ||
+      text.includes("Learn") ||
+      text.includes("اعرف")
+    ) {
+      btn.textContent = translations[lang].learnMore;
+    } else if (
+      text.includes("Envoyer") ||
+      text.includes("Send") ||
+      text.includes("إرسال")
+    ) {
+      btn.textContent = translations[lang].sendMessage;
+    }
+  });
+
+  // Update search placeholder
+  const searchInput = document.getElementById("search-box");
+  if (searchInput)
+    searchInput.placeholder = translations[lang].searchPlaceholder;
+
+  // Update contact form placeholders
+  const contactName = document.getElementById("contact-name");
+  const contactEmail = document.getElementById("contact-email");
+  const contactPhone = document.getElementById("contact-phone");
+  const contactMessage = document.getElementById("contact-message");
+  if (contactName) contactName.placeholder = translations[lang].yourName;
+  if (contactEmail) contactEmail.placeholder = translations[lang].yourEmail;
+  if (contactPhone) contactPhone.placeholder = translations[lang].yourPhone;
+  if (contactMessage)
+    contactMessage.placeholder = translations[lang].yourMessage;
+
+  // Update contact info sidebar
+  const infoTitles = document.querySelectorAll(".info h3");
+  if (infoTitles[0]) infoTitles[0].textContent = translations[lang].phone;
+  if (infoTitles[1]) infoTitles[1].textContent = translations[lang].emailLabel;
+  if (infoTitles[2]) infoTitles[2].textContent = translations[lang].address;
+
+  // Update login form
+  const loginTitle = document.querySelector(".login-form h3");
+  if (loginTitle) loginTitle.textContent = translations[lang].loginTitle;
+
+  const loginEmail = document.querySelector('.login-form input[type="email"]');
+  const loginPassword = document.querySelector(
+    '.login-form input[type="password"]',
+  );
+  if (loginEmail) loginEmail.placeholder = translations[lang].email;
+  if (loginPassword) loginPassword.placeholder = translations[lang].password;
+
+  const rememberLabel = document.querySelector(".login-form .flex label");
+  if (rememberLabel) rememberLabel.textContent = translations[lang].rememberMe;
+
+  const forgotLink = document.querySelector(".login-form .flex a");
+  if (forgotLink) forgotLink.textContent = translations[lang].forgotPassword;
+
+  const noAccountText = document.querySelector(".login-form p");
+  if (noAccountText) {
+    const registerLink = noAccountText.querySelector("a");
+    noAccountText.childNodes[0].textContent =
+      translations[lang].noAccount + " ";
+    if (registerLink)
+      registerLink.textContent = translations[lang].createAccount;
+  }
+
+  // Update active language in dropdown
+  document.querySelectorAll(".language-option").forEach((option) => {
+    option.classList.remove("active");
+    if (option.getAttribute("data-lang") === lang) {
+      option.classList.add("active");
+    }
+  });
+
+  console.log(`Language changed to: ${lang}`);
+}
+
+// Language dropdown toggle
+document.addEventListener("DOMContentLoaded", function () {
+  const languageBtn = document.getElementById("language-btn");
+  const languageDropdown = document.getElementById("language-dropdown");
+
+  // Load saved language
+  const savedLang = localStorage.getItem("language");
+  if (savedLang && translations[savedLang]) {
+    updateLanguage(savedLang);
+  }
+
+  // Toggle dropdown
+  if (languageBtn && languageDropdown) {
+    languageBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      languageDropdown.classList.toggle("active");
+    });
+
+    // Language options
+    document.querySelectorAll(".language-option").forEach((option) => {
+      option.addEventListener("click", function () {
+        const lang = this.getAttribute("data-lang");
+        updateLanguage(lang);
+        languageDropdown.classList.remove("active");
+      });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener("click", function (e) {
+      if (
+        languageBtn &&
+        languageDropdown &&
+        !languageBtn.contains(e.target) &&
+        !languageDropdown.contains(e.target)
+      ) {
+        languageDropdown.classList.remove("active");
+      }
+    });
+  }
+});
