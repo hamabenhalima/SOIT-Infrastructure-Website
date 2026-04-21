@@ -988,3 +988,22 @@ document.addEventListener("DOMContentLoaded", function () {
     refreshBlogSlider();
   });
 });
+
+// ============ SCROLL TO TOP BUTTON ============
+document.addEventListener("DOMContentLoaded", function () {
+  const scrollTop = document.querySelector("#scroll-top");
+
+  if (scrollTop) {
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 300) {
+        scrollTop.style.display = "flex";
+      } else {
+        scrollTop.style.display = "none";
+      }
+    });
+
+    scrollTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+});

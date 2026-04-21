@@ -1665,3 +1665,40 @@ body {
     font-size: 1.3rem;
   }
 }
+
+/* Scroll to Top Button */
+
+.scroll-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: var(--bleu);
+  color: white;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: all 0.3s ease;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+.scroll-top:hover {
+  background: var(--black);
+  transform: translateY(-0.5rem);
+}
+
+@media (max-width: 768px) {
+  .scroll-top {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 4rem;
+    height: 4rem;
+    font-size: 1.6rem;
+  }
+}
