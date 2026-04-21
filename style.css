@@ -1666,39 +1666,79 @@ body {
   }
 }
 
-/* Scroll to Top Button */
-
-.scroll-top {
+/* ============ SCROLL TO TOP BUTTON ============ */
+#scroll-top {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background: var(--bleu);
-  color: white;
   width: 4.5rem;
   height: 4.5rem;
   border-radius: 50%;
+  background: var(--bleu);
+  color: white;
   border: none;
   cursor: pointer;
   font-size: 2rem;
   display: none;
   align-items: center;
   justify-content: center;
-  z-index: 100;
+  z-index: 9999;
   transition: all 0.3s ease;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.3rem 0.8rem rgba(0, 0, 0, 0.2);
 }
 
-.scroll-top:hover {
+#scroll-top:hover {
   background: var(--black);
-  transform: translateY(-0.5rem);
+  transform: scale(1.1);
 }
 
+#scroll-top.show {
+  display: flex;
+}
+
+/* ============ LOADING SPINNER ============ */
+#loading-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#loading-spinner.show {
+  display: flex;
+}
+
+.spinner {
+  width: 5rem;
+  height: 5rem;
+  border: 0.4rem solid rgba(255, 255, 255, 0.3);
+  border-top: 0.4rem solid var(--bleu);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mobile Responsive */
 @media (max-width: 768px) {
-  .scroll-top {
+  #scroll-top {
+    width: 3.8rem;
+    height: 3.8rem;
+    font-size: 1.6rem;
     bottom: 1.5rem;
     right: 1.5rem;
-    width: 4rem;
-    height: 4rem;
-    font-size: 1.6rem;
   }
 }

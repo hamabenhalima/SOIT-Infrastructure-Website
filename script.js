@@ -990,20 +990,51 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // ============ SCROLL TO TOP BUTTON ============
-document.addEventListener("DOMContentLoaded", function () {
-  const scrollTop = document.querySelector("#scroll-top");
+(function () {
+  const scrollBtn = document.getElementById("scroll-top");
 
-  if (scrollTop) {
-    window.addEventListener("scroll", () => {
+  if (scrollBtn) {
+    // Show button when scrolling down
+    window.addEventListener("scroll", function () {
       if (window.scrollY > 300) {
-        scrollTop.style.display = "flex";
+        scrollBtn.classList.add("show");
       } else {
-        scrollTop.style.display = "none";
+        scrollBtn.classList.remove("show");
       }
     });
 
-    scrollTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    // Scroll to top when clicked
+    scrollBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    });
+
+    // Hide button initially
+    scrollBtn.classList.remove("show");
+  }
+})();
+
+// ============ LOADING SPINNER ============
+(function () {
+  const spinner = document.getElementById("loading-spinner");
+
+  if (spinner) {
+    // Hide spinner when page is fully loaded
+    window.addEventListener("load", function () {
+      setTimeout(function () {
+        spinner.classList.remove("show");
+      }, 500);
+    });
+
+    // Show spinner on form submissions
+    const forms = document.querySelectorAll("form");
+    forms.forEach(function (form) {
+      form.addEventListener("submit", function () {
+        spinner.classList.add("show");
+      });
     });
   }
-});
+})();
