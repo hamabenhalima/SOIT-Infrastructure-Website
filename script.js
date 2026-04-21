@@ -9,8 +9,10 @@ function showMessage(message, type = "success") {
     container.className = "toast-container";
     document.body.appendChild(container);
   }
+
   const messageDiv = document.createElement("div");
   messageDiv.className = `alert-message alert-${type}`;
+
   let icon = "";
   switch (type) {
     case "success":
@@ -28,8 +30,10 @@ function showMessage(message, type = "success") {
     default:
       icon = '<i class="fas fa-bell"></i>';
   }
+
   messageDiv.innerHTML = `${icon}<span>${message}</span>`;
   container.appendChild(messageDiv);
+
   setTimeout(() => {
     messageDiv.remove();
     if (container.children.length === 0) container.remove();
@@ -180,48 +184,49 @@ function updateLanguage(lang) {
   if (infoTitles[1]) infoTitles[1].textContent = translations[lang].emailLabel;
   if (infoTitles[2]) infoTitles[2].textContent = translations[lang].address;
 
-  // Update active language in dropdown
   document
-    .querySelectorAll(".lang-item")
-    .forEach((item) => item.classList.remove("active"));
-  const activeItem = document.querySelector(`.lang-item[data-lang="${lang}"]`);
-  if (activeItem) activeItem.classList.add("active");
-  const currentLangSpan = document.getElementById("current-lang");
-  if (currentLangSpan) currentLangSpan.textContent = lang.toUpperCase();
+    .querySelectorAll(".lang-option")
+    .forEach((opt) => opt.classList.remove("active"));
+  const activeOpt = document.querySelector(`.lang-option[data-lang="${lang}"]`);
+  if (activeOpt) activeOpt.classList.add("active");
 }
 
-// ============ LANGUAGE SELECTOR SETUP ============
+// ============ SIMPLE LANGUAGE SWITCH ============
 document.addEventListener("DOMContentLoaded", function () {
-  const selector = document.querySelector(".language-selector");
-  const btn = document.getElementById("lang-btn");
-  if (selector && btn) {
-    btn.addEventListener("click", (e) => {
+  const languageBtn = document.getElementById("language-btn");
+  const languageDropdown = document.getElementById("language-dropdown");
+
+  if (languageBtn && languageDropdown) {
+    languageBtn.addEventListener("click", function (e) {
       e.stopPropagation();
-      selector.classList.toggle("active");
+      languageDropdown.classList.toggle("active");
     });
-    document.addEventListener("click", (e) => {
-      if (!selector.contains(e.target)) selector.classList.remove("active");
+
+    document.addEventListener("click", function (e) {
+      if (
+        !languageBtn.contains(e.target) &&
+        !languageDropdown.contains(e.target)
+      ) {
+        languageDropdown.classList.remove("active");
+      }
     });
   }
 
-  document.querySelectorAll(".lang-item").forEach((item) => {
-    item.addEventListener("click", () => {
-      const lang = item.getAttribute("data-lang");
+  document.querySelectorAll(".lang-option").forEach((option) => {
+    option.addEventListener("click", function () {
+      const lang = this.getAttribute("data-lang");
       updateLanguage(lang);
-      if (selector) selector.classList.remove("active");
+      languageDropdown.classList.remove("active");
     });
   });
 
-  // Load saved language
   const savedLang = localStorage.getItem("language");
   if (savedLang && translations[savedLang]) {
     updateLanguage(savedLang);
-  } else {
-    updateLanguage("fr");
   }
 });
 
-// ============ WAIT FOR PAGE TO LOAD (other features) ============
+// ============ WAIT FOR PAGE TO LOAD ============
 document.addEventListener("DOMContentLoaded", function () {
   console.log("✅ Frontend loaded, API URL:", API_URL);
 
@@ -308,10 +313,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ============ REGISTRATION HANDLER ============
+  // ============ REGISTRATION HANDLER (FIXED) ============
   if (registerForm) {
     registerForm.addEventListener("submit", async function (e) {
       e.preventDefault();
+
       const firstName = document.getElementById("reg-firstname")?.value.trim();
       const lastName = document.getElementById("reg-lastname")?.value.trim();
       const username = document.getElementById("reg-username")?.value.trim();
@@ -325,10 +331,12 @@ document.addEventListener("DOMContentLoaded", function () {
         showMessage("Veuillez remplir tous les champs", "warning");
         return;
       }
+
       if (password !== confirmPassword) {
         showMessage("Les mots de passe ne correspondent pas", "error");
         return;
       }
+
       if (password.length < 6) {
         showMessage(
           "Le mot de passe doit contenir au moins 6 caractères",
@@ -336,48 +344,64 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         return;
       }
+
+      showMessage("Inscription en cours...", "info");
+
       try {
         const response = await fetch(`${API_URL}/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, email, password }),
         });
+
         const data = await response.json();
+        console.log("Registration response:", data);
+
         if (data.success) {
           showMessage(
-            `${data.message} Bienvenue ${firstName} ${lastName} !`,
+            `Inscription réussie ! Bienvenue ${firstName} ${lastName} !`,
             "success",
           );
           registerForm.reset();
           registerForm.classList.remove("active");
           if (loginForm) loginForm.classList.add("active");
+
           const loginEmail = document.getElementById("login-email");
           if (loginEmail) loginEmail.value = email;
         } else {
           showMessage(data.message, "error");
         }
       } catch (error) {
+        console.error("Registration error:", error);
         showMessage("Erreur de connexion au serveur", "error");
       }
     });
   }
 
-  // ============ FORGOT PASSWORD HANDLER ============
+  // ============ FORGOT PASSWORD HANDLER (FIXED) ============
   if (forgotForm) {
     forgotForm.addEventListener("submit", async function (e) {
       e.preventDefault();
+
       const email = document.getElementById("forgot-email")?.value.trim();
+
       if (!email) {
         showMessage("Veuillez entrer votre email", "warning");
         return;
       }
+
+      showMessage("Envoi en cours...", "info");
+
       try {
         const response = await fetch(`${API_URL}/forgot-password`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
         });
+
         const data = await response.json();
+        console.log("Forgot password response:", data);
+
         if (data.success) {
           showMessage(data.message, "success");
           forgotForm.reset();
@@ -387,6 +411,7 @@ document.addEventListener("DOMContentLoaded", function () {
           showMessage(data.message, "error");
         }
       } catch (error) {
+        console.error("Forgot password error:", error);
         showMessage("Erreur de connexion au serveur", "error");
       }
     });
@@ -973,18 +998,15 @@ function initBlogSlider() {
       maxIndex = totalSlides - slidesToShow;
       currentIndex = Math.min(currentIndex, maxIndex);
     }
-    // Reset transform and recalculate
     blogSlider.style.transform = "";
     setTimeout(() => {
       updateSlider();
     }, 50);
   }
 
-  // Event listeners
   if (blogPrevBtn) blogPrevBtn.addEventListener("click", prevSlide);
   if (blogNextBtn) blogNextBtn.addEventListener("click", nextSlide);
 
-  // Handle window resize
   let resizeTimer;
   window.addEventListener("resize", function () {
     clearTimeout(resizeTimer);
@@ -993,49 +1015,11 @@ function initBlogSlider() {
     }, 150);
   });
 
-  // Initial update
   setTimeout(() => {
     updateSlider();
   }, 100);
 
-  // Update after all images load
   window.addEventListener("load", function () {
     refreshSlider();
   });
 }
-
-// ============ SIMPLE LANGUAGE SWITCH ============
-document.addEventListener("DOMContentLoaded", function () {
-  const languageBtn = document.getElementById("language-btn");
-  const languageDropdown = document.getElementById("language-dropdown");
-
-  if (languageBtn && languageDropdown) {
-    languageBtn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      languageDropdown.classList.toggle("active");
-    });
-
-    document.addEventListener("click", function (e) {
-      if (
-        !languageBtn.contains(e.target) &&
-        !languageDropdown.contains(e.target)
-      ) {
-        languageDropdown.classList.remove("active");
-      }
-    });
-  }
-
-  document.querySelectorAll(".lang-option").forEach((option) => {
-    option.addEventListener("click", function () {
-      const lang = this.getAttribute("data-lang");
-      updateLanguage(lang);
-      languageDropdown.classList.remove("active");
-    });
-  });
-
-  // Load saved language
-  const savedLang = localStorage.getItem("language");
-  if (savedLang && translations[savedLang]) {
-    updateLanguage(savedLang);
-  }
-});
