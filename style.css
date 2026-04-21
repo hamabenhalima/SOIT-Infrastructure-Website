@@ -1742,9 +1742,13 @@ body {
     right: 1.5rem;
   }
 }
-/* Language Switch with Flags */
+
+/* Language Switch */
 #language-btn {
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .language-dropdown {
@@ -1795,29 +1799,39 @@ body {
   color: white;
 }
 
+/* Mobile Responsive Fix */
 @media (max-width: 768px) {
   .language-dropdown {
-    top: 6rem;
+    position: fixed;
+    top: auto;
+    bottom: 8rem;
     right: 1rem;
+    left: auto;
+    width: auto;
+    min-width: 14rem;
+  }
+
+  .language-option {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.3rem;
+  }
+
+  .language-option img {
+    width: 1.8rem;
+    height: 1.3rem;
   }
 }
 
-/* RTL Support for Arabic */
-html[dir="rtl"] {
-  direction: rtl;
-}
+/* For very small screens */
+@media (max-width: 480px) {
+  .language-dropdown {
+    bottom: 7rem;
+    right: 0.8rem;
+    min-width: 12rem;
+  }
 
-html[dir="rtl"] .header .navbar a {
-  margin: 0 0 0 1rem;
-}
-
-html[dir="rtl"] .heading {
-  border-left: none;
-  border-right: 0.5rem solid var(--bleu);
-  padding-left: 0;
-  padding-right: 1rem;
-}
-
-html[dir="rtl"] .contact .row form .box {
-  text-align: right;
+  .language-option {
+    padding: 0.7rem 1rem;
+    font-size: 1.2rem;
+  }
 }
