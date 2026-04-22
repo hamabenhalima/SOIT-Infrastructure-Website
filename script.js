@@ -47,11 +47,14 @@ const translations = {
     about: "À propos",
     services: "Services",
     projects: "Projets",
-    clients: "Nos Clients",
+    beforeAfter: "Avant/Après",
+    clients: "Clients",
+    blogs: "Actualités",
     contact: "Contact",
-    aboutHeading: "Qui sommes-nous ?",
+    aboutHeading: "À propos de nous",
     servicesHeading: "Nos services",
     projectsHeading: "Nos réalisations",
+    beforeAfterHeading: "Transformation de nos projets",
     reviewsHeading: "Ce que disent nos clients",
     blogHeading: "Actualités",
     contactHeading: "Contactez-nous",
@@ -72,12 +75,15 @@ const translations = {
     about: "About",
     services: "Services",
     projects: "Projects",
-    clients: "Our Clients",
+    beforeAfter: "Before/After",
+    clients: "Clients",
+    blogs: "News",
     contact: "Contact",
-    aboutHeading: "Who are we?",
+    aboutHeading: "About Us",
     servicesHeading: "Our Services",
     projectsHeading: "Our Achievements",
-    reviewsHeading: "What our clients say",
+    beforeAfterHeading: "Transformation of Our Projects",
+    reviewsHeading: "What Our Clients Say",
     blogHeading: "News",
     contactHeading: "Contact Us",
     learnMore: "Learn more",
@@ -97,11 +103,14 @@ const translations = {
     about: "من نحن",
     services: "خدماتنا",
     projects: "مشاريعنا",
+    beforeAfter: "قبل / بعد",
     clients: "عملاؤنا",
+    blogs: "أخبار",
     contact: "اتصل بنا",
-    aboutHeading: "من نحن؟",
+    aboutHeading: "من نحن",
     servicesHeading: "خدماتنا",
     projectsHeading: "إنجازاتنا",
+    beforeAfterHeading: "تحول مشاريعنا",
     reviewsHeading: "ماذا يقول عملاؤنا",
     blogHeading: "أخبار",
     contactHeading: "اتصل بنا",
@@ -124,51 +133,66 @@ let currentLanguage = "fr";
 function updateLanguage(lang) {
   currentLanguage = lang;
   localStorage.setItem("language", lang);
-  document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
 
+  if (lang === "ar") {
+    document.documentElement.setAttribute("dir", "rtl");
+  } else {
+    document.documentElement.setAttribute("dir", "ltr");
+  }
+
+  // Update navigation links
   const navLinks = document.querySelectorAll(".navbar a");
   if (navLinks[0]) navLinks[0].textContent = translations[lang].home;
   if (navLinks[1]) navLinks[1].textContent = translations[lang].about;
   if (navLinks[2]) navLinks[2].textContent = translations[lang].services;
   if (navLinks[3]) navLinks[3].textContent = translations[lang].projects;
-  if (navLinks[4]) navLinks[4].textContent = translations[lang].clients;
-  if (navLinks[5]) navLinks[5].textContent = translations[lang].contact;
+  if (navLinks[4]) navLinks[4].textContent = translations[lang].beforeAfter;
+  if (navLinks[5]) navLinks[5].textContent = translations[lang].clients;
+  if (navLinks[6]) navLinks[6].textContent = translations[lang].blogs;
+  if (navLinks[7]) navLinks[7].textContent = translations[lang].contact;
 
-  const headings = document.querySelectorAll(".heading");
-  if (headings[0]) headings[0].textContent = translations[lang].aboutHeading;
-  if (headings[1]) headings[1].textContent = translations[lang].servicesHeading;
-  if (headings[2]) headings[2].textContent = translations[lang].projectsHeading;
-  if (headings[3]) headings[3].textContent = translations[lang].reviewsHeading;
-  if (headings[4]) headings[4].textContent = translations[lang].blogHeading;
-  if (headings[5]) headings[5].textContent = translations[lang].contactHeading;
+  // Update section headings using IDs
+  const aboutHeading = document.querySelector("#about .heading");
+  const servicesHeading = document.querySelector("#services .heading");
+  const projectsHeading = document.querySelector("#projects .heading");
+  const beforeAfterHeading = document.querySelector("#before-after .heading");
+  const reviewsHeading = document.querySelector("#reviews .heading");
+  const blogHeading = document.querySelector("#blogs .heading");
+  const contactHeading = document.querySelector("#contact .heading");
 
-  const btns = document.querySelectorAll(".btn");
-  btns.forEach((btn) => {
-    const text = btn.textContent;
-    if (
-      text.includes("Commencez") ||
-      text.includes("Start") ||
-      text.includes("ابدأ")
-    )
-      btn.textContent = translations[lang].startNow;
-    else if (
-      text.includes("En savoir") ||
-      text.includes("Learn") ||
-      text.includes("اعرف")
-    )
-      btn.textContent = translations[lang].learnMore;
-    else if (
-      text.includes("Envoyer") ||
-      text.includes("Send") ||
-      text.includes("إرسال")
-    )
-      btn.textContent = translations[lang].sendMessage;
+  if (aboutHeading) aboutHeading.textContent = translations[lang].aboutHeading;
+  if (servicesHeading)
+    servicesHeading.textContent = translations[lang].servicesHeading;
+  if (projectsHeading)
+    projectsHeading.textContent = translations[lang].projectsHeading;
+  if (beforeAfterHeading)
+    beforeAfterHeading.textContent = translations[lang].beforeAfterHeading;
+  if (reviewsHeading)
+    reviewsHeading.textContent = translations[lang].reviewsHeading;
+  if (blogHeading) blogHeading.textContent = translations[lang].blogHeading;
+  if (contactHeading)
+    contactHeading.textContent = translations[lang].contactHeading;
+
+  // Update buttons
+  const startButtons = document.querySelectorAll(".home .btn, .about .btn");
+  startButtons.forEach((btn) => {
+    btn.textContent = translations[lang].startNow;
   });
 
+  const learnButtons = document.querySelectorAll(".services .btn, .blogs .btn");
+  learnButtons.forEach((btn) => {
+    btn.textContent = translations[lang].learnMore;
+  });
+
+  const contactBtn = document.querySelector(".contact .btn");
+  if (contactBtn) contactBtn.textContent = translations[lang].sendMessage;
+
+  // Update search placeholder
   const searchInput = document.getElementById("search-box");
   if (searchInput)
     searchInput.placeholder = translations[lang].searchPlaceholder;
 
+  // Update contact form placeholders
   const contactName = document.getElementById("contact-name");
   const contactEmail = document.getElementById("contact-email");
   const contactPhone = document.getElementById("contact-phone");
@@ -179,19 +203,24 @@ function updateLanguage(lang) {
   if (contactMessage)
     contactMessage.placeholder = translations[lang].yourMessage;
 
+  // Update contact info sidebar
   const infoTitles = document.querySelectorAll(".info h3");
   if (infoTitles[0]) infoTitles[0].textContent = translations[lang].phone;
   if (infoTitles[1]) infoTitles[1].textContent = translations[lang].emailLabel;
   if (infoTitles[2]) infoTitles[2].textContent = translations[lang].address;
 
-  document
-    .querySelectorAll(".lang-option")
-    .forEach((opt) => opt.classList.remove("active"));
-  const activeOpt = document.querySelector(`.lang-option[data-lang="${lang}"]`);
-  if (activeOpt) activeOpt.classList.add("active");
+  // Update active class in dropdown
+  document.querySelectorAll(".lang-option").forEach((option) => {
+    option.classList.remove("active");
+    if (option.getAttribute("data-lang") === lang) {
+      option.classList.add("active");
+    }
+  });
+
+  console.log(`Language changed to: ${lang}`);
 }
 
-// ============ LANGUAGE SWITCH ============
+// ============ LANGUAGE SELECTOR ============
 document.addEventListener("DOMContentLoaded", function () {
   const languageBtn = document.getElementById("language-btn");
   const languageDropdown = document.getElementById("language-dropdown");
@@ -223,6 +252,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const savedLang = localStorage.getItem("language");
   if (savedLang && translations[savedLang]) {
     updateLanguage(savedLang);
+  } else {
+    updateLanguage("fr");
   }
 });
 
@@ -230,7 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.addEventListener("DOMContentLoaded", function () {
   console.log("✅ Frontend loaded, API URL:", API_URL);
 
-  // ============ GET FORM ELEMENTS ============
+  // ============ FORM ELEMENTS ============
   const loginBtn = document.querySelector("#login-btn");
   const loginForm = document.getElementById("login-form");
   const registerForm = document.getElementById("register-form");
@@ -240,47 +271,43 @@ document.addEventListener("DOMContentLoaded", function () {
   const forgotPasswordLink = document.getElementById("forgot-password-link");
   const backToLoginLink = document.getElementById("back-to-login");
 
-  // ============ TOGGLE FORMS ============
+  // Toggle Forms
   if (loginBtn) {
     loginBtn.addEventListener("click", function () {
-      loginForm.classList.add("active");
-      registerForm.classList.remove("active");
-      forgotForm.classList.remove("active");
+      if (loginForm) loginForm.classList.add("active");
+      if (registerForm) registerForm.classList.remove("active");
+      if (forgotForm) forgotForm.classList.remove("active");
     });
   }
-
   if (showRegisterLink) {
     showRegisterLink.addEventListener("click", function (e) {
       e.preventDefault();
-      loginForm.classList.remove("active");
-      forgotForm.classList.remove("active");
-      registerForm.classList.add("active");
+      if (loginForm) loginForm.classList.remove("active");
+      if (forgotForm) forgotForm.classList.remove("active");
+      if (registerForm) registerForm.classList.add("active");
     });
   }
-
   if (showLoginLink) {
     showLoginLink.addEventListener("click", function (e) {
       e.preventDefault();
-      registerForm.classList.remove("active");
-      forgotForm.classList.remove("active");
-      loginForm.classList.add("active");
+      if (registerForm) registerForm.classList.remove("active");
+      if (forgotForm) forgotForm.classList.remove("active");
+      if (loginForm) loginForm.classList.add("active");
     });
   }
-
   if (forgotPasswordLink) {
     forgotPasswordLink.addEventListener("click", function (e) {
       e.preventDefault();
-      loginForm.classList.remove("active");
-      registerForm.classList.remove("active");
-      forgotForm.classList.add("active");
+      if (loginForm) loginForm.classList.remove("active");
+      if (registerForm) registerForm.classList.remove("active");
+      if (forgotForm) forgotForm.classList.add("active");
     });
   }
-
   if (backToLoginLink) {
     backToLoginLink.addEventListener("click", function (e) {
       e.preventDefault();
-      forgotForm.classList.remove("active");
-      loginForm.classList.add("active");
+      if (forgotForm) forgotForm.classList.remove("active");
+      if (loginForm) loginForm.classList.add("active");
     });
   }
 
@@ -290,12 +317,10 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
       const email = document.getElementById("login-email")?.value.trim();
       const password = document.getElementById("login-password")?.value.trim();
-
       if (!email || !password) {
         showMessage("Veuillez entrer votre email et mot de passe", "warning");
         return;
       }
-
       try {
         const response = await fetch(`${API_URL}/login`, {
           method: "POST",
@@ -303,7 +328,6 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ email, password }),
         });
         const data = await response.json();
-
         if (data.success) {
           localStorage.setItem("user", JSON.stringify(data.user));
           showMessage(data.message, "success");
@@ -315,17 +339,15 @@ document.addEventListener("DOMContentLoaded", function () {
           showMessage(data.message, "error");
         }
       } catch (error) {
-        console.error("Login error:", error);
         showMessage("Erreur de connexion au serveur", "error");
       }
     });
   }
 
-  // ============ REGISTRATION HANDLER (WORKING) ============
+  // ============ REGISTRATION HANDLER ============
   if (registerForm) {
     registerForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-
       const firstName = document.getElementById("reg-firstname")?.value.trim();
       const lastName = document.getElementById("reg-lastname")?.value.trim();
       const username = document.getElementById("reg-username")?.value.trim();
@@ -339,12 +361,10 @@ document.addEventListener("DOMContentLoaded", function () {
         showMessage("Veuillez remplir tous les champs", "warning");
         return;
       }
-
       if (password !== confirmPassword) {
         showMessage("Les mots de passe ne correspondent pas", "error");
         return;
       }
-
       if (password.length < 6) {
         showMessage(
           "Le mot de passe doit contenir au moins 6 caractères",
@@ -352,7 +372,7 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         return;
       }
-
+      showMessage("Inscription en cours...", "info");
       try {
         const response = await fetch(`${API_URL}/register`, {
           method: "POST",
@@ -360,7 +380,6 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ username, email, password }),
         });
         const data = await response.json();
-
         if (data.success) {
           showMessage(
             `Inscription réussie ! Bienvenue ${firstName} ${lastName} !`,
@@ -368,31 +387,28 @@ document.addEventListener("DOMContentLoaded", function () {
           );
           registerForm.reset();
           registerForm.classList.remove("active");
-          loginForm.classList.add("active");
+          if (loginForm) loginForm.classList.add("active");
           const loginEmail = document.getElementById("login-email");
           if (loginEmail) loginEmail.value = email;
         } else {
           showMessage(data.message, "error");
         }
       } catch (error) {
-        console.error("Registration error:", error);
         showMessage("Erreur de connexion au serveur", "error");
       }
     });
   }
 
-  // ============ FORGOT PASSWORD HANDLER (WORKING) ============
+  // ============ FORGOT PASSWORD HANDLER ============
   if (forgotForm) {
     forgotForm.addEventListener("submit", async function (e) {
       e.preventDefault();
-
       const email = document.getElementById("forgot-email")?.value.trim();
-
       if (!email) {
         showMessage("Veuillez entrer votre email", "warning");
         return;
       }
-
+      showMessage("Envoi en cours...", "info");
       try {
         const response = await fetch(`${API_URL}/forgot-password`, {
           method: "POST",
@@ -400,17 +416,15 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ email }),
         });
         const data = await response.json();
-
         if (data.success) {
           showMessage(data.message, "success");
           forgotForm.reset();
           forgotForm.classList.remove("active");
-          loginForm.classList.add("active");
+          if (loginForm) loginForm.classList.add("active");
         } else {
           showMessage(data.message, "error");
         }
       } catch (error) {
-        console.error("Forgot password error:", error);
         showMessage("Erreur de connexion au serveur", "error");
       }
     });
@@ -463,11 +477,10 @@ document.addEventListener("DOMContentLoaded", function () {
       forms.forEach((form) => {
         if (form && form.contains(event.target)) clickedInsideForm = true;
       });
-      if (!clickedInsideForm) {
+      if (!clickedInsideForm)
         forms.forEach((form) => {
           if (form) form.classList.remove("active");
         });
-      }
     }
   });
 
@@ -534,16 +547,188 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// ============ SEARCH BUTTON ============
+// ============ SEARCH FUNCTIONALITY ============
+document.addEventListener("DOMContentLoaded", function () {
+  const searchForm = document.getElementById("search-form");
+  const searchInput = document.getElementById("search-box");
+  let currentHighlights = [],
+    currentHighlightIndex = -1,
+    searchResultsBar = null;
+
+  function createSearchBar() {
+    if (document.querySelector(".search-results-bar")) return;
+    const bar = document.createElement("div");
+    bar.className = "search-results-bar";
+    bar.innerHTML = `<span id="search-result-count">0 résultat</span>
+            <button id="prev-result" disabled>◀ Précédent</button>
+            <button id="next-result" disabled>Suivant ▶</button>
+            <button id="clear-search" class="close-search">✕</button>`;
+    document.body.appendChild(bar);
+    searchResultsBar = bar;
+    document
+      .getElementById("prev-result")
+      ?.addEventListener("click", previousHighlight);
+    document
+      .getElementById("next-result")
+      ?.addEventListener("click", nextHighlight);
+    document
+      .getElementById("clear-search")
+      ?.addEventListener("click", clearSearch);
+  }
+
+  function clearHighlights() {
+    currentHighlights.forEach((el) => {
+      if (el && el.parentNode) {
+        const parent = el.parentNode;
+        parent.replaceChild(document.createTextNode(el.textContent), el);
+        parent.normalize();
+      }
+    });
+    currentHighlights = [];
+    currentHighlightIndex = -1;
+    if (searchResultsBar) searchResultsBar.classList.remove("show");
+  }
+
+  function clearSearch() {
+    clearHighlights();
+    if (searchInput) searchInput.value = "";
+    if (searchResultsBar) searchResultsBar.classList.remove("show");
+  }
+
+  function highlightText(searchTerm) {
+    clearHighlights();
+    if (!searchTerm || searchTerm.trim() === "") return;
+    const term = searchTerm.trim().toLowerCase();
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function (node) {
+          if (
+            node.parentElement.tagName === "SCRIPT" ||
+            node.parentElement.tagName === "STYLE" ||
+            node.parentElement.classList?.contains("search-results-bar") ||
+            node.parentElement.classList?.contains("search-form")
+          )
+            return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      },
+    );
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    textNodes.forEach((node) => {
+      const text = node.textContent;
+      const lowerText = text.toLowerCase();
+      let index = lowerText.indexOf(term);
+      if (index !== -1) {
+        const span = document.createElement("span");
+        let lastIndex = 0,
+          html = "";
+        while (index !== -1) {
+          html += escapeHtml(text.substring(lastIndex, index));
+          html += `<mark class="highlight">${escapeHtml(text.substr(index, term.length))}</mark>`;
+          lastIndex = index + term.length;
+          index = lowerText.indexOf(term, lastIndex);
+        }
+        html += escapeHtml(text.substring(lastIndex));
+        span.innerHTML = html;
+        node.parentNode.replaceChild(span, node);
+      }
+    });
+    currentHighlights = Array.from(document.querySelectorAll(".highlight"));
+    if (currentHighlights.length > 0) {
+      const countSpan = document.getElementById("search-result-count");
+      if (countSpan)
+        countSpan.textContent =
+          currentHighlights.length === 1
+            ? "1 résultat trouvé"
+            : `${currentHighlights.length} résultats trouvés`;
+      if (searchResultsBar) searchResultsBar.classList.add("show");
+      currentHighlightIndex = 0;
+      scrollToHighlight();
+      updateNavButtons();
+    } else if (searchTerm.trim() !== "") {
+      showMessage(`Aucun résultat trouvé pour "${searchTerm}"`, "info");
+    }
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  function scrollToHighlight() {
+    if (
+      currentHighlights.length > 0 &&
+      currentHighlights[currentHighlightIndex]
+    ) {
+      document
+        .querySelectorAll(".highlight-current")
+        .forEach((el) => el.classList.remove("highlight-current"));
+      currentHighlights[currentHighlightIndex].classList.add(
+        "highlight-current",
+      );
+      currentHighlights[currentHighlightIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }
+
+  function updateNavButtons() {
+    const prevBtn = document.getElementById("prev-result"),
+      nextBtn = document.getElementById("next-result");
+    if (prevBtn) prevBtn.disabled = currentHighlightIndex <= 0;
+    if (nextBtn)
+      nextBtn.disabled = currentHighlightIndex >= currentHighlights.length - 1;
+  }
+
+  function nextHighlight() {
+    if (currentHighlightIndex < currentHighlights.length - 1) {
+      currentHighlightIndex++;
+      scrollToHighlight();
+      updateNavButtons();
+    }
+  }
+  function previousHighlight() {
+    if (currentHighlightIndex > 0) {
+      currentHighlightIndex--;
+      scrollToHighlight();
+      updateNavButtons();
+    }
+  }
+
+  if (searchForm) {
+    searchForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const searchTerm = searchInput.value;
+      if (searchTerm && searchTerm.trim() !== "") {
+        createSearchBar();
+        highlightText(searchTerm);
+        searchForm.classList.remove("active");
+      } else {
+        showMessage("Veuillez entrer un terme de recherche", "warning");
+      }
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") clearSearch();
+  });
+});
+
+// Search button toggle
 document.addEventListener("DOMContentLoaded", function () {
   const searchBtn = document.querySelector("#search-btn");
   const searchForm = document.querySelector(".search-form");
   if (searchBtn && searchForm) {
     searchBtn.addEventListener("click", function () {
       searchForm.classList.toggle("active");
-      if (searchForm.classList.contains("active")) {
+      if (searchForm.classList.contains("active"))
         document.querySelector("#search-box")?.focus();
-      }
+      else document.getElementById("clear-search")?.click();
     });
   }
 });
@@ -569,15 +754,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const scrollBtn = document.getElementById("scroll-top");
   if (scrollBtn) {
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) {
-        scrollBtn.classList.add("show");
-      } else {
-        scrollBtn.classList.remove("show");
-      }
+      if (window.scrollY > 300) scrollBtn.classList.add("show");
+      else scrollBtn.classList.remove("show");
     });
-    scrollBtn.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    scrollBtn.addEventListener("click", () =>
+      window.scrollTo({ top: 0, behavior: "smooth" }),
+    );
   }
 });
 
@@ -587,26 +769,22 @@ document.addEventListener("DOMContentLoaded", function () {
     ".projects .box-container .box",
   );
   if (projectBoxes.length === 0) return;
-
   let galleryImages = [];
   projectBoxes.forEach((box) => {
     const imgSrc = box.querySelector(".image img")?.src;
     if (imgSrc) galleryImages.push(imgSrc);
   });
   if (galleryImages.length === 0) return;
-
   let currentIndex = 0;
   const modal = document.createElement("div");
   modal.className = "gallery-modal";
   modal.innerHTML = `<div class="gallery-modal-content"><div class="gallery-modal-close"><i class="fas fa-times"></i></div><img src="" alt="Gallery Image"><div class="gallery-counter"><span class="current">1</span> / <span class="total">${galleryImages.length}</span></div></div><button class="gallery-prev"><i class="fas fa-chevron-left"></i></button><button class="gallery-next"><i class="fas fa-chevron-right"></i></button>`;
   document.body.appendChild(modal);
-
   const modalImg = modal.querySelector("img");
   const closeBtn = modal.querySelector(".gallery-modal-close");
   const prevBtn = modal.querySelector(".gallery-prev");
   const nextBtn = modal.querySelector(".gallery-next");
   const currentCounter = modal.querySelector(".current");
-
   function openGallery(index) {
     currentIndex = index;
     modalImg.src = galleryImages[currentIndex];
@@ -614,40 +792,33 @@ document.addEventListener("DOMContentLoaded", function () {
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
   }
-
   function closeGallery() {
     modal.classList.remove("active");
     document.body.style.overflow = "";
   }
-
   function nextImage() {
     currentIndex = (currentIndex + 1) % galleryImages.length;
     modalImg.src = galleryImages[currentIndex];
     currentCounter.textContent = currentIndex + 1;
   }
-
   function prevImage() {
     currentIndex =
       (currentIndex - 1 + galleryImages.length) % galleryImages.length;
     modalImg.src = galleryImages[currentIndex];
     currentCounter.textContent = currentIndex + 1;
   }
-
   projectBoxes.forEach((box, index) => {
     box.addEventListener("click", (e) => {
       e.preventDefault();
       openGallery(index);
     });
   });
-
   closeBtn.addEventListener("click", closeGallery);
   prevBtn.addEventListener("click", prevImage);
   nextBtn.addEventListener("click", nextImage);
-
   modal.addEventListener("click", (e) => {
     if (e.target === modal) closeGallery();
   });
-
   document.addEventListener("keydown", (e) => {
     if (!modal.classList.contains("active")) return;
     if (e.key === "Escape") closeGallery();
@@ -662,57 +833,205 @@ document.addEventListener("DOMContentLoaded", function () {
   const slides = document.querySelectorAll(".reviews .slide");
   const prevBtn = document.querySelector(".slider-prev");
   const nextBtn = document.querySelector(".slider-next");
-
+  const dotsContainer = document.querySelector(".slider-dots");
   if (!slider || slides.length === 0) return;
-
   let currentIndex = 0;
   let slidesToShow =
     window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
   let totalSlides = slides.length;
   let maxIndex = totalSlides - slidesToShow;
+  function getGap() {
+    return parseFloat(window.getComputedStyle(slider).gap) || 20;
+  }
+  function updateSlider() {
+    const gap = getGap();
+    const translateX = -currentIndex * (slides[0].offsetWidth + gap);
+    slider.style.transform = `translateX(${translateX}px)`;
+    updateDots();
+    updateButtons();
+  }
+  function createDots() {
+    if (!dotsContainer) return;
+    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < numberOfDots; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => {
+        currentIndex = i * slidesToShow;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateSlider();
+      });
+      dotsContainer.appendChild(dot);
+    }
+  }
+  function updateDots() {
+    if (!dotsContainer) return;
+    const dotIndex = Math.floor(currentIndex / slidesToShow);
+    const dots = document.querySelectorAll(".dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === dotIndex);
+    });
+  }
+  function updateButtons() {
+    if (prevBtn) {
+      if (currentIndex === 0) prevBtn.setAttribute("disabled", "disabled");
+      else prevBtn.removeAttribute("disabled");
+    }
+    if (nextBtn) {
+      if (currentIndex >= maxIndex)
+        nextBtn.setAttribute("disabled", "disabled");
+      else nextBtn.removeAttribute("disabled");
+    }
+  }
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateSlider();
+    }
+  }
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlider();
+    }
+  }
+  function refreshSlider() {
+    const newSlidesToShow =
+      window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
+    if (newSlidesToShow !== slidesToShow) {
+      slidesToShow = newSlidesToShow;
+      maxIndex = totalSlides - slidesToShow;
+      currentIndex = Math.min(currentIndex, maxIndex);
+      createDots();
+    }
+    updateSlider();
+  }
+  if (prevBtn) prevBtn.addEventListener("click", prevSlide);
+  if (nextBtn) nextBtn.addEventListener("click", nextSlide);
+  let resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(refreshSlider, 150);
+  });
+  createDots();
+  updateSlider();
+  window.addEventListener("load", refreshSlider);
+});
+
+// ============ BEFORE/AFTER SLIDER ============
+document.addEventListener("DOMContentLoaded", function () {
+  const slider = document.querySelector(".before-after-slider");
+  const slides = document.querySelectorAll(".before-after-card");
+  const prevBtn = document.querySelector(".before-after-prev");
+  const nextBtn = document.querySelector(".before-after-next");
+  const dotsContainer = document.querySelector(".before-after-dots");
+
+  if (!slider || slides.length === 0) return;
+
+  let currentIndex = 0;
+  let slidesToShow = getSlidesToShow();
+  let totalSlides = slides.length;
+  let maxIndex = totalSlides - slidesToShow;
+
+  function getSlidesToShow() {
+    if (window.innerWidth <= 768) return 1;
+    if (window.innerWidth <= 992) return 2;
+    return 3;
+  }
 
   function updateSlider() {
     const slideWidth = slides[0].offsetWidth;
     const gap = 20;
     const translateX = -currentIndex * (slideWidth + gap);
     slider.style.transform = `translateX(${translateX}px)`;
+    updateDots();
+    updateButtons();
+  }
 
-    if (prevBtn) {
-      prevBtn.disabled = currentIndex === 0;
-      prevBtn.style.opacity = currentIndex === 0 ? "0.5" : "1";
-    }
-    if (nextBtn) {
-      nextBtn.disabled = currentIndex >= maxIndex;
-      nextBtn.style.opacity = currentIndex >= maxIndex ? "0.5" : "1";
+  function createDots() {
+    if (!dotsContainer) return;
+    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < numberOfDots; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("before-after-dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => {
+        currentIndex = i * slidesToShow;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateSlider();
+      });
+      dotsContainer.appendChild(dot);
     }
   }
 
-  if (prevBtn)
-    prevBtn.addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateSlider();
-      }
+  function updateDots() {
+    if (!dotsContainer) return;
+    const dotIndex = Math.floor(currentIndex / slidesToShow);
+    const dots = document.querySelectorAll(".before-after-dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === dotIndex);
     });
+  }
 
-  if (nextBtn)
-    nextBtn.addEventListener("click", () => {
-      if (currentIndex < maxIndex) {
-        currentIndex++;
-        updateSlider();
+  function updateButtons() {
+    if (prevBtn) {
+      if (currentIndex === 0) {
+        prevBtn.setAttribute("disabled", "disabled");
+      } else {
+        prevBtn.removeAttribute("disabled");
       }
-    });
+    }
+    if (nextBtn) {
+      if (currentIndex >= maxIndex) {
+        nextBtn.setAttribute("disabled", "disabled");
+      } else {
+        nextBtn.removeAttribute("disabled");
+      }
+    }
+  }
 
-  window.addEventListener("resize", () => {
-    slidesToShow =
-      window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
-    maxIndex = totalSlides - slidesToShow;
-    currentIndex = Math.min(currentIndex, maxIndex);
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateSlider();
+    }
+  }
+
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlider();
+    }
+  }
+
+  function refreshSlider() {
+    const newSlidesToShow = getSlidesToShow();
+    if (newSlidesToShow !== slidesToShow) {
+      slidesToShow = newSlidesToShow;
+      maxIndex = totalSlides - slidesToShow;
+      currentIndex = Math.min(currentIndex, maxIndex);
+      createDots();
+    }
     updateSlider();
+  }
+
+  if (prevBtn) prevBtn.addEventListener("click", prevSlide);
+  if (nextBtn) nextBtn.addEventListener("click", nextSlide);
+
+  let resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      refreshSlider();
+    }, 150);
   });
 
-  setTimeout(updateSlider, 100);
-  window.addEventListener("load", updateSlider);
+  createDots();
+  updateSlider();
+  window.addEventListener("load", refreshSlider);
 });
 
 // ============ BLOG SLIDER ============
@@ -721,55 +1040,89 @@ document.addEventListener("DOMContentLoaded", function () {
   const blogSlides = document.querySelectorAll(".blogs .slide");
   const blogPrevBtn = document.querySelector(".blog-slider-prev");
   const blogNextBtn = document.querySelector(".blog-slider-next");
-
+  const blogDotsContainer = document.querySelector(".blog-slider-dots");
   if (!blogSlider || blogSlides.length === 0) return;
-
   let currentIndex = 0;
   let slidesToShow =
     window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
   let totalSlides = blogSlides.length;
   let maxIndex = totalSlides - slidesToShow;
-
-  function updateBlogSlider() {
-    const slideWidth = blogSlides[0].offsetWidth;
-    const gap = 20;
-    const translateX = -currentIndex * (slideWidth + gap);
+  function getGap() {
+    return parseFloat(window.getComputedStyle(blogSlider).gap) || 20;
+  }
+  function updateSlider() {
+    const gap = getGap();
+    const translateX = -currentIndex * (blogSlides[0].offsetWidth + gap);
     blogSlider.style.transform = `translateX(${translateX}px)`;
-
-    if (blogPrevBtn) {
-      blogPrevBtn.disabled = currentIndex === 0;
-      blogPrevBtn.style.opacity = currentIndex === 0 ? "0.5" : "1";
-    }
-    if (blogNextBtn) {
-      blogNextBtn.disabled = currentIndex >= maxIndex;
-      blogNextBtn.style.opacity = currentIndex >= maxIndex ? "0.5" : "1";
+    updateDots();
+    updateButtons();
+  }
+  function createDots() {
+    if (!blogDotsContainer) return;
+    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
+    blogDotsContainer.innerHTML = "";
+    for (let i = 0; i < numberOfDots; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("blog-dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => {
+        currentIndex = i * slidesToShow;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateSlider();
+      });
+      blogDotsContainer.appendChild(dot);
     }
   }
-
-  if (blogPrevBtn)
-    blogPrevBtn.addEventListener("click", () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updateBlogSlider();
-      }
+  function updateDots() {
+    if (!blogDotsContainer) return;
+    const dotIndex = Math.floor(currentIndex / slidesToShow);
+    const dots = document.querySelectorAll(".blog-dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === dotIndex);
     });
-
-  if (blogNextBtn)
-    blogNextBtn.addEventListener("click", () => {
-      if (currentIndex < maxIndex) {
-        currentIndex++;
-        updateBlogSlider();
-      }
-    });
-
-  window.addEventListener("resize", () => {
-    slidesToShow =
+  }
+  function updateButtons() {
+    if (blogPrevBtn) {
+      if (currentIndex === 0) blogPrevBtn.setAttribute("disabled", "disabled");
+      else blogPrevBtn.removeAttribute("disabled");
+    }
+    if (blogNextBtn) {
+      if (currentIndex >= maxIndex)
+        blogNextBtn.setAttribute("disabled", "disabled");
+      else blogNextBtn.removeAttribute("disabled");
+    }
+  }
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateSlider();
+    }
+  }
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlider();
+    }
+  }
+  function refreshSlider() {
+    const newSlidesToShow =
       window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
-    maxIndex = totalSlides - slidesToShow;
-    currentIndex = Math.min(currentIndex, maxIndex);
-    updateBlogSlider();
+    if (newSlidesToShow !== slidesToShow) {
+      slidesToShow = newSlidesToShow;
+      maxIndex = totalSlides - slidesToShow;
+      currentIndex = Math.min(currentIndex, maxIndex);
+      createDots();
+    }
+    updateSlider();
+  }
+  if (blogPrevBtn) blogPrevBtn.addEventListener("click", prevSlide);
+  if (blogNextBtn) blogNextBtn.addEventListener("click", nextSlide);
+  let resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(refreshSlider, 150);
   });
-
-  setTimeout(updateBlogSlider, 100);
-  window.addEventListener("load", updateBlogSlider);
+  createDots();
+  updateSlider();
+  window.addEventListener("load", refreshSlider);
 });
