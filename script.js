@@ -1,7 +1,7 @@
 // ============ API CONFIGURATION ============
 const API_URL = "https://soit-backend.onrender.com/api";
 
-// ============ CUSTOM TOAST NOTIFICATION ============
+// ============ TOAST NOTIFICATION ============
 function showMessage(message, type = "success") {
   let container = document.querySelector(".toast-container");
   if (!container) {
@@ -9,38 +9,644 @@ function showMessage(message, type = "success") {
     container.className = "toast-container";
     document.body.appendChild(container);
   }
-
   const messageDiv = document.createElement("div");
   messageDiv.className = `alert-message alert-${type}`;
-
-  let icon = "";
-  switch (type) {
-    case "success":
-      icon = '<i class="fas fa-check-circle"></i>';
-      break;
-    case "error":
-      icon = '<i class="fas fa-times-circle"></i>';
-      break;
-    case "warning":
-      icon = '<i class="fas fa-exclamation-triangle"></i>';
-      break;
-    case "info":
-      icon = '<i class="fas fa-info-circle"></i>';
-      break;
-    default:
-      icon = '<i class="fas fa-bell"></i>';
-  }
-
-  messageDiv.innerHTML = `${icon}<span>${message}</span>`;
+  let icon =
+    type === "success"
+      ? "✅"
+      : type === "error"
+        ? "❌"
+        : type === "warning"
+          ? "⚠️"
+          : "ℹ️";
+  messageDiv.innerHTML = `${icon} ${message}`;
   container.appendChild(messageDiv);
-
   setTimeout(() => {
     messageDiv.remove();
     if (container.children.length === 0) container.remove();
   }, 5000);
 }
 
-// ============ TRANSLATIONS ============
+// ============ SLIDER FUNCTION ============
+function initSlider(
+  sliderClass,
+  slideClass,
+  prevBtnClass,
+  nextBtnClass,
+  dotsClass,
+) {
+  const slider = document.querySelector(sliderClass);
+  const slides = document.querySelectorAll(slideClass);
+  const prevBtn = document.querySelector(prevBtnClass);
+  const nextBtn = document.querySelector(nextBtnClass);
+  const dotsContainer = document.querySelector(dotsClass);
+
+  if (!slider || slides.length === 0) return;
+
+  let currentIndex = 0;
+  let slidesToShow = 1;
+  let totalSlides = slides.length;
+  let maxIndex = 0;
+
+  function updateSlidesToShow() {
+    if (window.innerWidth <= 768) slidesToShow = 1;
+    else if (window.innerWidth <= 992) slidesToShow = 2;
+    else slidesToShow = 3;
+    maxIndex = Math.max(0, totalSlides - slidesToShow);
+    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    updateSlider();
+    createDots();
+  }
+
+  function updateSlider() {
+    const slideWidth = slides[0].offsetWidth;
+    const gap = 20;
+    const translateX = -currentIndex * (slideWidth + gap);
+    slider.style.transform = `translateX(${translateX}px)`;
+    updateButtons();
+    updateDots();
+  }
+
+  function createDots() {
+    if (!dotsContainer) return;
+    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < numberOfDots; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => {
+        currentIndex = i * slidesToShow;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateSlider();
+      });
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  function updateDots() {
+    if (!dotsContainer) return;
+    const dotIndex = Math.floor(currentIndex / slidesToShow);
+    const dots = dotsContainer.querySelectorAll(".dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === dotIndex);
+    });
+  }
+
+  function updateButtons() {
+    if (prevBtn) {
+      prevBtn.disabled = currentIndex === 0;
+      prevBtn.style.opacity = currentIndex === 0 ? "0.5" : "1";
+    }
+    if (nextBtn) {
+      nextBtn.disabled = currentIndex >= maxIndex;
+      nextBtn.style.opacity = currentIndex >= maxIndex ? "0.5" : "1";
+    }
+  }
+
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateSlider();
+    }
+  }
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlider();
+    }
+  }
+
+  if (prevBtn) prevBtn.addEventListener("click", prevSlide);
+  if (nextBtn) nextBtn.addEventListener("click", nextSlide);
+
+  window.addEventListener("resize", () => setTimeout(updateSlidesToShow, 100));
+  setTimeout(() => {
+    updateSlidesToShow();
+  }, 100);
+  window.addEventListener("load", () => updateSlidesToShow());
+}
+
+// ============ INITIALIZE ALL SLIDERS ============
+document.addEventListener("DOMContentLoaded", function () {
+  initSlider(
+    ".reviews-slider",
+    ".reviews .slide",
+    ".slider-prev",
+    ".slider-next",
+    ".slider-dots",
+  );
+  initSlider(
+    ".blogs-slider",
+    ".blogs .slide",
+    ".blog-slider-prev",
+    ".blog-slider-next",
+    ".blog-slider-dots",
+  );
+  initSlider(
+    ".before-after-slider",
+    ".before-after-card",
+    ".before-after-prev",
+    ".before-after-next",
+    ".before-after-dots",
+  );
+});
+
+// ============ SEARCH FUNCTIONALITY ============
+document.addEventListener("DOMContentLoaded", function () {
+  const searchBtn = document.querySelector("#search-btn");
+  const searchForm = document.querySelector(".search-form");
+  const searchOverlay = document.querySelector(".search-overlay");
+  const searchClose = document.querySelector("#search-close");
+  const searchInput = document.getElementById("search-box");
+
+  function openSearch() {
+    searchForm.classList.add("active");
+    if (searchOverlay) searchOverlay.classList.add("active");
+    if (searchInput) searchInput.focus();
+  }
+  function closeSearch() {
+    searchForm.classList.remove("active");
+    if (searchOverlay) searchOverlay.classList.remove("active");
+    clearHighlights();
+  }
+  if (searchBtn) searchBtn.addEventListener("click", openSearch);
+  if (searchClose) searchClose.addEventListener("click", closeSearch);
+  if (searchOverlay) searchOverlay.addEventListener("click", closeSearch);
+  if (searchForm) {
+    searchForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const term = searchInput.value;
+      if (term && term.trim() !== "") {
+        highlightText(term);
+        closeSearch();
+      } else {
+        showMessage("Veuillez entrer un terme de recherche", "warning");
+      }
+    });
+  }
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeSearch();
+  });
+
+  let currentHighlights = [];
+  let currentIndex = -1;
+
+  function clearHighlights() {
+    currentHighlights.forEach((el) => {
+      if (el && el.parentNode) {
+        const parent = el.parentNode;
+        parent.replaceChild(document.createTextNode(el.textContent), el);
+        parent.normalize();
+      }
+    });
+    currentHighlights = [];
+    const bar = document.querySelector(".search-results-bar");
+    if (bar) bar.remove();
+  }
+
+  function highlightText(term) {
+    clearHighlights();
+    const regex = new RegExp(`(${term})`, "gi");
+    const walker = document.createTreeWalker(
+      document.body,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function (node) {
+          if (
+            node.parentElement.tagName === "SCRIPT" ||
+            node.parentElement.tagName === "STYLE" ||
+            node.parentElement.classList?.contains("search-results-bar") ||
+            node.parentElement.classList?.contains("search-form")
+          )
+            return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      },
+    );
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+    textNodes.forEach((node) => {
+      const text = node.textContent;
+      if (regex.test(text)) {
+        const span = document.createElement("span");
+        span.innerHTML = text.replace(
+          regex,
+          `<mark class="highlight">$1</mark>`,
+        );
+        node.parentNode.replaceChild(span, node);
+        span
+          .querySelectorAll(".highlight")
+          .forEach((el) => currentHighlights.push(el));
+      }
+    });
+
+    if (currentHighlights.length > 0) {
+      currentIndex = 0;
+      scrollToHighlight();
+      createSearchBar();
+    } else {
+      showMessage(`Aucun résultat trouvé pour "${term}"`, "info");
+    }
+  }
+
+  function createSearchBar() {
+    let bar = document.querySelector(".search-results-bar");
+    if (bar) bar.remove();
+    bar = document.createElement("div");
+    bar.className = "search-results-bar";
+    bar.innerHTML = `<span>${currentHighlights.length} résultat(s) trouvé(s)</span>
+            <button id="prev-match" ${currentIndex === 0 ? "disabled" : ""}>◀ Précédent</button>
+            <button id="next-match" ${currentIndex >= currentHighlights.length - 1 ? "disabled" : ""}>Suivant ▶</button>
+            <button id="clear-matches">✕ Effacer</button>`;
+    document.body.appendChild(bar);
+    document.getElementById("prev-match")?.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        scrollToHighlight();
+        updateSearchBar();
+      }
+    });
+    document.getElementById("next-match")?.addEventListener("click", () => {
+      if (currentIndex < currentHighlights.length - 1) {
+        currentIndex++;
+        scrollToHighlight();
+        updateSearchBar();
+      }
+    });
+    document
+      .getElementById("clear-matches")
+      ?.addEventListener("click", clearHighlights);
+  }
+
+  function updateSearchBar() {
+    const bar = document.querySelector(".search-results-bar");
+    if (bar) {
+      bar.innerHTML = `<span>${currentHighlights.length} résultat(s) trouvé(s)</span>
+                <button id="prev-match" ${currentIndex === 0 ? "disabled" : ""}>◀ Précédent</button>
+                <button id="next-match" ${currentIndex >= currentHighlights.length - 1 ? "disabled" : ""}>Suivant ▶</button>
+                <button id="clear-matches">✕ Effacer</button>`;
+      document.getElementById("prev-match")?.addEventListener("click", () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          scrollToHighlight();
+          updateSearchBar();
+        }
+      });
+      document.getElementById("next-match")?.addEventListener("click", () => {
+        if (currentIndex < currentHighlights.length - 1) {
+          currentIndex++;
+          scrollToHighlight();
+          updateSearchBar();
+        }
+      });
+      document
+        .getElementById("clear-matches")
+        ?.addEventListener("click", clearHighlights);
+    }
+  }
+
+  function scrollToHighlight() {
+    if (currentHighlights[currentIndex]) {
+      currentHighlights[currentIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      currentHighlights[currentIndex].style.transition = "all 0.3s";
+      currentHighlights[currentIndex].style.boxShadow = "0 0 0 3px #2370f5";
+      setTimeout(() => {
+        if (currentHighlights[currentIndex])
+          currentHighlights[currentIndex].style.boxShadow = "";
+      }, 1000);
+    }
+  }
+});
+
+// ============ GALLERY FOR BEFORE/AFTER ============
+document.addEventListener("DOMContentLoaded", function () {
+  const cards = document.querySelectorAll(".before-after-card");
+  const images = [];
+  cards.forEach((card) => {
+    const img = card.querySelector(".image img");
+    if (img) images.push(img.src);
+  });
+  if (images.length === 0) return;
+
+  const modal = document.createElement("div");
+  modal.className = "gallery-modal";
+  modal.innerHTML = `<div class="gallery-modal-content"><div class="gallery-modal-close"><i class="fas fa-times"></i></div><img src="" alt="Image"><div class="gallery-counter"><span class="current">1</span> / <span class="total">${images.length}</span></div></div><button class="gallery-prev"><i class="fas fa-chevron-left"></i></button><button class="gallery-next"><i class="fas fa-chevron-right"></i></button>`;
+  document.body.appendChild(modal);
+  const modalImg = modal.querySelector("img");
+  const closeBtn = modal.querySelector(".gallery-modal-close");
+  const prevBtn = modal.querySelector(".gallery-prev");
+  const nextBtn = modal.querySelector(".gallery-next");
+  const counterSpan = modal.querySelector(".current");
+  let currentImageIndex = 0;
+
+  function openGallery(index) {
+    currentImageIndex = index;
+    modalImg.src = images[currentImageIndex];
+    counterSpan.textContent = currentImageIndex + 1;
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+  function closeGallery() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+  function nextImage() {
+    currentImageIndex = (currentImageIndex + 1) % images.length;
+    modalImg.src = images[currentImageIndex];
+    counterSpan.textContent = currentImageIndex + 1;
+  }
+  function prevImage() {
+    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+    modalImg.src = images[currentImageIndex];
+    counterSpan.textContent = currentImageIndex + 1;
+  }
+
+  cards.forEach((card, index) => {
+    card.addEventListener("click", (e) => {
+      if (
+        !e.target.closest(".before-after-prev") &&
+        !e.target.closest(".before-after-next")
+      )
+        openGallery(index);
+    });
+  });
+  closeBtn.addEventListener("click", closeGallery);
+  prevBtn.addEventListener("click", prevImage);
+  nextBtn.addEventListener("click", nextImage);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeGallery();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (!modal.classList.contains("active")) return;
+    if (e.key === "Escape") closeGallery();
+    else if (e.key === "ArrowRight") nextImage();
+    else if (e.key === "ArrowLeft") prevImage();
+  });
+});
+
+// ============ LOGIN, REGISTER, CONTACT FORMS ============
+document.addEventListener("DOMContentLoaded", function () {
+  // Toggle forms
+  const loginBtn = document.querySelector("#login-btn");
+  const loginForm = document.getElementById("login-form");
+  const registerForm = document.getElementById("register-form");
+  const forgotForm = document.getElementById("forgot-form");
+  const showRegister = document.getElementById("show-register");
+  const showLogin = document.getElementById("show-login");
+  const forgotLink = document.getElementById("forgot-password-link");
+  const backToLogin = document.getElementById("back-to-login");
+
+  if (loginBtn)
+    loginBtn.addEventListener("click", () => {
+      loginForm.classList.add("active");
+      registerForm.classList.remove("active");
+      forgotForm.classList.remove("active");
+    });
+  if (showRegister)
+    showRegister.addEventListener("click", (e) => {
+      e.preventDefault();
+      loginForm.classList.remove("active");
+      forgotForm.classList.remove("active");
+      registerForm.classList.add("active");
+    });
+  if (showLogin)
+    showLogin.addEventListener("click", (e) => {
+      e.preventDefault();
+      registerForm.classList.remove("active");
+      forgotForm.classList.remove("active");
+      loginForm.classList.add("active");
+    });
+  if (forgotLink)
+    forgotLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      loginForm.classList.remove("active");
+      registerForm.classList.remove("active");
+      forgotForm.classList.add("active");
+    });
+  if (backToLogin)
+    backToLogin.addEventListener("click", (e) => {
+      e.preventDefault();
+      forgotForm.classList.remove("active");
+      loginForm.classList.add("active");
+    });
+
+  // Login submit
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("login-email")?.value.trim();
+      const password = document.getElementById("login-password")?.value.trim();
+      if (!email || !password) {
+        showMessage("Veuillez entrer votre email et mot de passe", "warning");
+        return;
+      }
+      try {
+        const res = await fetch(`${API_URL}/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+          showMessage(data.message, "success");
+          loginForm.classList.remove("active");
+          loginForm.reset();
+          document.querySelector("#login-btn").innerHTML =
+            '<i class="fas fa-user-check"></i>';
+        } else {
+          showMessage(data.message, "error");
+        }
+      } catch (error) {
+        showMessage("Erreur de connexion au serveur", "error");
+      }
+    });
+  }
+
+  // Register submit
+  if (registerForm) {
+    registerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const firstName = document.getElementById("reg-firstname")?.value.trim();
+      const lastName = document.getElementById("reg-lastname")?.value.trim();
+      const username = document.getElementById("reg-username")?.value.trim();
+      const email = document.getElementById("reg-email")?.value.trim();
+      const password = document.getElementById("reg-password")?.value;
+      const confirm = document.getElementById("reg-confirm-password")?.value;
+      if (!firstName || !lastName || !username || !email || !password) {
+        showMessage("Veuillez remplir tous les champs", "warning");
+        return;
+      }
+      if (password !== confirm) {
+        showMessage("Les mots de passe ne correspondent pas", "error");
+        return;
+      }
+      if (password.length < 6) {
+        showMessage(
+          "Le mot de passe doit contenir au moins 6 caractères",
+          "warning",
+        );
+        return;
+      }
+      try {
+        const res = await fetch(`${API_URL}/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          showMessage(
+            `Inscription réussie ! Bienvenue ${firstName} ${lastName} !`,
+            "success",
+          );
+          registerForm.reset();
+          registerForm.classList.remove("active");
+          loginForm.classList.add("active");
+          document.getElementById("login-email").value = email;
+        } else {
+          showMessage(data.message, "error");
+        }
+      } catch (error) {
+        showMessage("Erreur de connexion au serveur", "error");
+      }
+    });
+  }
+
+  // Contact form
+  const contactForm = document.getElementById("contact-form");
+  if (contactForm) {
+    contactForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("contact-name")?.value,
+        email: document.getElementById("contact-email")?.value,
+        phone: document.getElementById("contact-phone")?.value,
+        message: document.getElementById("contact-message")?.value,
+      };
+      if (!data.name || !data.email || !data.message) {
+        showMessage("Veuillez remplir tous les champs obligatoires", "warning");
+        return;
+      }
+      try {
+        const res = await fetch(`${API_URL}/contact`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        if (result.success) {
+          showMessage(result.message, "success");
+          contactForm.reset();
+        } else {
+          showMessage(result.message, "error");
+        }
+      } catch (error) {
+        showMessage("Erreur de connexion au serveur", "error");
+      }
+    });
+  }
+
+  // Close forms on outside click
+  document.addEventListener("click", (event) => {
+    const forms = [loginForm, registerForm, forgotForm];
+    if (
+      !loginBtn?.contains(event.target) &&
+      forms.some((f) => f?.classList.contains("active"))
+    ) {
+      if (!forms.some((f) => f?.contains(event.target)))
+        forms.forEach((f) => f?.classList.remove("active"));
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      loginForm?.classList.remove("active");
+      registerForm?.classList.remove("active");
+      forgotForm?.classList.remove("active");
+    }
+  });
+});
+
+// ============ LOGOUT ============
+function logout() {
+  localStorage.removeItem("user");
+  document.querySelector("#login-btn").innerHTML =
+    '<i class="fas fa-user"></i>';
+  showMessage("Déconnexion réussie !", "success");
+  setTimeout(() => location.reload(), 1000);
+}
+
+// ============ CHECK LOGIN STATUS ============
+document.addEventListener("DOMContentLoaded", () => {
+  const user = localStorage.getItem("user");
+  if (user) {
+    try {
+      const userData = JSON.parse(user);
+      document.querySelector("#login-btn").innerHTML =
+        userData.role === "admin"
+          ? '<i class="fas fa-user-shield"></i>'
+          : '<i class="fas fa-user-check"></i>';
+    } catch (e) {}
+  }
+});
+
+// ============ HOME SLIDER ============
+document.addEventListener("DOMContentLoaded", () => {
+  const slides = document.querySelectorAll(".home .slide");
+  if (slides.length) {
+    let index = 0;
+    slides.forEach((s, i) => (s.style.display = i === 0 ? "flex" : "none"));
+    setInterval(() => {
+      index = (index + 1) % slides.length;
+      slides.forEach(
+        (s, i) => (s.style.display = i === index ? "flex" : "none"),
+      );
+    }, 6000);
+  }
+});
+
+// ============ MOBILE MENU ============
+document.addEventListener("DOMContentLoaded", () => {
+  const menuBtn = document.querySelector("#menu-btn");
+  const navbar = document.querySelector(".header .navbar");
+  if (menuBtn && navbar)
+    menuBtn.addEventListener("click", () => navbar.classList.toggle("active"));
+});
+
+// ============ INFO SIDEBAR ============
+document.addEventListener("DOMContentLoaded", () => {
+  const infoBtn = document.querySelector("#info-btn");
+  const contactInfo = document.querySelector(".contact-info");
+  const closeInfo = document.querySelector("#close-info");
+  if (infoBtn)
+    infoBtn.addEventListener("click", () =>
+      contactInfo?.classList.add("active"),
+    );
+  if (closeInfo)
+    closeInfo.addEventListener("click", () =>
+      contactInfo?.classList.remove("active"),
+    );
+});
+
+// ============ SCROLL TO TOP ============
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("scroll-top");
+  if (btn) {
+    window.addEventListener("scroll", () =>
+      btn.classList.toggle("show", window.scrollY > 300),
+    );
+    btn.addEventListener("click", () =>
+      window.scrollTo({ top: 0, behavior: "smooth" }),
+    );
+  }
+});
+
+// ============ LANGUAGE ============
 const translations = {
   fr: {
     home: "Accueil",
@@ -128,1001 +734,105 @@ const translations = {
   },
 };
 
-let currentLanguage = "fr";
-
 function updateLanguage(lang) {
-  currentLanguage = lang;
   localStorage.setItem("language", lang);
-
-  if (lang === "ar") {
-    document.documentElement.setAttribute("dir", "rtl");
-  } else {
-    document.documentElement.setAttribute("dir", "ltr");
-  }
-
-  // Update navigation links
-  const navLinks = document.querySelectorAll(".navbar a");
-  if (navLinks[0]) navLinks[0].textContent = translations[lang].home;
-  if (navLinks[1]) navLinks[1].textContent = translations[lang].about;
-  if (navLinks[2]) navLinks[2].textContent = translations[lang].services;
-  if (navLinks[3]) navLinks[3].textContent = translations[lang].projects;
-  if (navLinks[4]) navLinks[4].textContent = translations[lang].beforeAfter;
-  if (navLinks[5]) navLinks[5].textContent = translations[lang].clients;
-  if (navLinks[6]) navLinks[6].textContent = translations[lang].blogs;
-  if (navLinks[7]) navLinks[7].textContent = translations[lang].contact;
-
-  // Update section headings using IDs
-  const aboutHeading = document.querySelector("#about .heading");
-  const servicesHeading = document.querySelector("#services .heading");
-  const projectsHeading = document.querySelector("#projects .heading");
-  const beforeAfterHeading = document.querySelector("#before-after .heading");
-  const reviewsHeading = document.querySelector("#reviews .heading");
-  const blogHeading = document.querySelector("#blogs .heading");
-  const contactHeading = document.querySelector("#contact .heading");
-
-  if (aboutHeading) aboutHeading.textContent = translations[lang].aboutHeading;
-  if (servicesHeading)
-    servicesHeading.textContent = translations[lang].servicesHeading;
-  if (projectsHeading)
-    projectsHeading.textContent = translations[lang].projectsHeading;
-  if (beforeAfterHeading)
-    beforeAfterHeading.textContent = translations[lang].beforeAfterHeading;
-  if (reviewsHeading)
-    reviewsHeading.textContent = translations[lang].reviewsHeading;
-  if (blogHeading) blogHeading.textContent = translations[lang].blogHeading;
-  if (contactHeading)
-    contactHeading.textContent = translations[lang].contactHeading;
-
-  // Update buttons
-  const startButtons = document.querySelectorAll(".home .btn, .about .btn");
-  startButtons.forEach((btn) => {
-    btn.textContent = translations[lang].startNow;
-  });
-
-  const learnButtons = document.querySelectorAll(".services .btn, .blogs .btn");
-  learnButtons.forEach((btn) => {
-    btn.textContent = translations[lang].learnMore;
-  });
-
+  document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+  const nav = document.querySelectorAll(".navbar a");
+  if (nav[0]) nav[0].textContent = translations[lang].home;
+  if (nav[1]) nav[1].textContent = translations[lang].about;
+  if (nav[2]) nav[2].textContent = translations[lang].services;
+  if (nav[3]) nav[3].textContent = translations[lang].projects;
+  if (nav[4]) nav[4].textContent = translations[lang].beforeAfter;
+  if (nav[5]) nav[5].textContent = translations[lang].clients;
+  if (nav[6]) nav[6].textContent = translations[lang].blogs;
+  if (nav[7]) nav[7].textContent = translations[lang].contact;
+  const h = {
+    about: "#about .heading",
+    services: "#services .heading",
+    projects: "#projects .heading",
+    beforeAfter: "#before-after .heading",
+    reviews: "#reviews .heading",
+    blog: "#blogs .heading",
+    contact: "#contact .heading",
+  };
+  if (document.querySelector(h.about))
+    document.querySelector(h.about).textContent =
+      translations[lang].aboutHeading;
+  if (document.querySelector(h.services))
+    document.querySelector(h.services).textContent =
+      translations[lang].servicesHeading;
+  if (document.querySelector(h.projects))
+    document.querySelector(h.projects).textContent =
+      translations[lang].projectsHeading;
+  if (document.querySelector(h.beforeAfter))
+    document.querySelector(h.beforeAfter).textContent =
+      translations[lang].beforeAfterHeading;
+  if (document.querySelector(h.reviews))
+    document.querySelector(h.reviews).textContent =
+      translations[lang].reviewsHeading;
+  if (document.querySelector(h.blog))
+    document.querySelector(h.blog).textContent = translations[lang].blogHeading;
+  if (document.querySelector(h.contact))
+    document.querySelector(h.contact).textContent =
+      translations[lang].contactHeading;
+  document
+    .querySelectorAll(".home .btn, .about .btn")
+    .forEach((btn) => (btn.textContent = translations[lang].startNow));
+  document
+    .querySelectorAll(".services .btn, .blogs .btn")
+    .forEach((btn) => (btn.textContent = translations[lang].learnMore));
   const contactBtn = document.querySelector(".contact .btn");
   if (contactBtn) contactBtn.textContent = translations[lang].sendMessage;
-
-  // Update search placeholder
-  const searchInput = document.getElementById("search-box");
-  if (searchInput)
-    searchInput.placeholder = translations[lang].searchPlaceholder;
-
-  // Update contact form placeholders
-  const contactName = document.getElementById("contact-name");
-  const contactEmail = document.getElementById("contact-email");
-  const contactPhone = document.getElementById("contact-phone");
-  const contactMessage = document.getElementById("contact-message");
-  if (contactName) contactName.placeholder = translations[lang].yourName;
-  if (contactEmail) contactEmail.placeholder = translations[lang].yourEmail;
-  if (contactPhone) contactPhone.placeholder = translations[lang].yourPhone;
-  if (contactMessage)
-    contactMessage.placeholder = translations[lang].yourMessage;
-
-  // Update contact info sidebar
-  const infoTitles = document.querySelectorAll(".info h3");
-  if (infoTitles[0]) infoTitles[0].textContent = translations[lang].phone;
-  if (infoTitles[1]) infoTitles[1].textContent = translations[lang].emailLabel;
-  if (infoTitles[2]) infoTitles[2].textContent = translations[lang].address;
-
-  // Update active class in dropdown
-  document.querySelectorAll(".lang-option").forEach((option) => {
-    option.classList.remove("active");
-    if (option.getAttribute("data-lang") === lang) {
-      option.classList.add("active");
-    }
-  });
-
-  console.log(`Language changed to: ${lang}`);
+  const searchBox = document.getElementById("search-box");
+  if (searchBox) searchBox.placeholder = translations[lang].searchPlaceholder;
+  const fields = {
+    name: "contact-name",
+    email: "contact-email",
+    phone: "contact-phone",
+    message: "contact-message",
+  };
+  if (document.getElementById(fields.name))
+    document.getElementById(fields.name).placeholder =
+      translations[lang].yourName;
+  if (document.getElementById(fields.email))
+    document.getElementById(fields.email).placeholder =
+      translations[lang].yourEmail;
+  if (document.getElementById(fields.phone))
+    document.getElementById(fields.phone).placeholder =
+      translations[lang].yourPhone;
+  if (document.getElementById(fields.message))
+    document.getElementById(fields.message).placeholder =
+      translations[lang].yourMessage;
+  const info = document.querySelectorAll(".info h3");
+  if (info[0]) info[0].textContent = translations[lang].phone;
+  if (info[1]) info[1].textContent = translations[lang].emailLabel;
+  if (info[2]) info[2].textContent = translations[lang].address;
+  document
+    .querySelectorAll(".lang-option")
+    .forEach((opt) => opt.classList.remove("active"));
+  const active = document.querySelector(`.lang-option[data-lang="${lang}"]`);
+  if (active) active.classList.add("active");
 }
-
-// ============ LANGUAGE SELECTOR ============
-document.addEventListener("DOMContentLoaded", function () {
-  const languageBtn = document.getElementById("language-btn");
-  const languageDropdown = document.getElementById("language-dropdown");
-
-  if (languageBtn && languageDropdown) {
-    languageBtn.addEventListener("click", function (e) {
+document.addEventListener("DOMContentLoaded", () => {
+  const langBtn = document.getElementById("language-btn");
+  const langDropdown = document.getElementById("language-dropdown");
+  if (langBtn && langDropdown) {
+    langBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      languageDropdown.classList.toggle("active");
+      langDropdown.classList.toggle("active");
     });
-
-    document.addEventListener("click", function (e) {
-      if (
-        !languageBtn.contains(e.target) &&
-        !languageDropdown.contains(e.target)
-      ) {
-        languageDropdown.classList.remove("active");
-      }
+    document.addEventListener("click", (e) => {
+      if (!langBtn.contains(e.target) && !langDropdown.contains(e.target))
+        langDropdown.classList.remove("active");
     });
   }
-
-  document.querySelectorAll(".lang-option").forEach((option) => {
-    option.addEventListener("click", function () {
-      const lang = this.getAttribute("data-lang");
-      updateLanguage(lang);
-      languageDropdown.classList.remove("active");
+  document.querySelectorAll(".lang-option").forEach((opt) => {
+    opt.addEventListener("click", () => {
+      updateLanguage(opt.dataset.lang);
+      langDropdown.classList.remove("active");
     });
   });
-
-  const savedLang = localStorage.getItem("language");
-  if (savedLang && translations[savedLang]) {
-    updateLanguage(savedLang);
-  } else {
-    updateLanguage("fr");
-  }
-});
-
-// ============ WAIT FOR PAGE TO LOAD ============
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("✅ Frontend loaded, API URL:", API_URL);
-
-  // ============ FORM ELEMENTS ============
-  const loginBtn = document.querySelector("#login-btn");
-  const loginForm = document.getElementById("login-form");
-  const registerForm = document.getElementById("register-form");
-  const forgotForm = document.getElementById("forgot-form");
-  const showRegisterLink = document.getElementById("show-register");
-  const showLoginLink = document.getElementById("show-login");
-  const forgotPasswordLink = document.getElementById("forgot-password-link");
-  const backToLoginLink = document.getElementById("back-to-login");
-
-  // Toggle Forms
-  if (loginBtn) {
-    loginBtn.addEventListener("click", function () {
-      if (loginForm) loginForm.classList.add("active");
-      if (registerForm) registerForm.classList.remove("active");
-      if (forgotForm) forgotForm.classList.remove("active");
-    });
-  }
-  if (showRegisterLink) {
-    showRegisterLink.addEventListener("click", function (e) {
-      e.preventDefault();
-      if (loginForm) loginForm.classList.remove("active");
-      if (forgotForm) forgotForm.classList.remove("active");
-      if (registerForm) registerForm.classList.add("active");
-    });
-  }
-  if (showLoginLink) {
-    showLoginLink.addEventListener("click", function (e) {
-      e.preventDefault();
-      if (registerForm) registerForm.classList.remove("active");
-      if (forgotForm) forgotForm.classList.remove("active");
-      if (loginForm) loginForm.classList.add("active");
-    });
-  }
-  if (forgotPasswordLink) {
-    forgotPasswordLink.addEventListener("click", function (e) {
-      e.preventDefault();
-      if (loginForm) loginForm.classList.remove("active");
-      if (registerForm) registerForm.classList.remove("active");
-      if (forgotForm) forgotForm.classList.add("active");
-    });
-  }
-  if (backToLoginLink) {
-    backToLoginLink.addEventListener("click", function (e) {
-      e.preventDefault();
-      if (forgotForm) forgotForm.classList.remove("active");
-      if (loginForm) loginForm.classList.add("active");
-    });
-  }
-
-  // ============ LOGIN HANDLER ============
-  if (loginForm) {
-    loginForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const email = document.getElementById("login-email")?.value.trim();
-      const password = document.getElementById("login-password")?.value.trim();
-      if (!email || !password) {
-        showMessage("Veuillez entrer votre email et mot de passe", "warning");
-        return;
-      }
-      try {
-        const response = await fetch(`${API_URL}/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          localStorage.setItem("user", JSON.stringify(data.user));
-          showMessage(data.message, "success");
-          loginForm.classList.remove("active");
-          loginForm.reset();
-          const icon = document.querySelector("#login-btn");
-          if (icon) icon.innerHTML = '<i class="fas fa-user-check"></i>';
-        } else {
-          showMessage(data.message, "error");
-        }
-      } catch (error) {
-        showMessage("Erreur de connexion au serveur", "error");
-      }
-    });
-  }
-
-  // ============ REGISTRATION HANDLER ============
-  if (registerForm) {
-    registerForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const firstName = document.getElementById("reg-firstname")?.value.trim();
-      const lastName = document.getElementById("reg-lastname")?.value.trim();
-      const username = document.getElementById("reg-username")?.value.trim();
-      const email = document.getElementById("reg-email")?.value.trim();
-      const password = document.getElementById("reg-password")?.value;
-      const confirmPassword = document.getElementById(
-        "reg-confirm-password",
-      )?.value;
-
-      if (!firstName || !lastName || !username || !email || !password) {
-        showMessage("Veuillez remplir tous les champs", "warning");
-        return;
-      }
-      if (password !== confirmPassword) {
-        showMessage("Les mots de passe ne correspondent pas", "error");
-        return;
-      }
-      if (password.length < 6) {
-        showMessage(
-          "Le mot de passe doit contenir au moins 6 caractères",
-          "warning",
-        );
-        return;
-      }
-      showMessage("Inscription en cours...", "info");
-      try {
-        const response = await fetch(`${API_URL}/register`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          showMessage(
-            `Inscription réussie ! Bienvenue ${firstName} ${lastName} !`,
-            "success",
-          );
-          registerForm.reset();
-          registerForm.classList.remove("active");
-          if (loginForm) loginForm.classList.add("active");
-          const loginEmail = document.getElementById("login-email");
-          if (loginEmail) loginEmail.value = email;
-        } else {
-          showMessage(data.message, "error");
-        }
-      } catch (error) {
-        showMessage("Erreur de connexion au serveur", "error");
-      }
-    });
-  }
-
-  // ============ FORGOT PASSWORD HANDLER ============
-  if (forgotForm) {
-    forgotForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const email = document.getElementById("forgot-email")?.value.trim();
-      if (!email) {
-        showMessage("Veuillez entrer votre email", "warning");
-        return;
-      }
-      showMessage("Envoi en cours...", "info");
-      try {
-        const response = await fetch(`${API_URL}/forgot-password`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          showMessage(data.message, "success");
-          forgotForm.reset();
-          forgotForm.classList.remove("active");
-          if (loginForm) loginForm.classList.add("active");
-        } else {
-          showMessage(data.message, "error");
-        }
-      } catch (error) {
-        showMessage("Erreur de connexion au serveur", "error");
-      }
-    });
-  }
-
-  // ============ CONTACT FORM HANDLER ============
-  const contactForm = document.getElementById("contact-form");
-  if (contactForm) {
-    contactForm.addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const formData = {
-        name: document.getElementById("contact-name")?.value || "",
-        email: document.getElementById("contact-email")?.value || "",
-        phone: document.getElementById("contact-phone")?.value || "",
-        message: document.getElementById("contact-message")?.value || "",
-      };
-      if (!formData.name || !formData.email || !formData.message) {
-        showMessage("Veuillez remplir tous les champs obligatoires", "warning");
-        return;
-      }
-      showMessage("Envoi en cours...", "info");
-      try {
-        const response = await fetch(`${API_URL}/contact`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
-        const result = await response.json();
-        if (result.success) {
-          showMessage(result.message, "success");
-          contactForm.reset();
-        } else {
-          showMessage(result.message, "error");
-        }
-      } catch (error) {
-        showMessage("Erreur de connexion au serveur", "error");
-      }
-    });
-  }
-
-  // ============ CLOSE FORMS ON OUTSIDE CLICK ============
-  document.addEventListener("click", function (event) {
-    const forms = [loginForm, registerForm, forgotForm];
-    const loginIcon = document.querySelector("#login-btn");
-    const isFormActive = forms.some(
-      (form) => form && form.classList.contains("active"),
-    );
-    if (loginIcon && !loginIcon.contains(event.target) && isFormActive) {
-      let clickedInsideForm = false;
-      forms.forEach((form) => {
-        if (form && form.contains(event.target)) clickedInsideForm = true;
-      });
-      if (!clickedInsideForm)
-        forms.forEach((form) => {
-          if (form) form.classList.remove("active");
-        });
-    }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") {
-      if (loginForm) loginForm.classList.remove("active");
-      if (registerForm) registerForm.classList.remove("active");
-      if (forgotForm) forgotForm.classList.remove("active");
-    }
-  });
-});
-
-// ============ LOGOUT FUNCTION ============
-function logout() {
-  localStorage.removeItem("user");
-  const loginIcon = document.querySelector("#login-btn");
-  if (loginIcon) loginIcon.innerHTML = '<i class="fas fa-user"></i>';
-  showMessage("Déconnexion réussie !", "success");
-  setTimeout(() => location.reload(), 1000);
-}
-
-// ============ CHECK LOGIN STATUS ============
-document.addEventListener("DOMContentLoaded", function () {
-  const user = localStorage.getItem("user");
-  if (user) {
-    try {
-      const userData = JSON.parse(user);
-      const loginIcon = document.querySelector("#login-btn");
-      if (loginIcon) {
-        loginIcon.innerHTML =
-          userData.role === "admin"
-            ? '<i class="fas fa-user-shield"></i>'
-            : '<i class="fas fa-user-check"></i>';
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }
-});
-
-// ============ HOME SLIDER ============
-document.addEventListener("DOMContentLoaded", function () {
-  const slides = document.querySelectorAll(".home .slide");
-  if (slides.length > 0) {
-    let currentIndex = 0;
-    slides.forEach((slide, i) => {
-      slide.style.display = i === 0 ? "flex" : "none";
-    });
-    setInterval(() => {
-      currentIndex = (currentIndex + 1) % slides.length;
-      slides.forEach((slide, i) => {
-        slide.style.display = i === currentIndex ? "flex" : "none";
-      });
-    }, 6000);
-  }
-});
-
-// ============ MOBILE MENU ============
-document.addEventListener("DOMContentLoaded", function () {
-  const menuBtn = document.querySelector("#menu-btn");
-  const navbar = document.querySelector(".header .navbar");
-  if (menuBtn && navbar) {
-    menuBtn.addEventListener("click", () => navbar.classList.toggle("active"));
-  }
-});
-
-// ============ SEARCH FUNCTIONALITY ============
-document.addEventListener("DOMContentLoaded", function () {
-  const searchForm = document.getElementById("search-form");
-  const searchInput = document.getElementById("search-box");
-  let currentHighlights = [],
-    currentHighlightIndex = -1,
-    searchResultsBar = null;
-
-  function createSearchBar() {
-    if (document.querySelector(".search-results-bar")) return;
-    const bar = document.createElement("div");
-    bar.className = "search-results-bar";
-    bar.innerHTML = `<span id="search-result-count">0 résultat</span>
-            <button id="prev-result" disabled>◀ Précédent</button>
-            <button id="next-result" disabled>Suivant ▶</button>
-            <button id="clear-search" class="close-search">✕</button>`;
-    document.body.appendChild(bar);
-    searchResultsBar = bar;
-    document
-      .getElementById("prev-result")
-      ?.addEventListener("click", previousHighlight);
-    document
-      .getElementById("next-result")
-      ?.addEventListener("click", nextHighlight);
-    document
-      .getElementById("clear-search")
-      ?.addEventListener("click", clearSearch);
-  }
-
-  function clearHighlights() {
-    currentHighlights.forEach((el) => {
-      if (el && el.parentNode) {
-        const parent = el.parentNode;
-        parent.replaceChild(document.createTextNode(el.textContent), el);
-        parent.normalize();
-      }
-    });
-    currentHighlights = [];
-    currentHighlightIndex = -1;
-    if (searchResultsBar) searchResultsBar.classList.remove("show");
-  }
-
-  function clearSearch() {
-    clearHighlights();
-    if (searchInput) searchInput.value = "";
-    if (searchResultsBar) searchResultsBar.classList.remove("show");
-  }
-
-  function highlightText(searchTerm) {
-    clearHighlights();
-    if (!searchTerm || searchTerm.trim() === "") return;
-    const term = searchTerm.trim().toLowerCase();
-    const walker = document.createTreeWalker(
-      document.body,
-      NodeFilter.SHOW_TEXT,
-      {
-        acceptNode: function (node) {
-          if (
-            node.parentElement.tagName === "SCRIPT" ||
-            node.parentElement.tagName === "STYLE" ||
-            node.parentElement.classList?.contains("search-results-bar") ||
-            node.parentElement.classList?.contains("search-form")
-          )
-            return NodeFilter.FILTER_REJECT;
-          return NodeFilter.FILTER_ACCEPT;
-        },
-      },
-    );
-    const textNodes = [];
-    while (walker.nextNode()) textNodes.push(walker.currentNode);
-
-    textNodes.forEach((node) => {
-      const text = node.textContent;
-      const lowerText = text.toLowerCase();
-      let index = lowerText.indexOf(term);
-      if (index !== -1) {
-        const span = document.createElement("span");
-        let lastIndex = 0,
-          html = "";
-        while (index !== -1) {
-          html += escapeHtml(text.substring(lastIndex, index));
-          html += `<mark class="highlight">${escapeHtml(text.substr(index, term.length))}</mark>`;
-          lastIndex = index + term.length;
-          index = lowerText.indexOf(term, lastIndex);
-        }
-        html += escapeHtml(text.substring(lastIndex));
-        span.innerHTML = html;
-        node.parentNode.replaceChild(span, node);
-      }
-    });
-    currentHighlights = Array.from(document.querySelectorAll(".highlight"));
-    if (currentHighlights.length > 0) {
-      const countSpan = document.getElementById("search-result-count");
-      if (countSpan)
-        countSpan.textContent =
-          currentHighlights.length === 1
-            ? "1 résultat trouvé"
-            : `${currentHighlights.length} résultats trouvés`;
-      if (searchResultsBar) searchResultsBar.classList.add("show");
-      currentHighlightIndex = 0;
-      scrollToHighlight();
-      updateNavButtons();
-    } else if (searchTerm.trim() !== "") {
-      showMessage(`Aucun résultat trouvé pour "${searchTerm}"`, "info");
-    }
-  }
-
-  function escapeHtml(text) {
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-  }
-
-  function scrollToHighlight() {
-    if (
-      currentHighlights.length > 0 &&
-      currentHighlights[currentHighlightIndex]
-    ) {
-      document
-        .querySelectorAll(".highlight-current")
-        .forEach((el) => el.classList.remove("highlight-current"));
-      currentHighlights[currentHighlightIndex].classList.add(
-        "highlight-current",
-      );
-      currentHighlights[currentHighlightIndex].scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
-    }
-  }
-
-  function updateNavButtons() {
-    const prevBtn = document.getElementById("prev-result"),
-      nextBtn = document.getElementById("next-result");
-    if (prevBtn) prevBtn.disabled = currentHighlightIndex <= 0;
-    if (nextBtn)
-      nextBtn.disabled = currentHighlightIndex >= currentHighlights.length - 1;
-  }
-
-  function nextHighlight() {
-    if (currentHighlightIndex < currentHighlights.length - 1) {
-      currentHighlightIndex++;
-      scrollToHighlight();
-      updateNavButtons();
-    }
-  }
-  function previousHighlight() {
-    if (currentHighlightIndex > 0) {
-      currentHighlightIndex--;
-      scrollToHighlight();
-      updateNavButtons();
-    }
-  }
-
-  if (searchForm) {
-    searchForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const searchTerm = searchInput.value;
-      if (searchTerm && searchTerm.trim() !== "") {
-        createSearchBar();
-        highlightText(searchTerm);
-        searchForm.classList.remove("active");
-      } else {
-        showMessage("Veuillez entrer un terme de recherche", "warning");
-      }
-    });
-  }
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") clearSearch();
-  });
-});
-
-// Search button toggle
-document.addEventListener("DOMContentLoaded", function () {
-  const searchBtn = document.querySelector("#search-btn");
-  const searchForm = document.querySelector(".search-form");
-  if (searchBtn && searchForm) {
-    searchBtn.addEventListener("click", function () {
-      searchForm.classList.toggle("active");
-      if (searchForm.classList.contains("active"))
-        document.querySelector("#search-box")?.focus();
-      else document.getElementById("clear-search")?.click();
-    });
-  }
-});
-
-// ============ INFO SIDEBAR ============
-document.addEventListener("DOMContentLoaded", function () {
-  const infoBtn = document.querySelector("#info-btn");
-  const contactInfo = document.querySelector(".contact-info");
-  const closeInfo = document.querySelector("#close-info");
-  if (infoBtn && contactInfo) {
-    infoBtn.addEventListener("click", () =>
-      contactInfo.classList.add("active"),
-    );
-    if (closeInfo)
-      closeInfo.addEventListener("click", () =>
-        contactInfo.classList.remove("active"),
-      );
-  }
-});
-
-// ============ SCROLL TO TOP BUTTON ============
-document.addEventListener("DOMContentLoaded", function () {
-  const scrollBtn = document.getElementById("scroll-top");
-  if (scrollBtn) {
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 300) scrollBtn.classList.add("show");
-      else scrollBtn.classList.remove("show");
-    });
-    scrollBtn.addEventListener("click", () =>
-      window.scrollTo({ top: 0, behavior: "smooth" }),
-    );
-  }
-});
-
-// ============ GALLERY FUNCTIONALITY ============
-document.addEventListener("DOMContentLoaded", function () {
-  const projectBoxes = document.querySelectorAll(
-    ".projects .box-container .box",
-  );
-  if (projectBoxes.length === 0) return;
-  let galleryImages = [];
-  projectBoxes.forEach((box) => {
-    const imgSrc = box.querySelector(".image img")?.src;
-    if (imgSrc) galleryImages.push(imgSrc);
-  });
-  if (galleryImages.length === 0) return;
-  let currentIndex = 0;
-  const modal = document.createElement("div");
-  modal.className = "gallery-modal";
-  modal.innerHTML = `<div class="gallery-modal-content"><div class="gallery-modal-close"><i class="fas fa-times"></i></div><img src="" alt="Gallery Image"><div class="gallery-counter"><span class="current">1</span> / <span class="total">${galleryImages.length}</span></div></div><button class="gallery-prev"><i class="fas fa-chevron-left"></i></button><button class="gallery-next"><i class="fas fa-chevron-right"></i></button>`;
-  document.body.appendChild(modal);
-  const modalImg = modal.querySelector("img");
-  const closeBtn = modal.querySelector(".gallery-modal-close");
-  const prevBtn = modal.querySelector(".gallery-prev");
-  const nextBtn = modal.querySelector(".gallery-next");
-  const currentCounter = modal.querySelector(".current");
-  function openGallery(index) {
-    currentIndex = index;
-    modalImg.src = galleryImages[currentIndex];
-    currentCounter.textContent = currentIndex + 1;
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
-  }
-  function closeGallery() {
-    modal.classList.remove("active");
-    document.body.style.overflow = "";
-  }
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % galleryImages.length;
-    modalImg.src = galleryImages[currentIndex];
-    currentCounter.textContent = currentIndex + 1;
-  }
-  function prevImage() {
-    currentIndex =
-      (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-    modalImg.src = galleryImages[currentIndex];
-    currentCounter.textContent = currentIndex + 1;
-  }
-  projectBoxes.forEach((box, index) => {
-    box.addEventListener("click", (e) => {
-      e.preventDefault();
-      openGallery(index);
-    });
-  });
-  closeBtn.addEventListener("click", closeGallery);
-  prevBtn.addEventListener("click", prevImage);
-  nextBtn.addEventListener("click", nextImage);
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeGallery();
-  });
-  document.addEventListener("keydown", (e) => {
-    if (!modal.classList.contains("active")) return;
-    if (e.key === "Escape") closeGallery();
-    else if (e.key === "ArrowRight") nextImage();
-    else if (e.key === "ArrowLeft") prevImage();
-  });
-});
-
-// ============ REVIEWS SLIDER ============
-document.addEventListener("DOMContentLoaded", function () {
-  const slider = document.querySelector(".reviews-slider");
-  const slides = document.querySelectorAll(".reviews .slide");
-  const prevBtn = document.querySelector(".slider-prev");
-  const nextBtn = document.querySelector(".slider-next");
-  const dotsContainer = document.querySelector(".slider-dots");
-  if (!slider || slides.length === 0) return;
-  let currentIndex = 0;
-  let slidesToShow =
-    window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
-  let totalSlides = slides.length;
-  let maxIndex = totalSlides - slidesToShow;
-  function getGap() {
-    return parseFloat(window.getComputedStyle(slider).gap) || 20;
-  }
-  function updateSlider() {
-    const gap = getGap();
-    const translateX = -currentIndex * (slides[0].offsetWidth + gap);
-    slider.style.transform = `translateX(${translateX}px)`;
-    updateDots();
-    updateButtons();
-  }
-  function createDots() {
-    if (!dotsContainer) return;
-    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
-    dotsContainer.innerHTML = "";
-    for (let i = 0; i < numberOfDots; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add("dot");
-      if (i === 0) dot.classList.add("active");
-      dot.addEventListener("click", () => {
-        currentIndex = i * slidesToShow;
-        if (currentIndex > maxIndex) currentIndex = maxIndex;
-        updateSlider();
-      });
-      dotsContainer.appendChild(dot);
-    }
-  }
-  function updateDots() {
-    if (!dotsContainer) return;
-    const dotIndex = Math.floor(currentIndex / slidesToShow);
-    const dots = document.querySelectorAll(".dot");
-    dots.forEach((dot, index) => {
-      dot.classList.toggle("active", index === dotIndex);
-    });
-  }
-  function updateButtons() {
-    if (prevBtn) {
-      if (currentIndex === 0) prevBtn.setAttribute("disabled", "disabled");
-      else prevBtn.removeAttribute("disabled");
-    }
-    if (nextBtn) {
-      if (currentIndex >= maxIndex)
-        nextBtn.setAttribute("disabled", "disabled");
-      else nextBtn.removeAttribute("disabled");
-    }
-  }
-  function nextSlide() {
-    if (currentIndex < maxIndex) {
-      currentIndex++;
-      updateSlider();
-    }
-  }
-  function prevSlide() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateSlider();
-    }
-  }
-  function refreshSlider() {
-    const newSlidesToShow =
-      window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
-    if (newSlidesToShow !== slidesToShow) {
-      slidesToShow = newSlidesToShow;
-      maxIndex = totalSlides - slidesToShow;
-      currentIndex = Math.min(currentIndex, maxIndex);
-      createDots();
-    }
-    updateSlider();
-  }
-  if (prevBtn) prevBtn.addEventListener("click", prevSlide);
-  if (nextBtn) nextBtn.addEventListener("click", nextSlide);
-  let resizeTimer;
-  window.addEventListener("resize", function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(refreshSlider, 150);
-  });
-  createDots();
-  updateSlider();
-  window.addEventListener("load", refreshSlider);
-});
-
-// ============ BEFORE/AFTER SLIDER ============
-document.addEventListener("DOMContentLoaded", function () {
-  const slider = document.querySelector(".before-after-slider");
-  const slides = document.querySelectorAll(".before-after-card");
-  const prevBtn = document.querySelector(".before-after-prev");
-  const nextBtn = document.querySelector(".before-after-next");
-  const dotsContainer = document.querySelector(".before-after-dots");
-
-  if (!slider || slides.length === 0) return;
-
-  let currentIndex = 0;
-  let slidesToShow = getSlidesToShow();
-  let totalSlides = slides.length;
-  let maxIndex = totalSlides - slidesToShow;
-
-  function getSlidesToShow() {
-    if (window.innerWidth <= 768) return 1;
-    if (window.innerWidth <= 992) return 2;
-    return 3;
-  }
-
-  function updateSlider() {
-    const slideWidth = slides[0].offsetWidth;
-    const gap = 20;
-    const translateX = -currentIndex * (slideWidth + gap);
-    slider.style.transform = `translateX(${translateX}px)`;
-    updateDots();
-    updateButtons();
-  }
-
-  function createDots() {
-    if (!dotsContainer) return;
-    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
-    dotsContainer.innerHTML = "";
-    for (let i = 0; i < numberOfDots; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add("before-after-dot");
-      if (i === 0) dot.classList.add("active");
-      dot.addEventListener("click", () => {
-        currentIndex = i * slidesToShow;
-        if (currentIndex > maxIndex) currentIndex = maxIndex;
-        updateSlider();
-      });
-      dotsContainer.appendChild(dot);
-    }
-  }
-
-  function updateDots() {
-    if (!dotsContainer) return;
-    const dotIndex = Math.floor(currentIndex / slidesToShow);
-    const dots = document.querySelectorAll(".before-after-dot");
-    dots.forEach((dot, index) => {
-      dot.classList.toggle("active", index === dotIndex);
-    });
-  }
-
-  function updateButtons() {
-    if (prevBtn) {
-      if (currentIndex === 0) {
-        prevBtn.setAttribute("disabled", "disabled");
-      } else {
-        prevBtn.removeAttribute("disabled");
-      }
-    }
-    if (nextBtn) {
-      if (currentIndex >= maxIndex) {
-        nextBtn.setAttribute("disabled", "disabled");
-      } else {
-        nextBtn.removeAttribute("disabled");
-      }
-    }
-  }
-
-  function nextSlide() {
-    if (currentIndex < maxIndex) {
-      currentIndex++;
-      updateSlider();
-    }
-  }
-
-  function prevSlide() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateSlider();
-    }
-  }
-
-  function refreshSlider() {
-    const newSlidesToShow = getSlidesToShow();
-    if (newSlidesToShow !== slidesToShow) {
-      slidesToShow = newSlidesToShow;
-      maxIndex = totalSlides - slidesToShow;
-      currentIndex = Math.min(currentIndex, maxIndex);
-      createDots();
-    }
-    updateSlider();
-  }
-
-  if (prevBtn) prevBtn.addEventListener("click", prevSlide);
-  if (nextBtn) nextBtn.addEventListener("click", nextSlide);
-
-  let resizeTimer;
-  window.addEventListener("resize", function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      refreshSlider();
-    }, 150);
-  });
-
-  createDots();
-  updateSlider();
-  window.addEventListener("load", refreshSlider);
-});
-
-// ============ BLOG SLIDER ============
-document.addEventListener("DOMContentLoaded", function () {
-  const blogSlider = document.querySelector(".blogs-slider");
-  const blogSlides = document.querySelectorAll(".blogs .slide");
-  const blogPrevBtn = document.querySelector(".blog-slider-prev");
-  const blogNextBtn = document.querySelector(".blog-slider-next");
-  const blogDotsContainer = document.querySelector(".blog-slider-dots");
-  if (!blogSlider || blogSlides.length === 0) return;
-  let currentIndex = 0;
-  let slidesToShow =
-    window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
-  let totalSlides = blogSlides.length;
-  let maxIndex = totalSlides - slidesToShow;
-  function getGap() {
-    return parseFloat(window.getComputedStyle(blogSlider).gap) || 20;
-  }
-  function updateSlider() {
-    const gap = getGap();
-    const translateX = -currentIndex * (blogSlides[0].offsetWidth + gap);
-    blogSlider.style.transform = `translateX(${translateX}px)`;
-    updateDots();
-    updateButtons();
-  }
-  function createDots() {
-    if (!blogDotsContainer) return;
-    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
-    blogDotsContainer.innerHTML = "";
-    for (let i = 0; i < numberOfDots; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add("blog-dot");
-      if (i === 0) dot.classList.add("active");
-      dot.addEventListener("click", () => {
-        currentIndex = i * slidesToShow;
-        if (currentIndex > maxIndex) currentIndex = maxIndex;
-        updateSlider();
-      });
-      blogDotsContainer.appendChild(dot);
-    }
-  }
-  function updateDots() {
-    if (!blogDotsContainer) return;
-    const dotIndex = Math.floor(currentIndex / slidesToShow);
-    const dots = document.querySelectorAll(".blog-dot");
-    dots.forEach((dot, index) => {
-      dot.classList.toggle("active", index === dotIndex);
-    });
-  }
-  function updateButtons() {
-    if (blogPrevBtn) {
-      if (currentIndex === 0) blogPrevBtn.setAttribute("disabled", "disabled");
-      else blogPrevBtn.removeAttribute("disabled");
-    }
-    if (blogNextBtn) {
-      if (currentIndex >= maxIndex)
-        blogNextBtn.setAttribute("disabled", "disabled");
-      else blogNextBtn.removeAttribute("disabled");
-    }
-  }
-  function nextSlide() {
-    if (currentIndex < maxIndex) {
-      currentIndex++;
-      updateSlider();
-    }
-  }
-  function prevSlide() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateSlider();
-    }
-  }
-  function refreshSlider() {
-    const newSlidesToShow =
-      window.innerWidth <= 768 ? 1 : window.innerWidth <= 992 ? 2 : 3;
-    if (newSlidesToShow !== slidesToShow) {
-      slidesToShow = newSlidesToShow;
-      maxIndex = totalSlides - slidesToShow;
-      currentIndex = Math.min(currentIndex, maxIndex);
-      createDots();
-    }
-    updateSlider();
-  }
-  if (blogPrevBtn) blogPrevBtn.addEventListener("click", prevSlide);
-  if (blogNextBtn) blogNextBtn.addEventListener("click", nextSlide);
-  let resizeTimer;
-  window.addEventListener("resize", function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(refreshSlider, 150);
-  });
-  createDots();
-  updateSlider();
-  window.addEventListener("load", refreshSlider);
+  const saved = localStorage.getItem("language");
+  if (saved && translations[saved]) updateLanguage(saved);
+  else updateLanguage("fr");
 });
