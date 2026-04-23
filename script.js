@@ -1,5 +1,38 @@
 // ============ API CONFIGURATION ============
-const API_URL = "https://soit-backend.onrender.com/api";
+const API_URL = "http://localhost:3000/api";
+
+// ============ SHOW MESSAGE FUNCTION ============
+function showMessage(message, type = "success") {
+  // Create container if it doesn't exist
+  let container = document.querySelector(".toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  // Create message element
+  const toast = document.createElement("div");
+  toast.className = `alert-message alert-${type}`;
+
+  // Add icon based on type
+  let icon = "";
+  if (type === "success") icon = "✅";
+  else if (type === "error") icon = "❌";
+  else if (type === "warning") icon = "⚠️";
+  else icon = "ℹ️";
+
+  toast.innerHTML = `${icon} ${message}`;
+  container.appendChild(toast);
+
+  // Remove after 3 seconds
+  setTimeout(() => {
+    toast.remove();
+    if (container.children.length === 0) {
+      container.remove();
+    }
+  }, 3000);
+}
 
 // ============ TOAST NOTIFICATION ============
 function showMessage(message, type = "success") {
