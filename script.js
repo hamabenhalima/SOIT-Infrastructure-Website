@@ -869,3 +869,169 @@ document.addEventListener("DOMContentLoaded", () => {
   if (saved && translations[saved]) updateLanguage(saved);
   else updateLanguage("fr");
 });
+
+// ============ REVIEW SUBMISSION ============
+document.addEventListener("DOMContentLoaded", function () {
+  const reviewForm = document.getElementById("review-form");
+  const reviewStatus = document.getElementById("review-status");
+  const stars = document.querySelectorAll(".stars-input i");
+  const ratingInput = document.getElementById("review-rating");
+
+  // Star rating functionality
+  if (stars.length > 0) {
+    stars.forEach((star) => {
+      star.addEventListener("click", function () {
+        const rating = parseInt(this.getAttribute("data-rating"));
+        ratingInput.value = rating;
+
+        // Update star colors
+        stars.forEach((s, index) => {
+          if (index < rating) {
+            s.classList.add("active");
+            s.classList.remove("far");
+            s.classList.add("fas");
+          } else {
+            s.classList.remove("active");
+            s.classList.remove("fas");
+            s.classList.add("far");
+          }
+        });
+      });
+
+      star.addEventListener("mouseenter", function () {
+        const rating = parseInt(this.getAttribute("data-rating"));
+        stars.forEach((s, index) => {
+          if (index < rating) {
+            s.style.color = "#ffc107";
+          } else {
+            s.style.color = "#ccc";
+          }
+        });
+      });
+
+      star.addEventListener("mouseleave", function () {
+        const currentRating = parseInt(ratingInput.value);
+        stars.forEach((s, index) => {
+          if (index < currentRating) {
+            s.style.color = "#ffc107";
+          } else {
+            s.style.color = "#ccc";
+          }
+        });
+      });
+    });
+  }
+
+  // Submit review
+  if (reviewForm) {
+    reviewForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("review-name")?.value.trim();
+      const email = document.getElementById("review-email")?.value.trim();
+      const rating = parseInt(ratingInput?.value || 0);
+      const comment = document.getElementById("review-comment")?.value.trim();
+
+      // Validation
+      if (!name || !email || !comment) {
+        showMessage("Veuillez remplir tous les champs", "warning");
+        return;
+      }
+
+      if (rating === 0) {
+        showMessage("Veuillez sélectionner une note", "warning");
+        return;
+      }
+
+      if (comment.length < 10) {
+        showMessage(
+          "Votre commentaire doit contenir au moins 10 caractères",
+          "warning",
+        );
+        return;
+      }
+
+      showMessage("Envoi en cours...", "info");
+
+      try {
+        const response = await fetch(`${API_URL}/reviews`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email, rating, comment }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showMessage(result.message, "success");
+          reviewForm.reset();
+          ratingInput.value = "0";
+          stars.forEach((star) => {
+            star.classList.remove("active", "fas");
+            star.classList.add("far");
+          });
+        } else {
+          showMessage(result.message, "error");
+        }
+      } catch (error) {
+        console.error("Review error:", error);
+        showMessage("Erreur de connexion au serveur", "error");
+      }
+    });
+  }
+});
+
+// ============ LOAD REVIEWS FROM API ============
+async function loadReviews() {
+  try {
+    const response = await fetch(`${API_URL}/reviews`);
+    const data = await response.json();
+
+    if (data.success && data.reviews.length > 0) {
+      const reviewsSlider = document.querySelector(".reviews-slider");
+      if (reviewsSlider) {
+        reviewsSlider.innerHTML = "";
+        data.reviews.forEach((review) => {
+          const starsHtml = getStarsHtml(review.rating);
+          const slide = document.createElement("div");
+          slide.className = "slide";
+          slide.innerHTML = `
+                        <p>${escapeHtml(review.comment)}</p>
+                        <div class="user">
+                            <div class="user-info">
+                                <h3>${escapeHtml(review.name)}</h3>
+                                <div class="stars">${starsHtml}</div>
+                            </div>
+                        </div>
+                    `;
+          reviewsSlider.appendChild(slide);
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Load reviews error:", error);
+  }
+}
+
+function getStarsHtml(rating) {
+  let stars = "";
+  for (let i = 1; i <= 5; i++) {
+    if (i <= rating) {
+      stars += '<i class="fas fa-star"></i>';
+    } else {
+      stars += '<i class="far fa-star"></i>';
+    }
+  }
+  return stars;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+// Call loadReviews when page loads
+document.addEventListener("DOMContentLoaded", function () {
+  loadReviews();
+});

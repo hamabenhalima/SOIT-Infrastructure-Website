@@ -495,8 +495,63 @@
       <div class="before-after-dots"></div>
     </section>
 
+    <!-- ============ ADD A REVIEW SECTION ============ -->
+    <section class="add-review" id="add-review">
+      <h1 class="heading">Donnez votre avis</h1>
+      <p class="section-description">Partagez votre expérience avec SOIT</p>
+
+      <div class="review-form-container">
+        <form id="review-form">
+          <div class="form-group">
+            <input
+              type="text"
+              id="review-name"
+              placeholder="Votre nom complet"
+              class="box"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              id="review-email"
+              placeholder="Votre email"
+              class="box"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <div class="rating-input">
+              <label>Votre note :</label>
+              <div class="stars-input">
+                <i class="far fa-star" data-rating="1"></i>
+                <i class="far fa-star" data-rating="2"></i>
+                <i class="far fa-star" data-rating="3"></i>
+                <i class="far fa-star" data-rating="4"></i>
+                <i class="far fa-star" data-rating="5"></i>
+              </div>
+              <input type="hidden" id="review-rating" value="0" />
+            </div>
+          </div>
+          <div class="form-group">
+            <textarea
+              id="review-comment"
+              placeholder="Votre commentaire..."
+              class="box"
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          <button type="submit" class="btn">⭐ Envoyer mon avis</button>
+          <div id="review-status" style="margin-top: 1rem; display: none"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ REVIEWS SECTION (CLIENTS) ============ -->
     <section class="reviews" id="reviews">
       <h1 class="heading">Ce que disent nos clients</h1>
+
       <div class="reviews-slider-container">
         <div class="reviews-slider">
           <div class="slide">
