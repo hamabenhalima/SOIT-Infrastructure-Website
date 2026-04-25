@@ -981,39 +981,190 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+// ============ REVIEWS SLIDER INITIALIZATION (SPECIFIC FOR REVIEWS) ============
+function initReviewsSlider() {
+  const slider = document.querySelector(".reviews-slider");
+  const slides = document.querySelectorAll(".reviews .slide");
+  const prevBtn = document.querySelector(".slider-prev");
+  const nextBtn = document.querySelector(".slider-next");
+  const dotsContainer = document.querySelector(".slider-dots");
+
+  // If no slider or no slides, exit
+  if (!slider || slides.length === 0) return;
+
+  // Reset any existing transform to avoid conflicts
+  slider.style.transform = "translateX(0)";
+
+  let currentIndex = 0;
+  let slidesToShow = getSlidesToShow();
+  let totalSlides = slides.length;
+  let maxIndex = Math.max(0, totalSlides - slidesToShow);
+  let slideWidth = 0;
+  let gap = 20;
+
+  function getSlidesToShow() {
+    if (window.innerWidth <= 768) return 1;
+    if (window.innerWidth <= 992) return 2;
+    return 3;
+  }
+
+  function updateSlideWidth() {
+    const container = slider.parentElement;
+    const containerWidth = container.clientWidth - 32;
+    slideWidth = (containerWidth - gap * (slidesToShow - 1)) / slidesToShow;
+    slides.forEach((slide) => {
+      slide.style.flex = `0 0 ${slideWidth}px`;
+    });
+  }
+
+  function updateSliderPosition() {
+    const translateX = -currentIndex * (slideWidth + gap);
+    slider.style.transform = `translateX(${translateX}px)`;
+    updateDots();
+    updateButtons();
+  }
+
+  function createDots() {
+    if (!dotsContainer) return;
+    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < numberOfDots; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => {
+        currentIndex = i * slidesToShow;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateSliderPosition();
+      });
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  function updateDots() {
+    if (!dotsContainer) return;
+    const dotIndex = Math.floor(currentIndex / slidesToShow);
+    const dots = dotsContainer.querySelectorAll(".dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === dotIndex);
+    });
+  }
+
+  function updateButtons() {
+    if (prevBtn) {
+      prevBtn.disabled = currentIndex === 0;
+      prevBtn.style.opacity = currentIndex === 0 ? "0.5" : "1";
+      prevBtn.style.cursor = currentIndex === 0 ? "not-allowed" : "pointer";
+    }
+    if (nextBtn) {
+      nextBtn.disabled = currentIndex >= maxIndex;
+      nextBtn.style.opacity = currentIndex >= maxIndex ? "0.5" : "1";
+      nextBtn.style.cursor =
+        currentIndex >= maxIndex ? "not-allowed" : "pointer";
+    }
+  }
+
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateSliderPosition();
+    }
+  }
+
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSliderPosition();
+    }
+  }
+
+  function refreshSlider() {
+    const newSlidesToShow = getSlidesToShow();
+    if (newSlidesToShow !== slidesToShow) {
+      slidesToShow = newSlidesToShow;
+      maxIndex = Math.max(0, totalSlides - slidesToShow);
+      currentIndex = Math.min(currentIndex, maxIndex);
+      createDots();
+    }
+    updateSlideWidth();
+    updateSliderPosition();
+  }
+
+  // Remove old event listeners and add new ones to prevent duplicates
+  if (prevBtn) {
+    const newPrevBtn = prevBtn.cloneNode(true);
+    prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+    newPrevBtn.addEventListener("click", prevSlide);
+  }
+  if (nextBtn) {
+    const newNextBtn = nextBtn.cloneNode(true);
+    nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+    newNextBtn.addEventListener("click", nextSlide);
+  }
+
+  let resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      refreshSlider();
+    }, 150);
+  });
+
+  // Initialize the slider
+  updateSlideWidth();
+  createDots();
+  updateSliderPosition();
+
+  window.addEventListener("load", function () {
+    refreshSlider();
+  });
+}
+
 // ============ LOAD REVIEWS FROM API ============
 async function loadReviews() {
   try {
     const response = await fetch(`${API_URL}/reviews`);
     const data = await response.json();
 
-    if (data.success && data.reviews.length > 0) {
+    if (data.success && data.reviews) {
       const reviewsSlider = document.querySelector(".reviews-slider");
       if (reviewsSlider) {
+        // Clear the slider
         reviewsSlider.innerHTML = "";
-        data.reviews.forEach((review) => {
-          const starsHtml = getStarsHtml(review.rating);
-          const slide = document.createElement("div");
-          slide.className = "slide";
-          slide.innerHTML = `
-                        <p>${escapeHtml(review.comment)}</p>
-                        <div class="user">
-                            <div class="user-info">
-                                <h3>${escapeHtml(review.name)}</h3>
-                                <div class="stars">${starsHtml}</div>
+
+        if (data.reviews.length === 0) {
+          // Show a message if no reviews yet
+          reviewsSlider.innerHTML =
+            '<div class="slide"><p>Soyez le premier à laisser un avis !</p></div>';
+        } else {
+          // Add each review as a slide
+          data.reviews.forEach((review) => {
+            const stars = getStarRating(review.rating);
+            const slide = document.createElement("div");
+            slide.className = "slide";
+            slide.innerHTML = `
+                            <p>${escapeHtml(review.comment)}</p>
+                            <div class="user">
+                                <div>
+                                    <h3>${escapeHtml(review.name)}</h3>
+                                    <div class="stars">${stars}</div>
+                                </div>
                             </div>
-                        </div>
-                    `;
-          reviewsSlider.appendChild(slide);
-        });
+                        `;
+            reviewsSlider.appendChild(slide);
+          });
+        }
+
+        // Reinitialize the reviews slider after adding slides
+        initReviewsSlider();
       }
     }
   } catch (error) {
-    console.error("Load reviews error:", error);
+    console.error("Error loading reviews:", error);
   }
 }
 
-function getStarsHtml(rating) {
+function getStarRating(rating) {
   let stars = "";
   for (let i = 1; i <= 5; i++) {
     if (i <= rating) {
