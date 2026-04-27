@@ -1379,3 +1379,29 @@ document.addEventListener("DOMContentLoaded", function () {
   initProjectSlider();
   initProjectGallery();
 });
+
+// Forgot password handler
+const forgotForm = document.getElementById("forgot-form");
+if (forgotForm) {
+  forgotForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    console.log("Forgot form submitted");
+
+    const email = document.getElementById("forgot-email")?.value.trim();
+    console.log("Email:", email);
+    console.log("API_URL:", API_URL);
+
+    try {
+      const response = await fetch(`${API_URL}/forgot-password`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      console.log("Response status:", response.status);
+      const data = await response.json();
+      console.log("Response data:", data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  });
+}
