@@ -686,7 +686,7 @@ const translations = {
     about: "À propos",
     services: "Services",
     projects: "Projets",
-    beforeAfter: "Avant/Après",
+    beforeAfter: "Évolution",
     clients: "Clients",
     blogs: "Actualités",
     contact: "Contact",
@@ -1185,4 +1185,197 @@ function escapeHtml(text) {
 // Call loadReviews when page loads
 document.addEventListener("DOMContentLoaded", function () {
   loadReviews();
+});
+
+// ============ CURRENT PROJECT SLIDER ============
+function initProjectSlider() {
+  const slider = document.querySelector(".project-slider");
+  const slides = document.querySelectorAll(".project-slide");
+  const prevBtn = document.querySelector(".project-prev");
+  const nextBtn = document.querySelector(".project-next");
+  const dotsContainer = document.querySelector(".project-slider-dots");
+
+  if (!slider || slides.length === 0) return;
+
+  let currentIndex = 0;
+  let slidesToShow = getSlidesToShow();
+  let totalSlides = slides.length;
+  let maxIndex = totalSlides - slidesToShow;
+
+  function getSlidesToShow() {
+    if (window.innerWidth <= 768) return 1;
+    if (window.innerWidth <= 992) return 2;
+    return 3;
+  }
+
+  function updateSlider() {
+    const slideWidth = slides[0].offsetWidth;
+    const gap = 20;
+    const translateX = -currentIndex * (slideWidth + gap);
+    slider.style.transform = `translateX(${translateX}px)`;
+    updateDots();
+    updateButtons();
+  }
+
+  function createDots() {
+    if (!dotsContainer) return;
+    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < numberOfDots; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("project-dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => {
+        currentIndex = i * slidesToShow;
+        if (currentIndex > maxIndex) currentIndex = maxIndex;
+        updateSlider();
+      });
+      dotsContainer.appendChild(dot);
+    }
+  }
+
+  function updateDots() {
+    if (!dotsContainer) return;
+    const dotIndex = Math.floor(currentIndex / slidesToShow);
+    const dots = document.querySelectorAll(".project-dot");
+    dots.forEach((dot, index) => {
+      dot.classList.toggle("active", index === dotIndex);
+    });
+  }
+
+  function updateButtons() {
+    if (prevBtn) {
+      prevBtn.disabled = currentIndex === 0;
+      prevBtn.style.opacity = currentIndex === 0 ? "0.5" : "1";
+      prevBtn.style.cursor = currentIndex === 0 ? "not-allowed" : "pointer";
+    }
+    if (nextBtn) {
+      nextBtn.disabled = currentIndex >= maxIndex;
+      nextBtn.style.opacity = currentIndex >= maxIndex ? "0.5" : "1";
+      nextBtn.style.cursor =
+        currentIndex >= maxIndex ? "not-allowed" : "pointer";
+    }
+  }
+
+  function nextSlide() {
+    if (currentIndex < maxIndex) {
+      currentIndex++;
+      updateSlider();
+    }
+  }
+
+  function prevSlide() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateSlider();
+    }
+  }
+
+  function refreshSlider() {
+    const newSlidesToShow = getSlidesToShow();
+    if (newSlidesToShow !== slidesToShow) {
+      slidesToShow = newSlidesToShow;
+      maxIndex = totalSlides - slidesToShow;
+      currentIndex = Math.min(currentIndex, maxIndex);
+      createDots();
+    }
+    updateSlider();
+  }
+
+  if (prevBtn) prevBtn.addEventListener("click", prevSlide);
+  if (nextBtn) nextBtn.addEventListener("click", nextSlide);
+
+  let resizeTimer;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      refreshSlider();
+    }, 150);
+  });
+
+  createDots();
+  updateSlider();
+  window.addEventListener("load", refreshSlider);
+}
+
+// ============ GALLERY MODE FOR PROJECT IMAGES ============
+function initProjectGallery() {
+  const slides = document.querySelectorAll(".project-slide");
+  const images = [];
+
+  slides.forEach((slide) => {
+    const imgSrc = slide.querySelector("img")?.src;
+    if (imgSrc) images.push(imgSrc);
+  });
+
+  if (images.length === 0) return;
+
+  // Create modal
+  const modal = document.createElement("div");
+  modal.className = "gallery-modal";
+  modal.innerHTML = `
+        <div class="gallery-modal-content">
+            <div class="gallery-modal-close"><i class="fas fa-times"></i></div>
+            <img src="" alt="Gallery Image">
+            <div class="gallery-counter"><span class="current">1</span> / <span class="total">${images.length}</span></div>
+        </div>
+        <button class="gallery-prev"><i class="fas fa-chevron-left"></i></button>
+        <button class="gallery-next"><i class="fas fa-chevron-right"></i></button>
+    `;
+  document.body.appendChild(modal);
+
+  const modalImg = modal.querySelector("img");
+  const closeBtn = modal.querySelector(".gallery-modal-close");
+  const prevBtn = modal.querySelector(".gallery-prev");
+  const nextBtn = modal.querySelector(".gallery-next");
+  const currentCounter = modal.querySelector(".current");
+  let currentIndex = 0;
+
+  function openGallery(index) {
+    currentIndex = index;
+    modalImg.src = images[currentIndex];
+    currentCounter.textContent = currentIndex + 1;
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeGallery() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    modalImg.src = images[currentIndex];
+    currentCounter.textContent = currentIndex + 1;
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    modalImg.src = images[currentIndex];
+    currentCounter.textContent = currentIndex + 1;
+  }
+
+  slides.forEach((slide, index) => {
+    slide.addEventListener("click", () => openGallery(index));
+  });
+
+  closeBtn.addEventListener("click", closeGallery);
+  prevBtn.addEventListener("click", prevImage);
+  nextBtn.addEventListener("click", nextImage);
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeGallery();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (!modal.classList.contains("active")) return;
+    if (e.key === "Escape") closeGallery();
+    else if (e.key === "ArrowRight") nextImage();
+    else if (e.key === "ArrowLeft") prevImage();
+  });
+}
+
+// Initialize
+document.addEventListener("DOMContentLoaded", function () {
+  initProjectSlider();
+  initProjectGallery();
 });
