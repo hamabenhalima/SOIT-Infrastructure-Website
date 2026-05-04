@@ -1405,3 +1405,16 @@ if (forgotForm) {
     }
   });
 }
+
+// Measure page load time
+window.addEventListener("load", function () {
+  const loadTime =
+    performance.timing.domContentLoadedEventEnd -
+    performance.timing.navigationStart;
+  console.log(`Page loaded in ${loadTime}ms`);
+
+  // Send to analytics (optional)
+  if (loadTime > 3000) {
+    console.warn("Slow page load detected");
+  }
+});
