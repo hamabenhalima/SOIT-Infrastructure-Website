@@ -85,390 +85,746 @@
       <a href="#home" class="logo">
         <img src="images/SOIT LOGO.jpg" alt="SOIT Logo" class="logo-img" />
       </a>
+
+      <!-- Navigation Desktop -->
       <nav class="navbar">
-        <a href="#home">Accueil</a>
-        <a href="#about">À propos</a>
-        <a href="#services">Services</a>
-        <a href="#projects">Projets</a>
-        <a href="#before-after">Évolution</a>
-        <a href="#blogs">Actualités</a>
-        <a href="#reviews">Clients</a>
-        <a href="#contact">Contact</a>
+        <a href="#home">
+          <span>Accueil</span>
+          <i class="fas fa-home"></i>
+        </a>
+        <a href="#about">
+          <span>À propos</span>
+          <i class="fas fa-info-circle"></i>
+        </a>
+        <a href="#services">
+          <span>Services</span>
+          <i class="fas fa-cogs"></i>
+        </a>
+        <a href="#projects">
+          <span>Projets</span>
+          <i class="fas fa-building"></i>
+        </a>
+        <a href="#before-after">
+          <span>Évolution</span>
+          <i class="fas fa-chart-line"></i>
+        </a>
+        <a href="#blogs">
+          <span>Actualités</span>
+          <i class="fas fa-newspaper"></i>
+        </a>
+        <a href="#reviews">
+          <span>Clients</span>
+          <i class="fas fa-star"></i>
+        </a>
+        <a href="#contact">
+          <span>Contact</span>
+          <i class="fas fa-envelope"></i>
+        </a>
       </nav>
+
+      <!-- Icônes d'action -->
       <div class="icons">
-        <div id="menu-btn" class="fas fa-bars"></div>
-        <div id="info-btn" class="fas fa-info-circle"></div>
-        <div id="search-btn" class="fas fa-search"></div>
-        <div id="login-btn" class="fas fa-user"></div>
-        <div id="language-btn" class="fas fa-globe"></div>
+        <div id="menu-btn" class="icon-btn" aria-label="Menu">
+          <i class="fas fa-bars"></i>
+          <span class="tooltip">Menu</span>
+        </div>
+        <div id="info-btn" class="icon-btn" aria-label="Informations">
+          <i class="fas fa-info-circle"></i>
+          <span class="tooltip">Infos</span>
+        </div>
+        <div id="search-btn" class="icon-btn" aria-label="Rechercher">
+          <i class="fas fa-search"></i>
+          <span class="tooltip">Rechercher</span>
+        </div>
+        <div id="login-btn" class="icon-btn" aria-label="Connexion">
+          <i class="fas fa-user"></i>
+          <span class="tooltip">Connexion</span>
+        </div>
+        <div id="language-btn" class="icon-btn" aria-label="Langue">
+          <i class="fas fa-globe"></i>
+          <span class="tooltip">Langue</span>
+        </div>
       </div>
+
+      <!-- Dropdown Langue -->
       <div class="language-dropdown" id="language-dropdown">
-        <div class="lang-option" data-lang="fr">FR</div>
-        <div class="lang-option" data-lang="en">EN</div>
-        <div class="lang-option" data-lang="ar">AR</div>
+        <div class="lang-option" data-lang="fr">
+          <span class="lang-flag">🇫🇷</span>
+          <span>Français</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="lang-option" data-lang="en">
+          <span class="lang-flag">🇬🇧</span>
+          <span>English</span>
+          <i class="fas fa-check"></i>
+        </div>
+        <div class="lang-option" data-lang="ar">
+          <span class="lang-flag">🇸🇦</span>
+          <span>العربية</span>
+          <i class="fas fa-check"></i>
+        </div>
       </div>
     </header>
 
     <!-- Search Overlay -->
     <div class="search-overlay" id="search-overlay"></div>
 
+    <!-- Search Form -->
     <form action="#" class="search-form" id="search-form">
-      <input
-        type="search"
-        placeholder="Rechercher sur le site..."
-        id="search-box"
-      />
-      <button type="submit" class="search-btn-submit">
-        <i class="fas fa-search"></i>
-      </button>
-      <button type="button" class="search-close" id="search-close">
-        <i class="fas fa-times"></i>
-      </button>
+      <div class="search-container">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="search"
+          placeholder="Rechercher un projet, un service..."
+          id="search-box"
+          autocomplete="off"
+        />
+        <button type="button" class="search-close" id="search-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="search-suggestions" id="search-suggestions">
+        <div class="suggestion-group">
+          <span class="suggestion-title">Suggestions populaires</span>
+          <div class="suggestion-tags">
+            <span>Construction routes</span>
+            <span>VRD</span>
+            <span>Terrassement</span>
+            <span>Ponts</span>
+          </div>
+        </div>
+      </div>
     </form>
 
+    <!-- Login/Register Container -->
     <div class="login-form-container">
+      <!-- Login Form -->
       <form action="#" class="login-form" id="login-form">
-        <h3>Connexion</h3>
-        <input
-          type="email"
-          id="login-email"
-          placeholder="E-mail"
-          class="box"
-          required
-        />
-        <input
-          type="password"
-          id="login-password"
-          placeholder="Mot de passe"
-          class="box"
-          required
-        />
-        <div class="flex">
-          <input type="checkbox" id="remember-me" />
-          <label for="remember-me">Se souvenir de moi</label>
-          <a href="#" id="forgot-password-link">Mot de passe oublié ?</a>
+        <div class="form-header">
+          <i class="fas fa-user-circle"></i>
+          <h3>Connexion</h3>
+          <p>Accédez à votre espace personnel</p>
         </div>
-        <button type="submit" class="btn">Se connecter</button>
-        <p>Pas de compte ? <a href="#" id="show-register">Créez-en un</a></p>
+
+        <div class="input-field">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            id="login-email"
+            placeholder="Adresse e-mail"
+            class="box"
+            required
+          />
+        </div>
+
+        <div class="input-field">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="login-password"
+            placeholder="Mot de passe"
+            class="box"
+            required
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            data-target="login-password"
+          >
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="form-options">
+          <label class="checkbox-label">
+            <input type="checkbox" id="remember-me" />
+            <span>Se souvenir de moi</span>
+          </label>
+          <a href="#" id="forgot-password-link" class="forgot-link"
+            >Mot de passe oublié ?</a
+          >
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <span>Se connecter</span>
+          <i class="fas fa-arrow-right"></i>
+        </button>
+
+        <p class="form-footer">
+          Pas encore de compte ?
+          <a href="#" id="show-register">Créer un compte</a>
+        </p>
       </form>
+
+      <!-- Register Form -->
       <form action="#" class="register-form" id="register-form">
-        <h3>Inscription</h3>
-        <input
-          type="text"
-          id="reg-firstname"
-          placeholder="Prénom"
-          class="box"
-          required
-        />
-        <input
-          type="text"
-          id="reg-lastname"
-          placeholder="Nom"
-          class="box"
-          required
-        />
-        <input
-          type="text"
-          id="reg-username"
-          placeholder="Nom d'utilisateur"
-          class="box"
-          required
-        />
-        <input
-          type="email"
-          id="reg-email"
-          placeholder="E-mail"
-          class="box"
-          required
-        />
-        <input
-          type="password"
-          id="reg-password"
-          placeholder="Mot de passe"
-          class="box"
-          required
-        />
-        <input
-          type="password"
-          id="reg-confirm-password"
-          placeholder="Confirmer le mot de passe"
-          class="box"
-          required
-        />
-        <button type="submit" class="btn">S'inscrire</button>
-        <p>Déjà un compte ? <a href="#" id="show-login">Se connecter</a></p>
+        <div class="form-header">
+          <i class="fas fa-user-plus"></i>
+          <h3>Inscription</h3>
+          <p>Créez votre compte gratuitement</p>
+        </div>
+
+        <div class="form-row">
+          <div class="input-field half">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              id="reg-firstname"
+              placeholder="Prénom"
+              class="box"
+              required
+            />
+          </div>
+          <div class="input-field half">
+            <i class="fas fa-user"></i>
+            <input
+              type="text"
+              id="reg-lastname"
+              placeholder="Nom"
+              class="box"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="input-field">
+          <i class="fas fa-at"></i>
+          <input
+            type="text"
+            id="reg-username"
+            placeholder="Nom d'utilisateur"
+            class="box"
+            required
+          />
+        </div>
+
+        <div class="input-field">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            id="reg-email"
+            placeholder="Adresse e-mail"
+            class="box"
+            required
+          />
+        </div>
+
+        <div class="input-field">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="reg-password"
+            placeholder="Mot de passe"
+            class="box"
+            required
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            data-target="reg-password"
+          >
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="input-field">
+          <i class="fas fa-shield-alt"></i>
+          <input
+            type="password"
+            id="reg-confirm-password"
+            placeholder="Confirmer le mot de passe"
+            class="box"
+            required
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            data-target="reg-confirm-password"
+          >
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+
+        <div class="password-strength" id="password-strength">
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+          <div class="strength-bar"></div>
+          <span class="strength-text"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <span>S'inscrire</span>
+          <i class="fas fa-user-check"></i>
+        </button>
+
+        <p class="form-footer">
+          Déjà un compte ?
+          <a href="#" id="show-login">Se connecter</a>
+        </p>
       </form>
+
+      <!-- Forgot Password Form -->
       <form action="#" class="forgot-form" id="forgot-form">
-        <input
-          type="email"
-          id="forgot-email"
-          placeholder="Votre E-mail"
-          class="box"
-          required
-        />
-        <button type="submit" class="btn">Envoyer le lien</button>
+        <div class="form-header">
+          <i class="fas fa-key"></i>
+          <h3>Mot de passe oublié ?</h3>
+          <p>Entrez votre email pour réinitialiser</p>
+        </div>
+
+        <div class="input-field">
+          <i class="fas fa-envelope"></i>
+          <input
+            type="email"
+            id="forgot-email"
+            placeholder="Votre adresse e-mail"
+            class="box"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          <span>Envoyer le lien</span>
+          <i class="fas fa-paper-plane"></i>
+        </button>
+
+        <p class="form-footer">
+          <a href="#" id="back-to-login">← Retour à la connexion</a>
+        </p>
       </form>
     </div>
+
+    <!-- Contact Info Sidebar -->
 
     <div class="contact-info">
-      <div class="close-info" id="close-info"><i class="fas fa-times"></i></div>
-      <div class="info">
-        <i class="fas fa-phone"></i>
-        <h3>Téléphone</h3>
-        <p><a href="tel:+21612457785">+216 12 45 77 85</a></p>
-        <p><a href="tel:+21670457085">+216 70 45 70 85</a></p>
+      <div class="contact-info-header">
+        <h3><i class="fas fa-address-card"></i> Nos coordonnées</h3>
+        <button class="close-info" id="close-info">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
-      <div class="info">
-        <i class="fas fa-envelope"></i>
-        <h3>E-mail</h3>
-        <p><a href="mailto:groupesoit@gmail.com">groupesoit@gmail.com</a></p>
-        <p>
-          <a href="mailto:groupesoit.comercial@gmail.com"
-            >groupesoit.comercial@gmail.com</a
+
+      <div class="contact-info-body">
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fas fa-phone-alt"></i>
+          </div>
+          <div class="info-content">
+            <h4>Téléphone</h4>
+            <a href="tel:+21612457785">+216 12 45 77 85</a>
+            <a href="tel:+21670457085">+216 70 45 70 85</a>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fas fa-envelope"></i>
+          </div>
+          <div class="info-content">
+            <h4>E-mail</h4>
+            <a href="mailto:groupesoit@gmail.com">groupesoit@gmail.com</a>
+            <a href="mailto:groupesoit.comercial@gmail.com"
+              >groupesoit.comercial@gmail.com</a
+            >
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fas fa-map-marker-alt"></i>
+          </div>
+          <div class="info-content">
+            <h4>Adresse</h4>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=La+Rue+de+Tunis,+Km+12+Akouda+Sousse+Tunisie"
+              target="_blank"
+              class="address-link"
+              title="Ouvrir dans Google Maps"
+            >
+              <i class="fas fa-external-link-alt"></i>
+              La Route de Tunis, Km 12 (4022)
+              <br />Akouda, Sousse, Tunisie
+            </a>
+            <p class="address-note">Cliquez pour ouvrir dans Google Maps</p>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="info-content">
+            <h4>Horaires</h4>
+            <p>Lun - Ven : 8h00 - 17h00</p>
+            <p>Sam : 8h00 - 12h00</p>
+            <p class="closed">Dim : Fermé</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-info-footer">
+        <div class="share-title">
+          <i class="fas fa-share-alt"></i>
+          <span>Suivez-nous</span>
+        </div>
+        <div class="share-links">
+          <a href="#" class="share-link facebook" aria-label="Facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="share-link twitter" aria-label="Twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="#" class="share-link instagram" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/st%C3%A9-soit-s-a-r-l-1abb571a7/"
+            target="_blank"
+            class="share-link linkedin"
+            aria-label="LinkedIn"
           >
-        </p>
-      </div>
-      <div class="info">
-        <i class="fas fa-map-marker-alt"></i>
-        <h3>Adresse</h3>
-        <p>La Route de Tunis, Km 12 (4022) à Akouda, Sousse</p>
-      </div>
-      <div class="share">
-        <a href="#" class="fab fa-facebook-f"></a>
-        <a href="#" class="fab fa-twitter"></a>
-        <a href="#" class="fab fa-instagram"></a>
-        <a
-          href="https://www.linkedin.com/in/st%C3%A9-soit-s-a-r-l-1abb571a7/"
-          target="_blank"
-          class="fab fa-linkedin"
-        ></a>
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
       </div>
     </div>
-
     <!-- ============ HOME SECTION ============ -->
     <section class="home" id="home">
       <div class="home-slider">
+        <!-- Slide 1 -->
         <div
-          class="slide"
+          class="slide active"
           style="
-            background: url(&quot;images/1.png.jpg&quot;) no-repeat center
-              center/cover;
+            background:
+              linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+              url(&quot;images/1.png.jpg&quot;) no-repeat center center/cover;
           "
         >
           <div class="content">
-            <h3>
-              Nous fournissons des services professionnels de qualité en
-              infrastructure et travaux publics
-            </h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-            <a href="#about" class="btn">Commencez maintenant</a>
+            <span class="subtitle">Leader depuis 1997</span>
+            <h3>Infrastructure & Travaux Publics</h3>
+            <p>
+              Plus de 28 ans d'expertise au service du développement national.
+              SOIT réalise des projets d'envergure qui transforment le
+              territoire tunisien.
+            </p>
+            <a href="#about" class="btn">Découvrir notre savoir-faire</a>
           </div>
         </div>
+
+        <!-- Slide 2 -->
         <div
           class="slide"
           style="
-            background: url(&quot;images/2.jpg&quot;) no-repeat center
-              center/cover;
+            background:
+              linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+              url(&quot;images/2.jpg&quot;) no-repeat center center/cover;
           "
         >
           <div class="content">
-            <h3>Transformer les rêves en réalité</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            <a href="#about" class="btn">Commencez maintenant</a>
+            <span class="subtitle">Notre empreinte</span>
+            <h3>Des infrastructures qui connectent la Tunisie</h3>
+            <p>
+              Routes, ponts, réseaux urbains, terrassement... SOIT construit des
+              infrastructures durables qui créent de la valeur et rapprochent
+              les territoires.
+            </p>
+            <a href="#projects" class="btn">Découvrir nos réalisations</a>
           </div>
         </div>
+
+        <!-- Slide 3 -->
         <div
           class="slide"
           style="
-            background: url(&quot;images/3.jpg&quot;) no-repeat center
-              center/cover;
+            background:
+              linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+              url(&quot;images/3.jpg&quot;) no-repeat center center/cover;
           "
         >
           <div class="content">
-            <h3>De la conception à la construction</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-            <a href="#about" class="btn">Commencez maintenant</a>
+            <span class="subtitle">Votre partenaire de confiance</span>
+            <h3>Votre projet mérite l'excellence</h3>
+            <p>
+              Entreprise agréée Catégorie 5, nous garantissons qualité, sécurité
+              et respect des délais pour concrétiser vos ambitions.
+            </p>
+            <a href="#contact" class="btn">Demander un devis</a>
           </div>
         </div>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="home-prev"><i class="fas fa-chevron-left"></i></button>
+      <button class="home-next"><i class="fas fa-chevron-right"></i></button>
+
+      <!-- Slide Dots -->
+      <div class="home-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
       </div>
     </section>
 
     <!-- ============ ABOUT SECTION ============ -->
     <section class="about" id="about">
-      <h1 class="heading">Qui sommes-nous ?</h1>
-      <div class="row">
-        <div class="video">
-          <video src="videos/3741-174188012.mp4" loop muted autoplay></video>
+      <div class="about-container">
+        <div class="about-header">
+          <span class="section-subtitle">Notre histoire</span>
+          <h1 class="heading">Qui sommes-nous ?</h1>
+          <p class="section-description">
+            Découvrez l'entreprise qui construit l'avenir de la Tunisie depuis
+            1997
+          </p>
         </div>
-        <div class="content">
-          <h3>La Société El Oukhoua d'Infrastructure et de Travaux (SOIT)</h3>
-          <p><strong>📍 Fondation :</strong> 14 avril 1997</p>
-          <p>
-            <strong>🏢 Statut :</strong> Société à Responsabilité Limitée
-            (S.A.R.L.)
-          </p>
-          <p>
-            <strong>✅ Agrément :</strong> Entreprise Agréée par l'État en
-            Catégorie
-          </p>
-          <p>
-            <strong>🏗️ Spécialité :</strong> BTP (Bâtiment et Travaux Publics)
-          </p>
-          <br />
-          <p>
-            SOIT est une entreprise tunisienne spécialisée dans le secteur du
-            BTP. Depuis sa création, elle s'est imposée comme un acteur majeur
-            dans le domaine de l'infrastructure et des travaux publics en
-            Tunisie.
-          </p>
-          <p>
-            Notre société à responsabilité limitée (S.A.R.L.) est fière d'être
-            classée comme Entreprise Agréée par l'État en Catégorie, témoignant
-            de notre conformité aux normes les plus élevées de qualité et de
-            sécurité.
-          </p>
-          <p><strong>👨‍💼 Gérant : M. Boubaker Wannes</strong></p>
-          <a href="#services" class="btn">En savoir plus</a>
+
+        <div class="about-content">
+          <div class="about-video">
+            <div class="video-wrapper">
+              <video
+                src="videos/3741-174188012.mp4"
+                loop
+                muted
+                autoplay
+              ></video>
+              <div class="video-overlay">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+          </div>
+          <div class="about-text">
+            <h3>
+              La Société El Oukhoua d'Infrastructure et de Travaux Publics
+              (SOIT)
+            </h3>
+
+            <div class="info-grid">
+              <div class="info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                  <strong>Fondation</strong>
+                  <span>14 avril 1997</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-building"></i>
+                <div>
+                  <strong>Statut</strong>
+                  <span>S.A.R.L.</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-certificate"></i>
+                <div>
+                  <strong>Agrément</strong>
+                  <span>État Catégorie 5</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-hard-hat"></i>
+                <div>
+                  <strong>Spécialité</strong>
+                  <span>BTP</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-user-tie"></i>
+                <div>
+                  <strong>Gérant</strong>
+                  <span>M. Boubaker Wannes</span>
+                </div>
+              </div>
+              <div class="info-item">
+                <i class="fas fa-trophy"></i>
+                <div>
+                  <strong>Certification</strong>
+                  <span>Qualité & Sécurité</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="about-description">
+              <p>
+                SOIT est une entreprise tunisienne spécialisée dans le secteur
+                du BTP. Depuis sa création, elle s'est imposée comme un acteur
+                majeur dans le domaine de l'infrastructure et des travaux
+                publics en Tunisie.
+              </p>
+              <p>
+                Notre société à responsabilité limitée (S.A.R.L.) est fière
+                d'être classée comme Entreprise Agréée par l'État en Catégorie,
+                témoignant de notre conformité aux normes les plus élevées de
+                qualité et de sécurité.
+              </p>
+            </div>
+
+            <a href="#services" class="btn">Découvrir nos services →</a>
+          </div>
         </div>
       </div>
-      <div class="box-container">
-        <div class="box">
-          <h3>+30</h3>
-          <p>ans d'expérience</p>
+
+      <div class="stats-container">
+        <div class="stat-card">
+          <div class="stat-number" data-target="30">0</div>
+          <div class="stat-label">ans d'expérience</div>
+          <div class="stat-icon"><i class="fas fa-calendar"></i></div>
         </div>
-        <div class="box">
-          <h3>+100</h3>
-          <p>projets réalisés</p>
+        <div class="stat-card">
+          <div class="stat-number" data-target="150">0</div>
+          <div class="stat-label">projets réalisés</div>
+          <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
         </div>
-        <div class="box">
-          <h3>+250</h3>
-          <p>clients satisfaits</p>
+        <div class="stat-card">
+          <div class="stat-number" data-target="150">0</div>
+          <div class="stat-label">clients satisfaits</div>
+          <div class="stat-icon"><i class="fas fa-smile"></i></div>
         </div>
-        <div class="box">
-          <h3>+100</h3>
-          <p>professionnels qualifiés</p>
+        <div class="stat-card">
+          <div class="stat-number" data-target="100">0</div>
+          <div class="stat-label">professionnels</div>
+          <div class="stat-icon"><i class="fas fa-users"></i></div>
         </div>
       </div>
     </section>
 
     <!-- ============ SERVICES SECTION ============ -->
     <section class="services" id="services">
-      <h1 class="heading">Nos services</h1>
+      <div class="services-container">
+        <div class="services-header">
+          <span class="section-subtitle">Notre expertise</span>
+          <h1 class="heading">Nos services</h1>
+          <p class="section-description">
+            Une gamme complète de services pour vos projets d'infrastructure
+          </p>
+        </div>
 
-      <!-- Company introduction -->
-      <div class="services-intro">
-        <p>
-          La Société El Oukhoua d'Infrastructure et de Travaux (SOIT) propose
-          une gamme complète de services spécialisés dans les infrastructures de
-          transport et les réseaux urbains.
-        </p>
-        <p>
-          En tant qu'entreprise agréée par l'État (Catégorie 5), elle intervient
-          sur l'ensemble du territoire tunisien pour les prestations suivantes :
-        </p>
-      </div>
-
-      <div class="box-container">
-        <!-- Service 1: Infrastructures Routières -->
-        <div class="box">
-          <img
-            src="images/Construction de routes et chaussées icon.jpg"
-            alt="Construction de routes"
-            loading="lazy"
-          />
-          <h3>Infrastructures Routières</h3>
-          <div class="service-details">
+        <!-- Company introduction -->
+        <div class="services-intro">
+          <div class="intro-text">
+            <i class="fas fa-building"></i>
             <p>
-              <strong>Entreprise Générale de Routes :</strong> Construction
-              complète de nouvelles infrastructures routières.
+              La Société El Oukhoua d'Infrastructure et de Travaux (SOIT)
+              propose une gamme complète de services spécialisés dans les
+              infrastructures de transport et les réseaux urbains.
             </p>
-            <p>
-              <strong>Revêtements Routiers :</strong> Pose d'enrobés et de
-              différents types de surfaces pour la chaussée.
-            </p>
-            <p>
-              <strong>Terrassements :</strong> Travaux préparatoires de mise en
-              forme du terrain et mouvements de terres à grande échelle.
-            </p>
-            <p>
-              <strong>Entretien et Réparation :</strong> Maintenance préventive
-              et curative des routes existantes pour assurer la sécurité des
-              usagers.
-            </p>
+          </div>
+          <div class="intro-badge">
+            <i class="fas fa-certificate"></i>
+            <span>Entreprise agréée par l'État (Catégorie 5)</span>
           </div>
         </div>
 
-        <!-- Service 2: Voiries et Réseaux Divers (VRD) -->
-        <div class="box">
-          <img
-            src="images/Construction de ponts icon.avif"
-            alt="Construction de ponts"
-            loading="lazy"
-          />
-          <h3>Voiries et Réseaux Divers (VRD)</h3>
-          <div class="service-details">
-            <p>
-              <strong>Entreprise Générale VRD :</strong> Aménagement complet de
-              zones urbaines et de lotissements.
-            </p>
-            <p>
-              <strong>Pose de Canalisations Hydrauliques :</strong> Installation
-              de réseaux pour l'évacuation des eaux pluviales et
-              l'assainissement.
-            </p>
-            <p>
-              <strong>Réseaux Divers :</strong> Mise en place des
-              infrastructures pour les réseaux secs (électricité,
-              télécommunications).
-            </p>
+        <div class="services-grid">
+          <!-- Service 1: Infrastructures Routières -->
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="images/Construction de routes et chaussées icon.jpg"
+                alt="Construction de routes"
+                loading="lazy"
+              />
+            </div>
+            <h3>Infrastructures Routières</h3>
+            <div class="service-features">
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Entreprise Générale de Routes</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Revêtements Routiers</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Terrassements</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Entretien et Réparation</span>
+              </div>
+            </div>
+            <a href="#contact" class="service-link">Demander un devis →</a>
           </div>
-        </div>
 
-        <!-- Service 3: Travaux publics & terrassement -->
-        <div class="box">
-          <img
-            src="images/Travaux publics & terrassement.jpg"
-            alt="Travaux publics"
-            loading="lazy"
-          />
-          <h3>Travaux Publics & Terrassement</h3>
-          <div class="service-details">
-            <p>
-              <strong>Gestion de Projet :</strong> Expertise en ingénierie
-              civile pour le suivi et la direction de chantiers complexes.
-            </p>
-            <p>
-              <strong>Nettoyage de Chantier :</strong> Services de remise en
-              état après travaux.
-            </p>
-            <p>
-              <strong>Logistique de Transport :</strong> Support pour
-              l'acheminement de matériaux et de matériel de construction.
-            </p>
+          <!-- Service 2: Voiries et Réseaux Divers (VRD) -->
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="images/Construction de ponts icon.avif"
+                alt="VRD"
+                loading="lazy"
+              />
+            </div>
+            <h3>Voiries et Réseaux Divers (VRD)</h3>
+            <div class="service-features">
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Entreprise Générale VRD</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Pose de Canalisations Hydrauliques</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Réseaux Divers (Électricité, Télécom)</span>
+              </div>
+            </div>
+            <a href="#contact" class="service-link">Demander un devis →</a>
           </div>
-        </div>
 
-        <!-- Service 4: Réseaux et infrastructures -->
-        <div class="box">
-          <img
-            src="images/Réseaux et infrastructures.png"
-            alt="Réseaux"
-            loading="lazy"
-          />
-          <h3>Réseaux et Infrastructures</h3>
-          <div class="service-details">
-            <p>
-              <strong>Infrastructures Urbaines :</strong> Développement et
-              modernisation des réseaux urbains.
-            </p>
-            <p>
-              <strong>Gestion de Projets Complexes :</strong> Coordination et
-              supervision de grands chantiers d'infrastructure.
-            </p>
-            <p>
-              <strong>Solutions Durables :</strong> Approches innovantes pour
-              des infrastructures respectueuses de l'environnement.
-            </p>
+          <!-- Service 3: Travaux publics & terrassement -->
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="images/Travaux publics & terrassement.jpg"
+                alt="Travaux publics"
+                loading="lazy"
+              />
+            </div>
+            <h3>Travaux Publics & Terrassement</h3>
+            <div class="service-features">
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Gestion de Projet</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Nettoyage de Chantier</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Logistique de Transport</span>
+              </div>
+            </div>
+            <a href="#contact" class="service-link">Demander un devis →</a>
+          </div>
+
+          <!-- Service 4: Réseaux et infrastructures -->
+          <div class="service-card">
+            <div class="service-icon">
+              <img
+                src="images/Réseaux et infrastructures.png"
+                alt="Réseaux"
+                loading="lazy"
+              />
+            </div>
+            <h3>Réseaux et Infrastructures</h3>
+            <div class="service-features">
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Infrastructures Urbaines</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Gestion de Projets Complexes</span>
+              </div>
+              <div class="feature">
+                <i class="fas fa-check-circle"></i>
+                <span>Solutions Durables</span>
+              </div>
+            </div>
+            <a href="#contact" class="service-link">Demander un devis →</a>
           </div>
         </div>
       </div>
@@ -476,577 +832,1531 @@
 
     <!-- ============ PROJECTS SECTION ============ -->
     <section class="projects" id="projects">
-      <h1 class="heading">Nos réalisations</h1>
-      <div class="box-container">
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet1.jpg" alt="Projet" loading="lazy" />
-          </div>
-          <div class="content">
-            <div class="info">
-              <h3>Infrastructure Routière</h3>
-              <p>Travaux de voirie</p>
+      <div class="projects-container">
+        <div class="projects-header">
+          <span class="section-subtitle">Notre portfolio</span>
+          <h1 class="heading">Nos réalisations</h1>
+          <p class="section-description">
+            Découvrez nos projets d'infrastructure à travers la Tunisie
+          </p>
+        </div>
+
+        <div class="projects-grid">
+          <!-- Project 1: Siliana El Jadida -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet1.jpg"
+                alt="Siliana El Jadida"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet2.jpg" alt="Projet" loading="lazy" />
-          </div>
-          <div class="content">
-            <div class="info">
-              <h3>Construction de Ponts</h3>
-              <p>Ponts modernes</p>
+            <div class="project-content">
+              <div class="project-category">Lotissement VRD</div>
+              <h3>Aménagement Siliana El Jadida</h3>
+              <p>Voirie et réseaux divers pour le nouveau lotissement</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Siliana</span>
+                <span><i class="fas fa-calendar"></i> 2025</span>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet3.jpg" alt="Projet" loading="lazy" />
           </div>
-          <div class="content">
-            <div class="info">
-              <h3>Travaux Publics</h3>
-              <p>Terrassement</p>
+
+          <!-- Project 2: Réhabilitation Urbaine Tunis -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet2.jpg"
+                alt="Réhabilitation Tunis"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet4.jpg" alt="Projet" loading="lazy" />
+            <div class="project-content">
+              <div class="project-category">Urbanisme</div>
+              <h3>Réhabilitation Urbaine - Tunis</h3>
+              <p>Aménagement d'espaces publics et zones vertes</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Tunis</span>
+                <span><i class="fas fa-calendar"></i> 2024</span>
+              </div>
+            </div>
           </div>
-          <div class="content">
-            <div class="info">
-              <h3>Réseaux Urbains</h3>
-              <p>Installation réseaux</p>
+
+          <!-- Project 3: Modernisation Sousse -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet3.jpg"
+                alt="Modernisation Sousse"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet5.jpg" alt="Projet" loading="lazy" />
+            <div class="project-content">
+              <div class="project-category">Voirie</div>
+              <h3>Modernisation des Quartiers - Sousse</h3>
+              <p>Rénovation des voiries et éclairage public</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Sousse</span>
+                <span><i class="fas fa-calendar"></i> 2023</span>
+              </div>
+            </div>
           </div>
-          <div class="content">
-            <div class="info">
-              <h3>Infrastructure Moderne</h3>
-              <p>Projets d'envergure</p>
+
+          <!-- Project 4: Assainissement Monastir -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet4.jpg"
+                alt="Assainissement Monastir"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet6.jpg" alt="Projet" loading="lazy" />
+            <div class="project-content">
+              <div class="project-category">Assainissement</div>
+              <h3>Programme d'Assainissement - Monastir</h3>
+              <p>Installation de réseaux d'égouts modernes</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Monastir</span>
+                <span><i class="fas fa-calendar"></i> 2024</span>
+              </div>
+            </div>
           </div>
-          <div class="content">
-            <div class="info">
-              <h3>Génie Civil</h3>
-              <p>Construction</p>
+
+          <!-- Project 5: Zones Industrielles Nabeul -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet5.jpg"
+                alt="Zones Industrielles Nabeul"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet7.jpg" alt="Projet" loading="lazy" />
+            <div class="project-content">
+              <div class="project-category">Infrastructures</div>
+              <h3>Zones Industrielles - Nabeul</h3>
+              <p>Infrastructures routières et réseaux divers</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Nabeul</span>
+                <span><i class="fas fa-calendar"></i> 2023</span>
+              </div>
+            </div>
           </div>
-          <div class="content">
-            <div class="info">
-              <h3>Infrastructure Moderne</h3>
-              <p>Projets d'envergure</p>
+
+          <!-- Project 6: Réseaux d'Eau Bizerte -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet6.jpg"
+                alt="Réseaux d'Eau Bizerte"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
-        <a href="#" class="box"
-          ><div class="image">
-            <img src="images/projet7.jpg" alt="Projet" loading="lazy" />
+            <div class="project-content">
+              <div class="project-category">Hydraulique</div>
+              <h3>Réseaux d'Eau Potable - Bizerte</h3>
+              <p>Modernisation des conduites hydrauliques</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Bizerte</span>
+                <span><i class="fas fa-calendar"></i> 2024</span>
+              </div>
+            </div>
           </div>
-          <div class="content">
-            <div class="info">
-              <h3>Infrastructure Moderne</h3>
-              <p>Projets d'envergure</p>
+
+          <!-- Project 7: Construction Pont Kairouan -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet7.jpg"
+                alt="Pont Kairouan"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
             </div>
-            <i class="fas fa-plus"></i></div
-        ></a>
+            <div class="project-content">
+              <div class="project-category">Ouvrage d'art</div>
+              <h3>Construction d'un Pont - Kairouan</h3>
+              <p>Pont en béton armé de 120 mètres</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Kairouan</span>
+                <span><i class="fas fa-calendar"></i> 2023</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Project 8: Route Nationale Béja -->
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projet5.jpg"
+                alt="Route Nationale Béja"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-search-plus"></i
+                  ></a>
+                  <a href="#" class="project-link"
+                    ><i class="fas fa-external-link-alt"></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-category">Route</div>
+              <h3>Réfection Route Nationale 3 - Béja</h3>
+              <p>Revêtement et sécurité routière</p>
+              <div class="project-meta">
+                <span><i class="fas fa-map-marker-alt"></i> Béja</span>
+                <span><i class="fas fa-calendar"></i> 2023</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ============ BEFORE/AFTER SECTION ============ -->
     <section class="before-after" id="before-after">
-      <h1 class="heading">Transformation de nos projets</h1>
-      <div class="before-after-slider-container">
-        <div class="before-after-slider">
-          <div class="before-after-card">
-            <div class="image">
-              <img src="images/BA1.jpeg" alt="Avant/Après" loading="lazy" />
-            </div>
-            <div class="content">
-              <h3>Réhabilitation Urbaine - Tunis</h3>
-              <p>Aménagement d'espaces publics</p>
-              <div class="stats"><span>📅 2024</span><span>📍 Tunis</span></div>
-            </div>
-          </div>
-          <div class="before-after-card">
-            <div class="image">
-              <img src="images/BA2.jpeg" alt="Avant/Après" loading="lazy" />
-            </div>
-            <div class="content">
-              <h3>Modernisation des Quartiers - Sousse</h3>
-              <p>Rénovation des voiries</p>
-              <div class="stats">
-                <span>📅 2023</span><span>📍 Sousse</span>
-              </div>
-            </div>
-          </div>
-          <div class="before-after-card">
-            <div class="image">
-              <img src="images/BA3.jpeg" alt="Avant/Après" loading="lazy" />
-            </div>
-            <div class="content">
-              <h3>Assainissement - Monastir</h3>
-              <p>Installation de réseaux</p>
-              <div class="stats">
-                <span>📅 2024</span><span>📍 Monastir</span>
-              </div>
-            </div>
-          </div>
-          <div class="before-after-card">
-            <div class="image">
-              <img src="images/BA4.jpeg" alt="Avant/Après" loading="lazy" />
-            </div>
-            <div class="content">
-              <h3>Réhabilitation des Quartiers</h3>
-              <p>Création d'espaces verts</p>
-              <div class="stats"><span>📅 2024</span><span>📍 Tunis</span></div>
-            </div>
-          </div>
-          <div class="before-after-card">
-            <div class="image">
-              <img src="images/BA5.jpeg" alt="Avant/Après" loading="lazy" />
-            </div>
-            <div class="content">
-              <h3>Zones Industrielles - Nabeul</h3>
-              <p>Infrastructures routières</p>
-              <div class="stats">
-                <span>📅 2023</span><span>📍 Nabeul</span>
-              </div>
-            </div>
-          </div>
-          <div class="before-after-card">
-            <div class="image">
-              <img src="images/BA6.jpeg" alt="Avant/Après" loading="lazy" />
-            </div>
-            <div class="content">
-              <h3>Réseaux d'Eau - Bizerte</h3>
-              <p>Modernisation des conduites</p>
-              <div class="stats">
-                <span>📅 2024</span><span>📍 Bizerte</span>
-              </div>
-            </div>
-          </div>
+      <div class="before-after-container">
+        <div class="section-header">
+          <span class="section-subtitle">Notre impact</span>
+          <h1 class="heading">Avant / Après</h1>
+          <p class="section-description">
+            Découvrez la transformation de nos projets d'infrastructure
+          </p>
         </div>
-        <button class="before-after-prev">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="before-after-next">
-          <i class="fas fa-chevron-right"></i>
-        </button>
+
+        <!-- Filter Buttons -->
+        <div class="project-filters">
+          <button class="filter-btn active" data-filter="all">Tous</button>
+          <button class="filter-btn" data-filter="urbain">Urbain</button>
+          <button class="filter-btn" data-filter="route">Routes</button>
+          <button class="filter-btn" data-filter="hydraulique">
+            Hydraulique
+          </button>
+        </div>
+
+        <div class="before-after-slider-wrapper">
+          <div class="before-after-slider-container">
+            <div class="before-after-slider">
+              <!-- Project 1: Réhabilitation Urbaine - Tunis -->
+              <div class="before-after-card" data-category="urbain">
+                <div class="card-image">
+                  <img
+                    src="images/BA1.jpeg"
+                    alt="Réhabilitation Urbaine - Tunis"
+                    loading="lazy"
+                  />
+                  <div class="image-overlay">
+                    <button class="gallery-btn" data-image="images/BA1.jpeg">
+                      <i class="fas fa-search-plus"></i>
+                    </button>
+                  </div>
+                  <div class="image-tags">
+                    <span class="tag before-tag">AVANT</span>
+                    <span class="tag after-tag">APRÈS</span>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="project-year">2024</div>
+                  <h3>Réhabilitation Urbaine - Tunis</h3>
+                  <p>Aménagement d'espaces publics et zones vertes</p>
+                  <div class="impact-meter">
+                    <div class="impact-label">
+                      <span>Impact</span>
+                      <span class="impact-value">65%</span>
+                    </div>
+                    <div class="impact-bar">
+                      <div class="impact-fill" style="width: 65%"></div>
+                    </div>
+                  </div>
+                  <div class="card-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Tunis</span>
+                    <span
+                      ><i class="fas fa-ruler-combined"></i> 15 hectares</span
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project 2: Modernisation - Sousse -->
+              <div class="before-after-card" data-category="route">
+                <div class="card-image">
+                  <img
+                    src="images/BA2.jpeg"
+                    alt="Modernisation - Sousse"
+                    loading="lazy"
+                  />
+                  <div class="image-overlay">
+                    <button class="gallery-btn" data-image="images/BA2.jpeg">
+                      <i class="fas fa-search-plus"></i>
+                    </button>
+                  </div>
+                  <div class="image-tags">
+                    <span class="tag before-tag">AVANT</span>
+                    <span class="tag after-tag">APRÈS</span>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="project-year">2023</div>
+                  <h3>Modernisation des Quartiers - Sousse</h3>
+                  <p>Rénovation des voiries et éclairage public</p>
+                  <div class="impact-meter">
+                    <div class="impact-label">
+                      <span>Impact</span>
+                      <span class="impact-value">80%</span>
+                    </div>
+                    <div class="impact-bar">
+                      <div class="impact-fill" style="width: 80%"></div>
+                    </div>
+                  </div>
+                  <div class="card-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Sousse</span>
+                    <span><i class="fas fa-road"></i> 12 km</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project 3: Assainissement - Monastir -->
+              <div class="before-after-card" data-category="hydraulique">
+                <div class="card-image">
+                  <img
+                    src="images/BA3.jpeg"
+                    alt="Assainissement - Monastir"
+                    loading="lazy"
+                  />
+                  <div class="image-overlay">
+                    <button class="gallery-btn" data-image="images/BA3.jpeg">
+                      <i class="fas fa-search-plus"></i>
+                    </button>
+                  </div>
+                  <div class="image-tags">
+                    <span class="tag before-tag">AVANT</span>
+                    <span class="tag after-tag">APRÈS</span>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="project-year">2024</div>
+                  <h3>Assainissement - Monastir</h3>
+                  <p>Installation de réseaux d'égouts modernes</p>
+                  <div class="impact-meter">
+                    <div class="impact-label">
+                      <span>Impact</span>
+                      <span class="impact-value">100%</span>
+                    </div>
+                    <div class="impact-bar">
+                      <div class="impact-fill" style="width: 100%"></div>
+                    </div>
+                  </div>
+                  <div class="card-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Monastir</span>
+                    <span><i class="fas fa-water"></i> 8 km de réseau</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project 4: Réhabilitation des Quartiers -->
+              <div class="before-after-card" data-category="urbain">
+                <div class="card-image">
+                  <img
+                    src="images/BA4.jpeg"
+                    alt="Réhabilitation des Quartiers"
+                    loading="lazy"
+                  />
+                  <div class="image-overlay">
+                    <button class="gallery-btn" data-image="images/BA4.jpeg">
+                      <i class="fas fa-search-plus"></i>
+                    </button>
+                  </div>
+                  <div class="image-tags">
+                    <span class="tag before-tag">AVANT</span>
+                    <span class="tag after-tag">APRÈS</span>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="project-year">2024</div>
+                  <h3>Réhabilitation des Quartiers d'Habitation</h3>
+                  <p>Création d'espaces verts et aires de jeux</p>
+                  <div class="impact-meter">
+                    <div class="impact-label">
+                      <span>Impact</span>
+                      <span class="impact-value">70%</span>
+                    </div>
+                    <div class="impact-bar">
+                      <div class="impact-fill" style="width: 70%"></div>
+                    </div>
+                  </div>
+                  <div class="card-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Tunis</span>
+                    <span><i class="fas fa-tree"></i> 5 parcs</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project 5: Zones Industrielles - Nabeul -->
+              <div class="before-after-card" data-category="route">
+                <div class="card-image">
+                  <img
+                    src="images/BA5.jpeg"
+                    alt="Zones Industrielles - Nabeul"
+                    loading="lazy"
+                  />
+                  <div class="image-overlay">
+                    <button class="gallery-btn" data-image="images/BA5.jpeg">
+                      <i class="fas fa-search-plus"></i>
+                    </button>
+                  </div>
+                  <div class="image-tags">
+                    <span class="tag before-tag">AVANT</span>
+                    <span class="tag after-tag">APRÈS</span>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="project-year">2023</div>
+                  <h3>Zones Industrielles - Nabeul</h3>
+                  <p>Infrastructures routières et réseaux divers</p>
+                  <div class="impact-meter">
+                    <div class="impact-label">
+                      <span>Impact</span>
+                      <span class="impact-value">95%</span>
+                    </div>
+                    <div class="impact-bar">
+                      <div class="impact-fill" style="width: 95%"></div>
+                    </div>
+                  </div>
+                  <div class="card-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Nabeul</span>
+                    <span><i class="fas fa-industry"></i> 50 entreprises</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Project 6: Réseaux d'Eau - Bizerte -->
+              <div class="before-after-card" data-category="hydraulique">
+                <div class="card-image">
+                  <img
+                    src="images/BA6.jpeg"
+                    alt="Réseaux d'Eau - Bizerte"
+                    loading="lazy"
+                  />
+                  <div class="image-overlay">
+                    <button class="gallery-btn" data-image="images/BA6.jpeg">
+                      <i class="fas fa-search-plus"></i>
+                    </button>
+                  </div>
+                  <div class="image-tags">
+                    <span class="tag before-tag">AVANT</span>
+                    <span class="tag after-tag">APRÈS</span>
+                  </div>
+                </div>
+                <div class="card-content">
+                  <div class="project-year">2024</div>
+                  <h3>Modernisation Réseaux d'Eau - Bizerte</h3>
+                  <p>Remplacement des conduites hydrauliques</p>
+                  <div class="impact-meter">
+                    <div class="impact-label">
+                      <span>Impact</span>
+                      <span class="impact-value">75%</span>
+                    </div>
+                    <div class="impact-bar">
+                      <div class="impact-fill" style="width: 75%"></div>
+                    </div>
+                  </div>
+                  <div class="card-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Bizerte</span>
+                    <span><i class="fas fa-tint"></i> 20k habitants</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button class="slider-nav prev-btn">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="slider-nav next-btn">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="slider-dots"></div>
       </div>
-      <div class="before-after-dots"></div>
+
+      <!-- Gallery Modal -->
+      <div class="gallery-modal" id="galleryModal">
+        <div class="gallery-modal-content">
+          <button class="gallery-close"><i class="fas fa-times"></i></button>
+          <img src="" alt="Gallery Image" />
+          <div class="gallery-caption"></div>
+          <button class="gallery-prev">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="gallery-next">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+          <div class="gallery-counter">1 / 6</div>
+        </div>
+      </div>
     </section>
 
     <!-- ============ CURRENT PROJECT SECTION ============ -->
     <section class="current-project" id="current-project">
-      <h1 class="heading">Projet en cours</h1>
-      <p class="section-description">
-        Découvrez l'avancement de notre projet phare
-      </p>
-
       <div class="current-project-container">
-        <div class="project-header">
-          <h2>SILIANA EL JADIDA</h2>
-          <p>Description détaillée du projet en cours...</p>
-          <div class="project-meta">
-            <span
-              ><i class="fas fa-map-marker-alt"></i>📍 Lieu: Tunis -
-              Siliana</span
-            >
-            <span><i class="fas fa-calendar"></i>📅 Début: 28 Avril 2025</span>
-            <span><i class="fas fa-chart-line"></i>📊 Avancement: 65%</span>
-            <span
-              ><i class="fas fa-chart-line"></i>⏱️ Durée totale prévisionnelle:
-              540 jours</span
-            >
-            <span
-              ><i class="fas fa-calendar-check"></i>📅 Fin estimée: 19 Novembre
-              2026</span
-            >
-          </div>
+        <div class="section-header">
+          <span class="section-subtitle">Projet phare</span>
+          <h1 class="heading">Projet en cours</h1>
+          <p class="section-description">
+            Découvrez l'avancement de notre projet d'envergure
+          </p>
         </div>
 
-        <!-- Project Slider -->
-        <div class="project-slider-container">
-          <div class="project-slider-wrapper">
-            <div class="project-slider" id="project-slider">
-              <div class="project-slide">
-                <img
-                  src="images/current-project/PLANCHE PERS +GENERALE.jpg"
-                  alt="Projet - Photo 1 "
-                  loading="lazy"
-                />
+        <!-- Project Header with Stats -->
+        <div class="project-header-card">
+          <div class="project-title-section">
+            <h2>SILIANA EL JADIDA</h2>
+            <div class="project-badges">
+              <span class="badge badge-primary"
+                ><i class="fas fa-star"></i> Projet prioritaire</span
+              >
+              <span class="badge badge-success"
+                ><i class="fas fa-chart-line"></i> En cours</span
+              >
+            </div>
+          </div>
+          <p class="project-description">
+            Projet d'aménagement d'un nouveau lotissement moderne à Siliana,
+            comprenant des infrastructures routières, réseaux divers (VRD),
+            espaces verts et équipements publics. Un projet d'envergure qui
+            transformera la région et améliorera la qualité de vie des
+            habitants.
+          </p>
+
+          <!-- Key Metrics Grid -->
+          <div class="key-metrics">
+            <div class="metric-card">
+              <div class="metric-icon">
+                <i class="fas fa-map-marker-alt"></i>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/Presentation AFH Siliana_page-0001.jpg"
-                  alt="Projet - Photo 2"
-                  loading="lazy"
-                />
+              <div class="metric-info">
+                <span class="metric-label">Localisation</span>
+                <strong class="metric-value">Tunis - Siliana</strong>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/Screenshot_20260422_152857_Google Earth.jpg.jpeg"
-                  alt="Projet - Photo 3"
-                  loading="lazy"
-                />
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon"><i class="fas fa-calendar-alt"></i></div>
+              <div class="metric-info">
+                <span class="metric-label">Date de début</span>
+                <strong class="metric-value">28 Avril 2025</strong>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/SILIANA EL JADIDA lotissement approuvé Model (1)_page-0001.jpg"
-                  alt="Projet - Photo 4"
-                  loading="lazy"
-                />
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <i class="fas fa-hourglass-half"></i>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/1.jpg"
-                  alt="Projet - Photo 5"
-                  loading="lazy"
-                />
+              <div class="metric-info">
+                <span class="metric-label">Durée prévisionnelle</span>
+                <strong class="metric-value">540 jours</strong>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/2.jpeg"
-                  alt="Projet - Photo 6"
-                  loading="lazy"
-                />
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <i class="fas fa-calendar-check"></i>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/3.jpeg"
-                  alt="Projet - Photo 7"
-                  loading="lazy"
-                />
+              <div class="metric-info">
+                <span class="metric-label">Fin estimée</span>
+                <strong class="metric-value">19 Novembre 2026</strong>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/4.jpg"
-                  alt="Projet - Photo 8"
-                  loading="lazy"
-                />
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon">
+                <i class="fas fa-ruler-combined"></i>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/5.jpg"
-                  alt="Projet - Photo 9"
-                  loading="lazy"
-                />
+              <div class="metric-info">
+                <span class="metric-label">Superficie</span>
+                <strong class="metric-value">25 hectares</strong>
               </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/6.jpg"
-                  alt="Projet - Photo 10"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/7.jpg"
-                  alt="Projet - Photo 11"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/8.jpg"
-                  alt="Projet - Photo 12"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/9.jpg"
-                  alt="Projet - Photo 13"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/10.jpg"
-                  alt="Projet - Photo 14"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/11.jpg"
-                  alt="Projet - Photo 15"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/12.jpg"
-                  alt="Projet - Photo 16"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/13.jpg"
-                  alt="Projet - Photo 17"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/14.jpg"
-                  alt="Projet - Photo 18"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/15.jpg"
-                  alt="Projet - Photo 19"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/16.jpg"
-                  alt="Projet - Photo 20"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/17.jpg"
-                  alt="Projet - Photo 21"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/18.jpg"
-                  alt="Projet - Photo 22"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/19.jpg"
-                  alt="Projet - Photo 23"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/20.jpeg"
-                  alt="Projet - Photo 24"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/21.jpeg"
-                  alt="Projet - Photo 25"
-                  loading="lazy"
-                />
-              </div>
-              <div class="project-slide">
-                <img
-                  src="images/current-project/22.jpeg"
-                  alt="Projet - Photo 26"
-                  loading="lazy"
-                />
+            </div>
+            <div class="metric-card">
+              <div class="metric-icon"><i class="fas fa-euro-sign"></i></div>
+              <div class="metric-info">
+                <span class="metric-label">Budget</span>
+                <strong class="metric-value">21.46 M DT </strong>
               </div>
             </div>
           </div>
-          <button class="project-prev">
+        </div>
+
+        <!-- Progress Section -->
+        <div class="progress-section">
+          <div class="progress-header">
+            <div class="progress-title">
+              <i class="fas fa-tasks"></i>
+              <h3>Avancement des travaux</h3>
+            </div>
+            <div class="progress-percentage">65%</div>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-track">
+              <div class="progress-bar-fill" style="width: 65%">
+                <span class="progress-glow"></span>
+              </div>
+            </div>
+          </div>
+          <div class="progress-stages">
+            <div class="stage completed">
+              <div class="stage-dot"></div>
+              <div class="stage-label">Étude</div>
+              <div class="stage-date">Avr 2025</div>
+            </div>
+            <div class="stage completed">
+              <div class="stage-dot"></div>
+              <div class="stage-label">Terrassement</div>
+              <div class="stage-date">Mai 2025</div>
+            </div>
+            <div class="stage active">
+              <div class="stage-dot"></div>
+              <div class="stage-label">VRD</div>
+              <div class="stage-date">En cours</div>
+            </div>
+            <div class="stage">
+              <div class="stage-dot"></div>
+              <div class="stage-label">Voirie</div>
+              <div class="stage-date">Sep 2025</div>
+            </div>
+            <div class="stage">
+              <div class="stage-dot"></div>
+              <div class="stage-label">Espaces verts</div>
+              <div class="stage-date">Fév 2026</div>
+            </div>
+            <div class="stage">
+              <div class="stage-dot"></div>
+              <div class="stage-label">Livraison</div>
+              <div class="stage-date">Nov 2026</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gallery Section -->
+        <div class="gallery-section">
+          <div class="gallery-header">
+            <h3><i class="fas fa-images"></i> Galerie du projet</h3>
+            <p>Découvrez l'évolution du chantier en images</p>
+          </div>
+          <div class="project-slider-container">
+            <div class="project-slider-wrapper">
+              <div class="project-slider" id="project-slider">
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/PLANCHE PERS +GENERALE.jpg"
+                    alt="Vue générale du projet"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Vue générale du projet</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/Presentation AFH Siliana_page-0001.jpg"
+                    alt="Plan d'aménagement"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Plan d'aménagement</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/Screenshot_20260422_152857_Google Earth.jpg.jpeg"
+                    alt="Localisation satellite"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Localisation satellite</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/SILIANA EL JADIDA lotissement approuvé Model (1)_page-0001.jpg"
+                    alt="Lotissement approuvé"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Plan de lotissement approuvé</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/1.jpg"
+                    alt="Travaux - Phase 1"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Phase 1 - Terrassement</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/2.jpeg"
+                    alt="Travaux - Phase 2"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Phase 2 - Réseaux</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/3.jpeg"
+                    alt="Travaux - Phase 3"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Phase 3 - Voirie</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/4.jpg"
+                    alt="Avancement - Vue aérienne"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Vue aérienne des travaux</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/5.jpg"
+                    alt="Équipements"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Équipements modernes</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/6.jpg"
+                    alt="Réseaux"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Installation des réseaux</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/7.jpg"
+                    alt="Équipe"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Notre équipe sur le terrain</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/8.jpg"
+                    alt="Matériaux"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Matériaux de qualité</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/9.jpg"
+                    alt="Contrôle qualité"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Contrôle qualité rigoureux</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/10.jpg"
+                    alt="Sécurité"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Sécurité sur le chantier</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/11.jpg"
+                    alt="Avancement"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Avancement des travaux</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/12.jpg"
+                    alt="Finitions"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Travaux de finition</div>
+                </div>
+                <div class="project-slide">
+                  <img
+                    src="images/current-project/13.jpg"
+                    alt="Résultat final"
+                    loading="lazy"
+                  />
+                  <div class="slide-caption">Résultat final attendu</div>
+                </div>
+                <!-- Add more slides as needed -->
+              </div>
+            </div>
+            <button class="project-prev">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="project-next">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+          <div class="project-slider-dots"></div>
+        </div>
+
+        <!-- Team Section -->
+        <div class="team-section">
+          <h3><i class="fas fa-users"></i> Équipe projet</h3>
+          <div class="team-grid">
+            <div class="team-card">
+              <div class="team-avatar">
+                <i class="fas fa-user-tie"></i>
+              </div>
+              <h4>M. Boubaker Wannes</h4>
+              <p>Chef de projet</p>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar">
+                <i class="fas fa-hard-hat"></i>
+              </div>
+              <h4>Ingénieurs</h4>
+              <p>5 experts terrain</p>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar">
+                <i class="fas fa-tools"></i>
+              </div>
+              <h4>Ouvriers qualifiés</h4>
+              <p>35 professionnels</p>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h4>Contrôle qualité</h4>
+              <p>3 inspecteurs</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="project-cta">
+          <div class="cta-content">
+            <h3>Intéressé par ce projet ?</h3>
+            <p>
+              Contactez-nous pour plus d'informations sur les opportunités
+              d'investissement
+            </p>
+            <a href="#contact" class="cta-btn"
+              >Nous contacter <i class="fas fa-arrow-right"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery Modal -->
+      <div class="gallery-modal" id="projectGalleryModal">
+        <div class="gallery-modal-content">
+          <button class="gallery-close"><i class="fas fa-times"></i></button>
+          <img src="" alt="Gallery Image" />
+          <div class="gallery-caption"></div>
+          <button class="gallery-prev">
             <i class="fas fa-chevron-left"></i>
           </button>
-          <button class="project-next">
+          <button class="gallery-next">
             <i class="fas fa-chevron-right"></i>
           </button>
-        </div>
-        <div class="project-slider-dots"></div>
-
-        <!-- Progress Bar -->
-        <div class="progress-bar">
-          <div class="progress-label">Avancement des travaux</div>
-          <div class="progress-track">
-            <div class="progress-fill" style="width: 65%">65%</div>
-          </div>
+          <div class="gallery-counter">1 / 10</div>
         </div>
       </div>
     </section>
 
     <!-- ============ BLOG SECTION (ACTUALITÉS) ============ -->
     <section class="blogs" id="blogs">
-      <h1 class="heading">Actualités</h1>
-      <div class="blogs-slider-container">
-        <div class="blogs-slider">
-          <div class="slide">
-            <div class="image">
-              <img src="images/blog1.jpg" alt="Blog" loading="lazy" />
-            </div>
-            <div class="content">
-              <h3>Nouveau projet d'infrastructure</h3>
-              <p>Lorem ipsum dolor sit amet.</p>
-              <a href="#" class="btn">En savoir plus</a>
-            </div>
+      <div class="blogs-container">
+        <div class="section-header">
+          <span class="section-subtitle">Actualités & Événements</span>
+          <h1 class="heading">Dernières nouvelles</h1>
+          <p class="section-description">
+            Restez informés des dernières actualités de SOIT
+          </p>
+        </div>
+
+        <!-- Featured Article -->
+        <div class="featured-article">
+          <div class="featured-image">
+            <img
+              src="images/current-project/SILIANA EL JADIDA lotissement approuvé Model (1)_page-0001.jpg"
+              alt="Projet Siliana El Jadida"
+            />
+            <span class="featured-badge">À la une</span>
           </div>
-          <div class="slide">
-            <div class="image">
-              <img src="images/blog2.jpg" alt="Blog" loading="lazy" />
+          <div class="featured-content">
+            <div class="article-meta">
+              <span><i class="fas fa-calendar-alt"></i> 28 Avril 2025</span>
+              <span><i class="fas fa-tag"></i> Projet</span>
+              <span><i class="fas fa-clock"></i> 5 min de lecture</span>
             </div>
-            <div class="content">
-              <h3>Innovation dans la construction</h3>
-              <p>Lorem ipsum dolor sit amet.</p>
-              <a href="#" class="btn">En savoir plus</a>
+            <h2>Lancement du projet Siliana El Jadida</h2>
+            <p>
+              SOIT démarre les travaux d'aménagement du nouveau lotissement
+              "Siliana El Jadida". Un projet d'envergure de 540 jours qui
+              transformera la région avec des infrastructures modernes et
+              durables.
+            </p>
+            <div class="featured-stats">
+              <div class="stat">
+                <strong>540</strong>
+                <span>jours de travaux</span>
+              </div>
+              <div class="stat">
+                <strong>25</strong>
+                <span>hectares</span>
+              </div>
+              <div class="stat">
+                <strong>21.46 M DT</strong>
+                <span>DT budget</span>
+              </div>
             </div>
+            <a href="#" class="btn-read-more"
+              >Lire l'article complet <i class="fas fa-arrow-right"></i
+            ></a>
           </div>
-          <div class="slide">
-            <div class="image">
-              <img src="images/blog3.jpg" alt="Blog" loading="lazy" />
+        </div>
+
+        <!-- Articles Grid -->
+        <div class="articles-grid">
+          <!-- Article 1 -->
+          <article class="article-card">
+            <div class="card-image">
+              <img src="images/categorie 5.jpg" alt="Agrément Catégorie 5" />
+              <div class="card-category">Certification</div>
             </div>
-            <div class="content">
-              <h3>Technologies vertes</h3>
-              <p>Lorem ipsum dolor sit amet.</p>
-              <a href="#" class="btn">En savoir plus</a>
+            <div class="card-content">
+              <div class="article-meta">
+                <span><i class="fas fa-calendar-alt"></i> 15 Mars 2025</span>
+                <span><i class="fas fa-eye"></i> 245 vues</span>
+              </div>
+              <h3>SOIT renouvelle son agrément Catégorie 5</h3>
+              <p>
+                L'entreprise confirme son statut auprès de l'État tunisien pour
+                les grands projets d'infrastructure.
+              </p>
+              <a href="#" class="read-more"
+                >Lire la suite <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </article>
+
+          <!-- Article 2 -->
+          <article class="article-card">
+            <div class="card-image">
+              <img src="images/28th.jpg" alt="28 ans SOIT" />
+              <div class="card-category">Anniversaire</div>
+            </div>
+            <div class="card-content">
+              <div class="article-meta">
+                <span><i class="fas fa-calendar-alt"></i> 14 Avril 2025</span>
+                <span><i class="fas fa-eye"></i> 512 vues</span>
+              </div>
+              <h3>SOIT fête ses 28 ans d'excellence</h3>
+              <p>
+                Fondée en 1997, SOIT célèbre 28 années d'engagement pour le
+                développement des infrastructures tunisiennes.
+              </p>
+              <a href="#" class="read-more"
+                >Lire la suite <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </article>
+
+          <!-- Article 3 -->
+          <article class="article-card">
+            <div class="card-image">
+              <img src="images/blog4.jpg" alt="Nouveaux équipements" />
+              <div class="card-category">Investissement</div>
+            </div>
+            <div class="card-content">
+              <div class="article-meta">
+                <span><i class="fas fa-calendar-alt"></i> 20 Janvier 2025</span>
+                <span><i class="fas fa-eye"></i> 189 vues</span>
+              </div>
+              <h3>Renouvellement de notre parc machine</h3>
+              <p>
+                SOIT investit dans des équipements de dernière génération pour
+                optimiser ses chantiers et garantir l'excellence.
+              </p>
+              <a href="#" class="read-more"
+                >Lire la suite <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </article>
+
+          <!-- Article 4 -->
+          <article class="article-card">
+            <div class="card-image">
+              <img src="images/formationAI.jpeg" alt="Formation" />
+              <div class="card-category">RH</div>
+            </div>
+            <div class="card-content">
+              <div class="article-meta">
+                <span
+                  ><i class="fas fa-calendar-alt"></i> 10 Décembre 2024</span
+                >
+                <span><i class="fas fa-eye"></i> 156 vues</span>
+              </div>
+              <h3>Programme de formation pour nos équipes</h3>
+              <p>
+                SOIT investit dans la montée en compétences de ses
+                collaborateurs avec des programmes certifiants.
+              </p>
+              <a href="#" class="read-more"
+                >Lire la suite <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </article>
+
+          <!-- Article 5 -->
+          <article class="article-card">
+            <div class="card-image">
+              <img src="images/green.jpg" alt="RSE" />
+              <div class="card-category">Développement durable</div>
+            </div>
+            <div class="card-content">
+              <div class="article-meta">
+                <span
+                  ><i class="fas fa-calendar-alt"></i> 5 Septembre 2024</span
+                >
+                <span><i class="fas fa-eye"></i> 203 vues</span>
+              </div>
+              <h3>SOIT s'engage pour l'environnement</h3>
+              <p>
+                L'entreprise adopte des pratiques durables pour réduire son
+                impact environnemental et protéger les écosystèmes.
+              </p>
+              <a href="#" class="read-more"
+                >Lire la suite <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </article>
+
+          <!-- Article 6 - Additional -->
+          <article class="article-card">
+            <div class="card-image">
+              <img src="images/partnership.jpg" alt="Partenariat" />
+              <div class="card-category">Partenariat</div>
+            </div>
+            <div class="card-content">
+              <div class="article-meta">
+                <span><i class="fas fa-calendar-alt"></i> 15 Août 2024</span>
+                <span><i class="fas fa-eye"></i> 98 vues</span>
+              </div>
+              <h3>Nouveau partenariat stratégique</h3>
+              <p>
+                SOIT signe un accord avec un leader international pour renforcer
+                son expertise technique.
+              </p>
+              <a href="#" class="read-more"
+                >Lire la suite <i class="fas fa-arrow-right"></i
+              ></a>
+            </div>
+          </article>
+        </div>
+
+        <!-- Newsletter Section -->
+        <div class="newsletter-section">
+          <div class="newsletter-content">
+            <div class="newsletter-icon">
+              <i class="fas fa-envelope-open-text"></i>
+            </div>
+            <h3>Restez informés</h3>
+            <p>Recevez nos actualités directement dans votre boîte mail</p>
+            <form class="newsletter-form">
+              <input type="email" placeholder="Votre adresse email" required />
+              <button type="submit">
+                S'abonner <i class="fas fa-paper-plane"></i>
+              </button>
+            </form>
+            <p class="newsletter-note">
+              Aucun spam, désabonnement à tout moment.
+            </p>
+          </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more">
+          <button class="load-more-btn">
+            <i class="fas fa-sync-alt"></i> Charger plus d'articles
+          </button>
+        </div>
+      </div>
+
+      <!-- Article Modal (for full article view) -->
+      <div class="article-modal" id="articleModal">
+        <div class="modal-content">
+          <button class="modal-close"><i class="fas fa-times"></i></button>
+          <div class="modal-body">
+            <img src="" alt="Article image" />
+            <div class="modal-text">
+              <h2></h2>
+              <div class="modal-meta"></div>
+              <div class="modal-description"></div>
             </div>
           </div>
         </div>
-        <button class="blog-slider-btn blog-slider-prev">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="blog-slider-btn blog-slider-next">
-          <i class="fas fa-chevron-right"></i>
-        </button>
       </div>
-      <div class="blog-slider-dots"></div>
     </section>
 
     <!-- ============ REVIEWS SECTION ============ -->
     <section class="reviews" id="reviews">
-      <h1 class="heading">Ce que disent nos clients</h1>
-      <div class="reviews-slider-container">
-        <div class="reviews-slider">
-          <!-- Les avis seront chargés dynamiquement depuis l'API -->
+      <div class="reviews-container">
+        <div class="section-header">
+          <span class="section-subtitle">Témoignages</span>
+          <h1 class="heading">Ce que disent nos clients</h1>
+          <p class="section-description">
+            La satisfaction de nos clients, notre plus belle récompense
+          </p>
         </div>
-        <button class="slider-btn slider-prev">
-          <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="slider-btn slider-next">
-          <i class="fas fa-chevron-right"></i>
-        </button>
-      </div>
-      <div class="slider-dots"></div>
-    </section>
 
-    <!-- ============ ADD A REVIEW SECTION ============ -->
-    <section class="add-review" id="add-review">
-      <h1 class="heading">Donnez votre avis</h1>
-      <p class="section-description">Partagez votre expérience avec SOIT</p>
-      <div class="review-form-container">
-        <form id="review-form">
-          <div class="form-group">
-            <input
-              type="text"
-              id="review-name"
-              placeholder="Votre nom complet"
-              class="box"
-              required
-            />
+        <!-- Rating Summary -->
+        <div class="rating-summary">
+          <div class="rating-stats">
+            <div class="overall-rating">
+              <div class="rating-number">4.8</div>
+              <div class="rating-stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <div class="rating-count">Basé sur 128 avis</div>
+            </div>
+            <div class="rating-bars">
+              <div class="rating-bar-item">
+                <span class="rating-label">5 étoiles</span>
+                <div class="rating-bar">
+                  <div class="rating-fill" style="width: 85%"></div>
+                </div>
+                <span class="rating-percent">85%</span>
+              </div>
+              <div class="rating-bar-item">
+                <span class="rating-label">4 étoiles</span>
+                <div class="rating-bar">
+                  <div class="rating-fill" style="width: 10%"></div>
+                </div>
+                <span class="rating-percent">10%</span>
+              </div>
+              <div class="rating-bar-item">
+                <span class="rating-label">3 étoiles</span>
+                <div class="rating-bar">
+                  <div class="rating-fill" style="width: 3%"></div>
+                </div>
+                <span class="rating-percent">3%</span>
+              </div>
+              <div class="rating-bar-item">
+                <span class="rating-label">2 étoiles</span>
+                <div class="rating-bar">
+                  <div class="rating-fill" style="width: 1%"></div>
+                </div>
+                <span class="rating-percent">1%</span>
+              </div>
+              <div class="rating-bar-item">
+                <span class="rating-label">1 étoile</span>
+                <div class="rating-bar">
+                  <div class="rating-fill" style="width: 1%"></div>
+                </div>
+                <span class="rating-percent">1%</span>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <input
-              type="email"
-              id="review-email"
-              placeholder="Votre email"
-              class="box"
-              required
-            />
+        </div>
+
+        <!-- Reviews Slider -->
+        <div class="reviews-slider-container">
+          <div class="reviews-slider-wrapper">
+            <div class="reviews-slider">
+              <!-- Reviews will be loaded dynamically from API -->
+            </div>
           </div>
-          <div class="form-group">
-            <div class="rating-input">
+          <button class="reviews-prev">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          <button class="reviews-next">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+        <div class="reviews-dots"></div>
+
+        <!-- Add Review Button -->
+        <div class="add-review-btn-container">
+          <button class="add-review-btn" id="openReviewModal">
+            <i class="fas fa-star"></i>
+            Donnez votre avis
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Add Review Modal -->
+      <div class="review-modal" id="reviewModal">
+        <div class="review-modal-content">
+          <div class="review-modal-header">
+            <h3>Partagez votre expérience</h3>
+            <button class="review-modal-close">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <form id="review-form-modal">
+            <div class="form-group">
+              <input
+                type="text"
+                id="review-name-modal"
+                placeholder="Votre nom complet"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <input
+                type="email"
+                id="review-email-modal"
+                placeholder="Votre email"
+                required
+              />
+            </div>
+            <div class="form-group">
               <label>Votre note :</label>
-              <div class="stars-input">
+              <div class="rating-input">
                 <i class="far fa-star" data-rating="1"></i>
                 <i class="far fa-star" data-rating="2"></i>
                 <i class="far fa-star" data-rating="3"></i>
                 <i class="far fa-star" data-rating="4"></i>
                 <i class="far fa-star" data-rating="5"></i>
               </div>
-              <input type="hidden" id="review-rating" value="0" />
+              <input type="hidden" id="review-rating-modal" value="0" />
+            </div>
+            <div class="form-group">
+              <textarea
+                id="review-comment-modal"
+                placeholder="Votre commentaire..."
+                rows="4"
+                required
+              ></textarea>
+            </div>
+            <button type="submit" class="submit-review-btn">
+              Envoyer mon avis
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section class="faq" id="faq">
+      <div class="faq-container">
+        <div class="section-header">
+          <span class="section-subtitle">Questions fréquentes</span>
+          <h1 class="heading">Foire Aux Questions</h1>
+          <p class="section-description">
+            Toutes les réponses à vos questions sur nos services
+          </p>
+        </div>
+
+        <div class="faq-grid">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <div class="faq-question-content">
+                <i class="fas fa-road"></i>
+                <h3>Quels types de projets réalisez-vous ?</h3>
+              </div>
+              <i class="fas fa-chevron-down faq-toggle"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Nous réalisons tous types de projets d'infrastructure :</p>
+              <ul>
+                <li>Construction et réfection de routes</li>
+                <li>Ponts et ouvrages d'art</li>
+                <li>VRD (Voiries et Réseaux Divers)</li>
+                <li>Terrassement et aménagement</li>
+                <li>Réseaux hydrauliques et d'assainissement</li>
+              </ul>
             </div>
           </div>
-          <div class="form-group">
-            <textarea
-              id="review-comment"
-              placeholder="Votre commentaire..."
-              class="box"
-              rows="4"
-              required
-            ></textarea>
+
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <div class="faq-question-content">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h3>Comment obtenir un devis ?</h3>
+              </div>
+              <i class="fas fa-chevron-down faq-toggle"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Pour obtenir un devis gratuit :</p>
+              <ol>
+                <li>Remplissez le formulaire de contact</li>
+                <li>
+                  Appelez-nous au
+                  <a href="tel:+21612457785">+216 12 45 77 85</a>
+                </li>
+                <li>
+                  Envoyez-nous un email à
+                  <a href="mailto:groupesoit@gmail.com">groupesoit@gmail.com</a>
+                </li>
+              </ol>
+              <p>
+                Nous vous répondons sous 24h avec une proposition détaillée.
+              </p>
+            </div>
           </div>
-          <button type="submit" class="btn">⭐ Envoyer mon avis</button>
-          <div id="review-status" style="margin-top: 1rem; display: none"></div>
-        </form>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <div class="faq-question-content">
+                <i class="fas fa-map-marker-alt"></i>
+                <h3>Quelles sont vos zones d'intervention ?</h3>
+              </div>
+              <i class="fas fa-chevron-down faq-toggle"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Nous intervenons sur tout le territoire tunisien, avec une base
+                principale à Sousse. Nos équipes sont mobiles et peuvent
+                réaliser des projets dans toutes les régions :
+              </p>
+              <div class="region-list">
+                <span>Sousse</span>
+                <span>Tunis</span>
+                <span>Sfax</span>
+                <span>Monastir</span>
+                <span>Nabeul</span>
+                <span>Kairouan</span>
+                <span>Bizerte</span>
+                <span>Béja</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 4 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <div class="faq-question-content">
+                <i class="fas fa-clock"></i>
+                <h3>Quels sont vos délais de réalisation ?</h3>
+              </div>
+              <i class="fas fa-chevron-down faq-toggle"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Les délais varient selon la complexité du projet :</p>
+              <ul>
+                <li><strong>Petits projets :</strong> 2 à 4 semaines</li>
+                <li><strong>Projets moyens :</strong> 2 à 6 mois</li>
+                <li><strong>Grands projets :</strong> 6 à 24 mois</li>
+              </ul>
+              <p>Nous respectons toujours nos engagements contractuels.</p>
+            </div>
+          </div>
+
+          <!-- FAQ Item 5 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <div class="faq-question-content">
+                <i class="fas fa-certificate"></i>
+                <h3>Quelles sont vos certifications ?</h3>
+              </div>
+              <i class="fas fa-chevron-down faq-toggle"></i>
+            </div>
+            <div class="faq-answer">
+              <p>SOIT est fièrement certifiée :</p>
+              <ul>
+                <li>✅ Entreprise agréée par l'État - Catégorie 5</li>
+                <li>✅ Certification Qualité ISO 9001:2015</li>
+                <li>✅ Agrément Sécurité sur les chantiers</li>
+                <li>✅ Membre de la Fédération Tunisienne du BTP</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- FAQ Item 6 -->
+          <div class="faq-item">
+            <div class="faq-question">
+              <div class="faq-question-content">
+                <i class="fas fa-handshake"></i>
+                <h3>Comment devenir partenaire ou fournisseur ?</h3>
+              </div>
+              <i class="fas fa-chevron-down faq-toggle"></i>
+            </div>
+            <div class="faq-answer">
+              <p>
+                Nous sommes toujours à la recherche de partenaires de qualité.
+                Contactez notre service achats :
+              </p>
+              <p>
+                <i class="fas fa-envelope"></i>
+                <a href="mailto:groupesoit.comercial@gmail.com"
+                  >groupesoit.comercial@gmail.com</a
+                >
+              </p>
+              <p>
+                <i class="fas fa-phone"></i>
+                <a href="tel:+21670457085">+216 70 45 70 85</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lien vers contact -->
+        <div class="faq-footer">
+          <p>Vous n'avez pas trouvé votre réponse ?</p>
+          <a href="#contact" class="btn-faq"
+            >Contactez-nous <i class="fas fa-arrow-right"></i
+          ></a>
+        </div>
       </div>
     </section>
 
-    <!-- ============ CONTACT SECTION ============ -->
     <section class="contact" id="contact">
-      <h1 class="heading">Contactez-nous</h1>
-      <div class="row">
-        <iframe
-          class="map"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.9978137489047!2d10.550683474848261!3d35.898069218033704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd8986821cc149%3A0x473129e67fa70f08!2zU29jacOpdMOpIFNPSVQ!5e0!3m2!1sen!2stn!4v1776413143737!5m2!1sen!2stn"
-          allowfullscreen=""
-          loading="lazy"
-          title="SOIT Location Map"
-        ></iframe>
+      <div class="contact-container">
+        <div class="contact-header">
+          <span class="section-subtitle">Contactez-nous</span>
+          <h1 class="heading">Contactez-nous</h1>
+          <p class="section-description">
+            Une question ? Un projet ? Notre équipe est à votre écoute
+          </p>
+        </div>
 
-        <form id="contact-form">
-          <h3>N'hésitez pas à nous contacter</h3>
-          <input
-            type="text"
-            id="contact-name"
-            placeholder="Votre nom"
-            class="box"
-            required
-          />
-          <input
-            type="email"
-            id="contact-email"
-            placeholder="Votre email"
-            class="box"
-            required
-          />
-          <input
-            type="tel"
-            id="contact-phone"
-            placeholder="Votre téléphone"
-            class="box"
-          />
-          <textarea
-            id="contact-message"
-            placeholder="Votre message"
-            class="box"
-            required
-          ></textarea>
-          <button type="submit" class="btn">Envoyer un message</button>
-          <div id="form-status" style="margin-top: 1rem; display: none"></div>
-        </form>
+        <div class="contact-row">
+          <!-- Carte -->
+          <div class="map-card">
+            <div class="map-wrapper">
+              <iframe
+                class="map"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.9978137489047!2d10.550683474848261!3d35.898069218033704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd8986821cc149%3A0x473129e67fa70f08!2zU29jacOpdMOpIFNPSVQ!5e0!3m2!1sen!2stn!4v1776413143737!5m2!1sen!2stn"
+                allowfullscreen=""
+                loading="lazy"
+                title="SOIT Location Map"
+              ></iframe>
+            </div>
+          </div>
+
+          <!-- Formulaire -->
+          <div class="form-card">
+            <form id="contact-form" class="contact-form">
+              <h3>N'hésitez pas à nous contacter</h3>
+
+              <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input
+                  type="text"
+                  id="contact-name"
+                  placeholder="Votre nom"
+                  class="box"
+                  required
+                />
+              </div>
+
+              <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input
+                  type="email"
+                  id="contact-email"
+                  placeholder="Votre email"
+                  class="box"
+                  required
+                />
+              </div>
+
+              <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input
+                  type="tel"
+                  id="contact-phone"
+                  placeholder="Votre téléphone"
+                  class="box"
+                />
+              </div>
+
+              <div class="input-group">
+                <i class="fas fa-comment"></i>
+                <textarea
+                  id="contact-message"
+                  placeholder="Votre message"
+                  class="box"
+                  required
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn">
+                <span>Envoyer un message</span>
+                <i class="fas fa-arrow-right"></i>
+              </button>
+
+              <div
+                id="form-status"
+                style="margin-top: 1rem; display: none"
+              ></div>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1061,4 +2371,3 @@
     <script src="script.js"></script>
   </body>
 </html>
-" "
