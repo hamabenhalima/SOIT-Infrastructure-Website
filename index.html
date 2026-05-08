@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=yes"
     />
-    <title>SOIT | Infrastructure & Travaux</title>
+    <title>SOIT | Infrastructure & Travaux public</title>
 
     <link
       rel="stylesheet"
@@ -83,7 +83,7 @@
   <body>
     <header class="header">
       <a href="#home" class="logo">
-        <img src="images/SOIT LOGO.jpg" alt="SOIT Logo" class="logo-img" />
+        <img src="images/SOIT-LOGO.jpg" alt="SOIT Logo" class="logo-img" />
       </a>
 
       <!-- Navigation Desktop -->
@@ -143,6 +143,10 @@
         <div id="language-btn" class="icon-btn" aria-label="Langue">
           <i class="fas fa-globe"></i>
           <span class="tooltip">Langue</span>
+        </div>
+        <div id="dark-mode-btn" class="icon-btn" aria-label="Mode sombre">
+          <i class="fas fa-moon"></i>
+          <span class="tooltip">Mode sombre</span>
         </div>
       </div>
 
@@ -1075,6 +1079,79 @@
               <div class="project-meta">
                 <span><i class="fas fa-map-marker-alt"></i> Béja</span>
                 <span><i class="fas fa-calendar"></i> 2023</span>
+              </div>
+            </div>
+          </div>
+          <div class="project-card">
+            <div class="project-image">
+              <img
+                src="images/projets/souk-jdid/1.jpg"
+                alt="Embellissement Souk Jdid"
+                loading="lazy"
+              />
+              <div class="project-overlay">
+                <div class="project-links">
+                  <!-- Bouton Galerie -->
+                  <button
+                    type="button"
+                    class="project-link"
+                    onclick="openSoukJdidGallery(0)"
+                    style="
+                      background: white;
+                      border: none;
+                      cursor: pointer;
+                      width: 45px;
+                      height: 45px;
+                      border-radius: 50%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-images"></i>
+                  </button>
+                  <!-- Bouton Info -->
+                  <button
+                    type="button"
+                    class="project-link"
+                    onclick="showProjectDetails('souk-jdid')"
+                    style="
+                      background: white;
+                      border: none;
+                      cursor: pointer;
+                      width: 45px;
+                      height: 45px;
+                      border-radius: 50%;
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                    "
+                  >
+                    <i class="fas fa-info-circle"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-category">
+                Aménagement Urbain | Embellissement
+              </div>
+              <h3>Embellissement de l'entrée de la ville - Souk Jdid</h3>
+              <p>
+                Achèvement des travaux d'embellissement de l'entrée de la ville
+                <strong>Souk Jdid</strong>, gouvernorat de
+                <strong>Sidi Bouzid</strong>, Tunisie.
+              </p>
+              <div class="project-meta">
+                <span
+                  ><i class="fas fa-map-marker-alt"></i> Sidi Bouzid,
+                  Tunisie</span
+                >
+                <span><i class="fas fa-calendar"></i> 2025</span>
+                <span style="color: #00c851"
+                  ><i class="fas fa-check-circle"></i> Terminé</span
+                >
+                <span><i class="fas fa-camera"></i> 12 photos</span>
               </div>
             </div>
           </div>
@@ -2369,7 +2446,7 @@
         <div class="footer-grid">
           <!-- Colonne 1 -->
           <div class="footer-col">
-            <img src="images/SOIT LOGO.jpg" alt="SOIT" class="footer-logo" />
+            <img src="images/SOIT-LOGO.jpg" alt="SOIT" class="footer-logo" />
             <p>
               Expert en infrastructure et travaux publics en Tunisie depuis
               1997.
@@ -2425,6 +2502,105 @@
     </button>
     <div id="loading-spinner" class="loading-spinner">
       <div class="spinner"></div>
+    </div>
+    <!-- ============ MODALE GALERIE SOUK JDID ============ -->
+    <div
+      id="galleryModalSoukJdid"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          position: relative;
+          max-width: 90%;
+          max-height: 90%;
+          background: #111;
+          border-radius: 12px;
+          padding: 20px;
+        "
+      >
+        <button
+          onclick="closeSoukJdidGallery()"
+          style="
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 10;
+          "
+        >
+          &times;
+        </button>
+
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+          "
+        >
+          <button
+            onclick="prevSoukJdidImage()"
+            style="
+              background: rgba(255, 255, 255, 0.2);
+              border: none;
+              color: white;
+              font-size: 24px;
+              cursor: pointer;
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              margin-right: 15px;
+            "
+          >
+            ◀
+          </button>
+
+          <img
+            id="galleryImageSoukJdid"
+            src=""
+            alt="Galerie Souk Jdid"
+            style="max-width: 70vw; max-height: 70vh; object-fit: contain"
+          />
+
+          <button
+            onclick="nextSoukJdidImage()"
+            style="
+              background: rgba(255, 255, 255, 0.2);
+              border: none;
+              color: white;
+              font-size: 24px;
+              cursor: pointer;
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              margin-left: 15px;
+            "
+          >
+            ▶
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 15px; color: white">
+          <div id="galleryCaptionSoukJdid" style="margin-bottom: 10px"></div>
+          <div id="galleryCounterSoukJdid" style="margin-bottom: 10px"></div>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/js/lightgallery.min.js"></script>

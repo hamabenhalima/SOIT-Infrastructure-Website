@@ -2171,3 +2171,444 @@ function initFaq() {
 document.addEventListener("DOMContentLoaded", () => {
   initFaq();
 });
+
+// ============ DARK MODE TOGGLE ============
+function initDarkMode() {
+  const darkModeBtn = document.getElementById("dark-mode-btn");
+
+  if (!darkModeBtn) return;
+
+  const moonIcon = darkModeBtn.querySelector("i");
+
+  // Vérifier la préférence sauvegardée
+  const isDarkMode = localStorage.getItem("darkMode") === "true";
+
+  if (isDarkMode) {
+    document.body.classList.add("dark-mode");
+    if (moonIcon) {
+      moonIcon.classList.remove("fa-moon");
+      moonIcon.classList.add("fa-sun");
+    }
+  }
+
+  darkModeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    const isDark = document.body.classList.contains("dark-mode");
+
+    localStorage.setItem("darkMode", isDark);
+
+    if (moonIcon) {
+      if (isDark) {
+        moonIcon.classList.remove("fa-moon");
+        moonIcon.classList.add("fa-sun");
+        moonIcon.style.transform = "scale(1.1)";
+        setTimeout(() => {
+          moonIcon.style.transform = "scale(1)";
+        }, 200);
+      } else {
+        moonIcon.classList.remove("fa-sun");
+        moonIcon.classList.add("fa-moon");
+        moonIcon.style.transform = "scale(1.1)";
+        setTimeout(() => {
+          moonIcon.style.transform = "scale(1)";
+        }, 200);
+      }
+    }
+  });
+}
+
+// Détecter la préférence système
+function detectSystemTheme() {
+  if (localStorage.getItem("darkMode") === null) {
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)",
+    ).matches;
+    if (prefersDark) {
+      document.body.classList.add("dark-mode");
+      const moonIcon = document.querySelector("#dark-mode-btn i");
+      if (moonIcon) {
+        moonIcon.classList.remove("fa-moon");
+        moonIcon.classList.add("fa-sun");
+      }
+      localStorage.setItem("darkMode", "true");
+    }
+  }
+}
+
+// Initialiser
+document.addEventListener("DOMContentLoaded", () => {
+  initDarkMode();
+  detectSystemTheme();
+});
+
+// ============ GALERIE PROJET SOUK JDID ============
+const galleryData = [
+  {
+    src: "images/projets/souk-jdid/souk-jdid-01.jpg",
+    caption: "Vue générale - Entrée de Souk Jdid",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-02.jpg",
+    caption: "Préparation du terrain",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-03.jpg",
+    caption: "Mise en place des bordures",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-04.jpg",
+    caption: "Plantation d'arbres",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-05.jpg",
+    caption: "Aménagement paysager",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-06.jpg",
+    caption: "Installation éclairage public",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-07.jpg",
+    caption: "Revêtement des trottoirs",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-08.jpg",
+    caption: "Signalétique décorative",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-09.jpg",
+    caption: "Avancement des travaux",
+  },
+  { src: "images/projets/souk-jdid/souk-jdid-10.jpg", caption: "Finitions" },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-11.jpg",
+    caption: "Vue après aménagement",
+  },
+  {
+    src: "images/projets/souk-jdid/souk-jdid-12.jpg",
+    caption: "Résultat final - Entrée embellie",
+  },
+];
+
+let currentGalleryIndex = 0;
+const modal = document.getElementById("galleryModal");
+const mainImage = document.getElementById("galleryMainImage");
+const captionEl = document.getElementById("galleryCaption");
+const currentSpan = document.getElementById("galleryCurrent");
+const totalSpan = document.getElementById("galleryTotal");
+const thumbnailsContainer = document.getElementById("galleryThumbnails");
+
+// Générer les miniatures
+function generateThumbnails() {
+  thumbnailsContainer.innerHTML = "";
+  galleryData.forEach((img, index) => {
+    const thumb = document.createElement("img");
+    thumb.src = img.src;
+    thumb.alt = img.caption;
+    thumb.classList.add("thumbnail");
+    if (index === currentGalleryIndex) thumb.classList.add("active");
+    thumb.addEventListener("click", () => openImage(index));
+    thumbnailsContainer.appendChild(thumb);
+  });
+}
+
+// Ouvrir la galerie
+function openGallery(index) {
+  currentGalleryIndex = index;
+  mainImage.src = galleryData[currentGalleryIndex].src;
+  captionEl.textContent = galleryData[currentGalleryIndex].caption;
+  currentSpan.textContent = currentGalleryIndex + 1;
+  totalSpan.textContent = galleryData.length;
+  updateThumbnailsActive();
+  modal.classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+// Fermer la galerie
+function closeGallery() {
+  modal.classList.remove("active");
+  document.body.style.overflow = "";
+}
+
+// Ouvrir une image spécifique
+function openImage(index) {
+  currentGalleryIndex = index;
+  mainImage.src = galleryData[currentGalleryIndex].src;
+  captionEl.textContent = galleryData[currentGalleryIndex].caption;
+  currentSpan.textContent = currentGalleryIndex + 1;
+  updateThumbnailsActive();
+}
+
+// Image suivante
+function nextImage() {
+  currentGalleryIndex = (currentGalleryIndex + 1) % galleryData.length;
+  mainImage.src = galleryData[currentGalleryIndex].src;
+  captionEl.textContent = galleryData[currentGalleryIndex].caption;
+  currentSpan.textContent = currentGalleryIndex + 1;
+  updateThumbnailsActive();
+}
+
+// Image précédente
+function prevImage() {
+  currentGalleryIndex =
+    (currentGalleryIndex - 1 + galleryData.length) % galleryData.length;
+  mainImage.src = galleryData[currentGalleryIndex].src;
+  captionEl.textContent = galleryData[currentGalleryIndex].caption;
+  currentSpan.textContent = currentGalleryIndex + 1;
+  updateThumbnailsActive();
+}
+
+// Mettre à jour la classe active des miniatures
+function updateThumbnailsActive() {
+  const thumbs = document.querySelectorAll(".thumbnail");
+  thumbs.forEach((thumb, idx) => {
+    thumb.classList.toggle("active", idx === currentGalleryIndex);
+    if (idx === currentGalleryIndex) {
+      thumb.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  });
+}
+
+// Écouteurs d'événements
+document
+  .getElementById("galleryCloseBtn")
+  ?.addEventListener("click", closeGallery);
+document.getElementById("galleryPrev")?.addEventListener("click", prevImage);
+document.getElementById("galleryNext")?.addEventListener("click", nextImage);
+
+// Ouvrir la galerie depuis un bouton
+document.querySelectorAll(".view-gallery").forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    openGallery(0);
+  });
+});
+
+// Navigation au clavier
+document.addEventListener("keydown", function (e) {
+  if (!modal.classList.contains("active")) return;
+  if (e.key === "Escape") closeGallery();
+  if (e.key === "ArrowLeft") prevImage();
+  if (e.key === "ArrowRight") nextImage();
+});
+
+// Initialiser
+generateThumbnails();
+
+// ============ GALERIE PROJET SOUK JDID - VERSION CORRIGÉE ============
+// ============ GALERIE PROJET SOUK JDID - 12 PHOTOS (1.jpg à 12.jpg) ============
+const soukJdidImages = [
+  {
+    src: "images/projets/souk-jdid/1.jpg",
+    caption: "Vue générale - Entrée de Souk Jdid",
+  },
+  { src: "images/projets/souk-jdid/2.jpg", caption: "Préparation du terrain" },
+  {
+    src: "images/projets/souk-jdid/3.jpg",
+    caption: "Mise en place des bordures",
+  },
+  { src: "images/projets/souk-jdid/4.jpg", caption: "Plantation d'arbres" },
+  { src: "images/projets/souk-jdid/5.jpg", caption: "Aménagement paysager" },
+  {
+    src: "images/projets/souk-jdid/6.jpg",
+    caption: "Installation éclairage public",
+  },
+  {
+    src: "images/projets/souk-jdid/7.jpg",
+    caption: "Revêtement des trottoirs",
+  },
+  { src: "images/projets/souk-jdid/8.jpg", caption: "Signalétique décorative" },
+  { src: "images/projets/souk-jdid/9.jpg", caption: "Avancement des travaux" },
+  { src: "images/projets/souk-jdid/10.jpg", caption: "Finitions" },
+  { src: "images/projets/souk-jdid/11.jpg", caption: "Vue après aménagement" },
+  {
+    src: "images/projets/souk-jdid/12.jpg",
+    caption: "Résultat final - Entrée embellie",
+  },
+];
+
+let soukJdidCurrentIndex = 0;
+
+function openSoukJdidGallery(index) {
+  soukJdidCurrentIndex = index;
+
+  const modal = document.getElementById("galleryModalSoukJdid");
+  const img = document.getElementById("galleryImageSoukJdid");
+  const caption = document.getElementById("galleryCaptionSoukJdid");
+  const counter = document.getElementById("galleryCounterSoukJdid");
+
+  if (!modal) {
+    console.error("Modal non trouvée");
+    return;
+  }
+
+  img.src = soukJdidImages[soukJdidCurrentIndex].src;
+  caption.textContent = soukJdidImages[soukJdidCurrentIndex].caption;
+  counter.textContent =
+    soukJdidCurrentIndex + 1 + " / " + soukJdidImages.length;
+
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeSoukJdidGallery() {
+  const modal = document.getElementById("galleryModalSoukJdid");
+  if (modal) {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+}
+
+function nextSoukJdidImage() {
+  if (soukJdidCurrentIndex < soukJdidImages.length - 1) {
+    soukJdidCurrentIndex++;
+  } else {
+    soukJdidCurrentIndex = 0;
+  }
+  const img = document.getElementById("galleryImageSoukJdid");
+  const caption = document.getElementById("galleryCaptionSoukJdid");
+  const counter = document.getElementById("galleryCounterSoukJdid");
+
+  img.src = soukJdidImages[soukJdidCurrentIndex].src;
+  caption.textContent = soukJdidImages[soukJdidCurrentIndex].caption;
+  counter.textContent =
+    soukJdidCurrentIndex + 1 + " / " + soukJdidImages.length;
+}
+
+function prevSoukJdidImage() {
+  if (soukJdidCurrentIndex > 0) {
+    soukJdidCurrentIndex--;
+  } else {
+    soukJdidCurrentIndex = soukJdidImages.length - 1;
+  }
+  const img = document.getElementById("galleryImageSoukJdid");
+  const caption = document.getElementById("galleryCaptionSoukJdid");
+  const counter = document.getElementById("galleryCounterSoukJdid");
+
+  img.src = soukJdidImages[soukJdidCurrentIndex].src;
+  caption.textContent = soukJdidImages[soukJdidCurrentIndex].caption;
+  counter.textContent =
+    soukJdidCurrentIndex + 1 + " / " + soukJdidImages.length;
+}
+
+// Navigation au clavier
+document.addEventListener("keydown", function (e) {
+  const modal = document.getElementById("galleryModalSoukJdid");
+  if (modal && modal.style.display === "flex") {
+    if (e.key === "Escape") closeSoukJdidGallery();
+    if (e.key === "ArrowRight") nextSoukJdidImage();
+    if (e.key === "ArrowLeft") prevSoukJdidImage();
+  }
+});
+
+// ============ GALERIE PROJET SOUK JDID - DÉCLARATION AU DÉBUT ============
+// Déclarez la variable au tout début du fichier, avant toute fonction
+let soukJdidCurrentIndex = 0;
+
+// Tableau des 12 photos (1.jpg à 12.jpg)
+const soukJdidImages = [
+  {
+    src: "images/projets/souk-jdid/1.jpg",
+    caption: "Vue générale - Entrée de Souk Jdid",
+  },
+  { src: "images/projets/souk-jdid/2.jpg", caption: "Préparation du terrain" },
+  {
+    src: "images/projets/souk-jdid/3.jpg",
+    caption: "Mise en place des bordures",
+  },
+  { src: "images/projets/souk-jdid/4.jpg", caption: "Plantation d'arbres" },
+  { src: "images/projets/souk-jdid/5.jpg", caption: "Aménagement paysager" },
+  {
+    src: "images/projets/souk-jdid/6.jpg",
+    caption: "Installation éclairage public",
+  },
+  {
+    src: "images/projets/souk-jdid/7.jpg",
+    caption: "Revêtement des trottoirs",
+  },
+  { src: "images/projets/souk-jdid/8.jpg", caption: "Signalétique décorative" },
+  { src: "images/projets/souk-jdid/9.jpg", caption: "Avancement des travaux" },
+  { src: "images/projets/souk-jdid/10.jpg", caption: "Finitions" },
+  { src: "images/projets/souk-jdid/11.jpg", caption: "Vue après aménagement" },
+  {
+    src: "images/projets/souk-jdid/12.jpg",
+    caption: "Résultat final - Entrée embellie",
+  },
+];
+
+// Fonctions de la galerie
+function openSoukJdidGallery(index) {
+  soukJdidCurrentIndex = index;
+  const modal = document.getElementById("galleryModalSoukJdid");
+  const img = document.getElementById("galleryImageSoukJdid");
+  const caption = document.getElementById("galleryCaptionSoukJdid");
+  const counter = document.getElementById("galleryCounterSoukJdid");
+
+  if (!modal) return;
+
+  img.src = soukJdidImages[soukJdidCurrentIndex].src;
+  if (caption)
+    caption.textContent = soukJdidImages[soukJdidCurrentIndex].caption;
+  if (counter)
+    counter.textContent =
+      soukJdidCurrentIndex + 1 + " / " + soukJdidImages.length;
+
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeSoukJdidGallery() {
+  const modal = document.getElementById("galleryModalSoukJdid");
+  if (modal) {
+    modal.style.display = "none";
+    document.body.style.overflow = "";
+  }
+}
+
+// ============ FONCTION POUR AFFICHER LES DÉTAILS DU PROJET ============
+function showProjectDetails(projectId) {
+  if (projectId === "souk-jdid") {
+    alert(
+      "Projet: Embellissement de l'entrée de Souk Jdid\n" +
+        "Localisation: Sidi Bouzid, Tunisie\n" +
+        "Année: 2025\n" +
+        "Statut: Terminé\n" +
+        "Photos: 12 vues",
+    );
+  } else {
+    alert("Plus de détails disponibles prochainement.");
+  }
+}
+
+function nextSoukJdidImage() {
+  soukJdidCurrentIndex = (soukJdidCurrentIndex + 1) % soukJdidImages.length;
+  const img = document.getElementById("galleryImageSoukJdid");
+  const caption = document.getElementById("galleryCaptionSoukJdid");
+  const counter = document.getElementById("galleryCounterSoukJdid");
+
+  if (img) img.src = soukJdidImages[soukJdidCurrentIndex].src;
+  if (caption)
+    caption.textContent = soukJdidImages[soukJdidCurrentIndex].caption;
+  if (counter)
+    counter.textContent =
+      soukJdidCurrentIndex + 1 + " / " + soukJdidImages.length;
+}
+
+function prevSoukJdidImage() {
+  soukJdidCurrentIndex =
+    (soukJdidCurrentIndex - 1 + soukJdidImages.length) % soukJdidImages.length;
+  const img = document.getElementById("galleryImageSoukJdid");
+  const caption = document.getElementById("galleryCaptionSoukJdid");
+  const counter = document.getElementById("galleryCounterSoukJdid");
+
+  if (img) img.src = soukJdidImages[soukJdidCurrentIndex].src;
+  if (caption)
+    caption.textContent = soukJdidImages[soukJdidCurrentIndex].caption;
+  if (counter)
+    counter.textContent =
+      soukJdidCurrentIndex + 1 + " / " + soukJdidImages.length;
+}
