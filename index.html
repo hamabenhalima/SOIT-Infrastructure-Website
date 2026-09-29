@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=yes"
     />
-    <title>SOIT | Infrastructure & Travaux public</title>
+    <title>SOIT | Infrastructure & Travaux Publics</title>
 
     <link
       rel="stylesheet"
@@ -16,11 +16,8 @@
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/css/lightgallery.min.css"
-    />
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="modern.css" />
     <link
       rel="icon"
       type="image/svg+xml"
@@ -30,12 +27,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
-    <meta
-      http-equiv="Cache-Control"
-      content="no-cache, no-store, must-revalidate"
-    />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
 
     <!-- Primary Meta Tags -->
     <meta
@@ -63,7 +54,7 @@
     />
     <meta
       property="og:image"
-      content="https://hamabenhalima.github.io/SOIT-Infrastructure-Website/images/logo.jpg"
+      content="https://hamabenhalima.github.io/SOIT-Infrastructure-Website/images/SOIT-LOGO.jpg"
     />
 
     <!-- Twitter -->
@@ -81,13 +72,14 @@
     />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Aller au contenu principal</a>
     <header class="header">
       <a href="#home" class="logo">
         <img src="images/SOIT-LOGO.jpg" alt="SOIT Logo" class="logo-img" />
       </a>
 
       <!-- Navigation Desktop -->
-      <nav class="navbar">
+      <nav class="navbar" id="primary-navigation">
         <a href="#home">
           <span>Accueil</span>
           <i class="fas fa-home"></i>
@@ -124,30 +116,30 @@
 
       <!-- Icônes d'action -->
       <div class="icons">
-        <div id="menu-btn" class="icon-btn" aria-label="Menu">
+        <button type="button" id="menu-btn" class="icon-btn" aria-label="Menu" aria-expanded="false" aria-controls="primary-navigation">
           <i class="fas fa-bars"></i>
           <span class="tooltip">Menu</span>
-        </div>
-        <div id="info-btn" class="icon-btn" aria-label="Informations">
+        </button>
+        <button type="button" id="info-btn" class="icon-btn" aria-label="Informations">
           <i class="fas fa-info-circle"></i>
           <span class="tooltip">Infos</span>
-        </div>
-        <div id="search-btn" class="icon-btn" aria-label="Rechercher">
+        </button>
+        <button type="button" id="search-btn" class="icon-btn" aria-label="Rechercher">
           <i class="fas fa-search"></i>
           <span class="tooltip">Rechercher</span>
-        </div>
-        <div id="login-btn" class="icon-btn" aria-label="Connexion">
+        </button>
+        <button type="button" id="login-btn" class="icon-btn" aria-label="Connexion" aria-expanded="false" aria-controls="login-form">
           <i class="fas fa-user"></i>
           <span class="tooltip">Connexion</span>
-        </div>
-        <div id="language-btn" class="icon-btn" aria-label="Langue">
+        </button>
+        <button type="button" id="language-btn" class="icon-btn" aria-label="Langue">
           <i class="fas fa-globe"></i>
           <span class="tooltip">Langue</span>
-        </div>
-        <div id="dark-mode-btn" class="icon-btn" aria-label="Mode sombre">
+        </button>
+        <button type="button" id="dark-mode-btn" class="icon-btn" aria-label="Mode sombre">
           <i class="fas fa-moon"></i>
           <span class="tooltip">Mode sombre</span>
-        </div>
+        </button>
       </div>
 
       <!-- Dropdown Langue -->
@@ -199,6 +191,7 @@
 
     <!-- Login/Register Container -->
     <div class="login-form-container">
+      <button type="button" class="auth-backdrop" aria-label="Fermer la fen&ecirc;tre de connexion"></button>
       <!-- Login Form -->
       <form action="#" class="login-form" id="login-form">
         <div class="form-header">
@@ -469,15 +462,6 @@
           <span>Suivez-nous</span>
         </div>
         <div class="share-links">
-          <a href="#" class="share-link facebook" aria-label="Facebook">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="#" class="share-link twitter" aria-label="Twitter">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="#" class="share-link instagram" aria-label="Instagram">
-            <i class="fab fa-instagram"></i>
-          </a>
           <a
             href="https://www.linkedin.com/in/st%C3%A9-soit-s-a-r-l-1abb571a7/"
             target="_blank"
@@ -489,6 +473,7 @@
         </div>
       </div>
     </div>
+    <main id="main-content">
     <!-- ============ HOME SECTION ============ -->
     <section class="home" id="home">
       <div class="home-slider">
@@ -503,7 +488,7 @@
         >
           <div class="content">
             <span class="subtitle">Leader depuis 1997</span>
-            <h3>Infrastructure & Travaux Publics</h3>
+            <h1>Infrastructure & Travaux Publics</h1>
             <p>
               Plus de 28 ans d'expertise au service du développement national.
               SOIT réalise des projets d'envergure qui transforment le
@@ -524,7 +509,7 @@
         >
           <div class="content">
             <span class="subtitle">Notre empreinte</span>
-            <h3>Des infrastructures qui connectent la Tunisie</h3>
+            <h2>Des infrastructures qui connectent la Tunisie</h2>
             <p>
               Routes, ponts, réseaux urbains, terrassement... SOIT construit des
               infrastructures durables qui créent de la valeur et rapprochent
@@ -545,7 +530,7 @@
         >
           <div class="content">
             <span class="subtitle">Votre partenaire de confiance</span>
-            <h3>Votre projet mérite l'excellence</h3>
+            <h2>Votre projet mérite l'excellence</h2>
             <p>
               Entreprise agréée Catégorie 5, nous garantissons qualité, sécurité
               et respect des délais pour concrétiser vos ambitions.
@@ -556,14 +541,14 @@
       </div>
 
       <!-- Navigation Arrows -->
-      <button class="home-prev"><i class="fas fa-chevron-left"></i></button>
-      <button class="home-next"><i class="fas fa-chevron-right"></i></button>
+      <button class="home-prev" type="button" aria-label="Diapositive précédente"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+      <button class="home-next" type="button" aria-label="Diapositive suivante"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
 
       <!-- Slide Dots -->
       <div class="home-dots">
-        <div class="dot active"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+        <button class="dot active" type="button" aria-label="Afficher la diapositive 1" aria-current="true"></button>
+        <button class="dot" type="button" aria-label="Afficher la diapositive 2" aria-current="false"></button>
+        <button class="dot" type="button" aria-label="Afficher la diapositive 3" aria-current="false"></button>
       </div>
     </section>
 
@@ -572,7 +557,7 @@
       <div class="about-container">
         <div class="about-header">
           <span class="section-subtitle">Notre histoire</span>
-          <h1 class="heading">Qui sommes-nous ?</h1>
+          <h2 class="heading">Qui sommes-nous ?</h2>
           <p class="section-description">
             Découvrez l'entreprise qui construit l'avenir de la Tunisie depuis
             1997
@@ -583,14 +568,15 @@
           <div class="about-video">
             <div class="video-wrapper">
               <video
-                src="videos/3741-174188012.mp4"
-                loop
-                muted
+                data-src="videos/3741-174188012.mp4"
+                poster="images/1.png.jpg"
+                preload="none"
                 autoplay
+                muted
+                loop
+                playsinline
+                aria-hidden="true"
               ></video>
-              <div class="video-overlay">
-                <i class="fas fa-play"></i>
-              </div>
             </div>
           </div>
           <div class="about-text">
@@ -693,7 +679,7 @@
       <div class="services-container">
         <div class="services-header">
           <span class="section-subtitle">Notre expertise</span>
-          <h1 class="heading">Nos services</h1>
+          <h2 class="heading">Nos services</h2>
           <p class="section-description">
             Une gamme complète de services pour vos projets d'infrastructure
           </p>
@@ -719,11 +705,7 @@
           <!-- Service 1: Infrastructures Routières -->
           <div class="service-card">
             <div class="service-icon">
-              <img
-                src="images/Construction de routes et chaussées icon.jpg"
-                alt="Construction de routes"
-                loading="lazy"
-              />
+              <i class="fas fa-road" aria-hidden="true"></i>
             </div>
             <h3>Infrastructures Routières</h3>
             <div class="service-features">
@@ -750,11 +732,7 @@
           <!-- Service 2: Voiries et Réseaux Divers (VRD) -->
           <div class="service-card">
             <div class="service-icon">
-              <img
-                src="images/Construction de ponts icon.avif"
-                alt="VRD"
-                loading="lazy"
-              />
+              <i class="fas fa-project-diagram" aria-hidden="true"></i>
             </div>
             <h3>Voiries et Réseaux Divers (VRD)</h3>
             <div class="service-features">
@@ -777,11 +755,7 @@
           <!-- Service 3: Travaux publics & terrassement -->
           <div class="service-card">
             <div class="service-icon">
-              <img
-                src="images/Travaux publics & terrassement.jpg"
-                alt="Travaux publics"
-                loading="lazy"
-              />
+              <i class="fas fa-truck" aria-hidden="true"></i>
             </div>
             <h3>Travaux Publics & Terrassement</h3>
             <div class="service-features">
@@ -804,11 +778,7 @@
           <!-- Service 4: Réseaux et infrastructures -->
           <div class="service-card">
             <div class="service-icon">
-              <img
-                src="images/Réseaux et infrastructures.png"
-                alt="Réseaux"
-                loading="lazy"
-              />
+              <i class="fas fa-sitemap" aria-hidden="true"></i>
             </div>
             <h3>Réseaux et Infrastructures</h3>
             <div class="service-features">
@@ -835,326 +805,63 @@
     <section class="projects" id="projects">
       <div class="projects-container">
         <div class="projects-header">
-          <span class="section-subtitle">Notre portfolio</span>
-          <h1 class="heading">Nos réalisations</h1>
-          <p class="section-description">
-            Découvrez nos projets d'infrastructure à travers la Tunisie
-          </p>
+          <span class="section-subtitle">Portfolio terrain</span>
+          <h2 class="heading">Des projets r&eacute;els, sur le terrain</h2>
+          <p class="section-description">Une s&eacute;lection de chantiers SOIT, illustr&eacute;s par les photos de nos &eacute;quipes.</p>
+          <span class="projects-count"><strong>03</strong> projets document&eacute;s</span>
         </div>
 
         <div class="projects-grid">
-          <!-- Project 1: Siliana El Jadida -->
-          <div class="project-card">
+          <article class="project-card" data-gallery="images/current-project/8.jpg|images/current-project/1.jpg|images/current-project/2.jpeg|images/current-project/3.jpeg">
             <div class="project-image">
-              <img
-                src="images/projet1.jpg"
-                alt="Siliana El Jadida"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
+              <img src="images/current-project/8.jpg" alt="Chantier d'am&eacute;nagement de Siliana El Jadida avec un membre de l'&eacute;quipe SOIT" loading="lazy" />
+              <div class="project-overlay"><div class="project-links"><button type="button" class="project-link" aria-label="Voir les photos du projet Siliana El Jadida"><i class="fas fa-expand" aria-hidden="true"></i></button></div></div>
+              <span class="project-image-label"><i class="fas fa-camera" aria-hidden="true"></i> Photos du chantier SOIT</span>
             </div>
             <div class="project-content">
-              <div class="project-category">Lotissement VRD</div>
-              <h3>Aménagement Siliana El Jadida</h3>
-              <p>Voirie et réseaux divers pour le nouveau lotissement</p>
+              <span class="project-category">Lotissement VRD</span>
+              <h3>Am&eacute;nagement Siliana El Jadida</h3>
+              <p>Travaux d'am&eacute;nagement et de r&eacute;seaux divers pour le nouveau lotissement.</p>
               <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Siliana</span>
-                <span><i class="fas fa-calendar"></i> 2025</span>
+                <span><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Siliana, Tunisie</span>
+                <span><i class="fas fa-images" aria-hidden="true"></i> Chantier en images</span>
               </div>
             </div>
-          </div>
+          </article>
 
-          <!-- Project 2: Réhabilitation Urbaine Tunis -->
-          <div class="project-card">
+          <article class="project-card" data-gallery="images/projets/souk-jdid/1.jpg|images/projets/souk-jdid/2.jpg|images/projets/souk-jdid/3.jpg|images/projets/souk-jdid/4.jpg|images/projets/souk-jdid/5.jpg|images/projets/souk-jdid/6.jpg|images/projets/souk-jdid/7.jpg|images/projets/souk-jdid/8.jpg|images/projets/souk-jdid/9.jpg|images/projets/souk-jdid/10.jpg|images/projets/souk-jdid/11.jpg|images/projets/souk-jdid/12.jpg">
             <div class="project-image">
-              <img
-                src="images/projet2.jpg"
-                alt="Réhabilitation Tunis"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
+              <img src="images/projets/souk-jdid/1.jpg" alt="Photo r&eacute;elle des travaux d'embellissement &agrave; Souk Jdid" loading="lazy" />
+              <div class="project-overlay"><div class="project-links"><button type="button" class="project-link" aria-label="Voir les photos du projet Souk Jdid"><i class="fas fa-expand" aria-hidden="true"></i></button></div></div>
+              <span class="project-image-label"><i class="fas fa-camera" aria-hidden="true"></i> Photos du chantier SOIT</span>
             </div>
             <div class="project-content">
-              <div class="project-category">Urbanisme</div>
-              <h3>Réhabilitation Urbaine - Tunis</h3>
-              <p>Aménagement d'espaces publics et zones vertes</p>
+              <span class="project-category">Am&eacute;nagement urbain</span>
+              <h3>Entr&eacute;e de la ville, Souk Jdid</h3>
+              <p>Embellissement de l'entr&eacute;e de Souk Jdid, dans le gouvernorat de Sidi Bouzid.</p>
               <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Tunis</span>
-                <span><i class="fas fa-calendar"></i> 2024</span>
+                <span><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Sidi Bouzid, Tunisie</span>
+                <span><i class="fas fa-check-circle" aria-hidden="true"></i> Projet achev&eacute;</span>
               </div>
             </div>
-          </div>
+          </article>
 
-          <!-- Project 3: Modernisation Sousse -->
-          <div class="project-card">
+          <article class="project-card" data-gallery="images/chantier-routier.jpg">
             <div class="project-image">
-              <img
-                src="images/projet3.jpg"
-                alt="Modernisation Sousse"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
+              <img src="images/chantier-routier.jpg" alt="&Eacute;quipe et engins sur un chantier r&eacute;el de rev&ecirc;tement routier" loading="lazy" />
+              <div class="project-overlay"><div class="project-links"><button type="button" class="project-link" aria-label="Voir la photo du chantier routier"><i class="fas fa-expand" aria-hidden="true"></i></button></div></div>
+              <span class="project-image-label"><i class="fas fa-camera" aria-hidden="true"></i> Photos du chantier SOIT</span>
             </div>
             <div class="project-content">
-              <div class="project-category">Voirie</div>
-              <h3>Modernisation des Quartiers - Sousse</h3>
-              <p>Rénovation des voiries et éclairage public</p>
+              <span class="project-category">Infrastructures routi&egrave;res</span>
+              <h3>Travaux de voirie</h3>
+              <p>Pr&eacute;paration et rev&ecirc;tement d'une chauss&eacute;e, photographi&eacute;s sur le chantier.</p>
               <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Sousse</span>
-                <span><i class="fas fa-calendar"></i> 2023</span>
+                <span><i class="fas fa-road" aria-hidden="true"></i> Rev&ecirc;tement routier</span>
+                <span><i class="fas fa-images" aria-hidden="true"></i> Chantier en images</span>
               </div>
             </div>
-          </div>
-
-          <!-- Project 4: Assainissement Monastir -->
-          <div class="project-card">
-            <div class="project-image">
-              <img
-                src="images/projet4.jpg"
-                alt="Assainissement Monastir"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div class="project-content">
-              <div class="project-category">Assainissement</div>
-              <h3>Programme d'Assainissement - Monastir</h3>
-              <p>Installation de réseaux d'égouts modernes</p>
-              <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Monastir</span>
-                <span><i class="fas fa-calendar"></i> 2024</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 5: Zones Industrielles Nabeul -->
-          <div class="project-card">
-            <div class="project-image">
-              <img
-                src="images/projet5.jpg"
-                alt="Zones Industrielles Nabeul"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div class="project-content">
-              <div class="project-category">Infrastructures</div>
-              <h3>Zones Industrielles - Nabeul</h3>
-              <p>Infrastructures routières et réseaux divers</p>
-              <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Nabeul</span>
-                <span><i class="fas fa-calendar"></i> 2023</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 6: Réseaux d'Eau Bizerte -->
-          <div class="project-card">
-            <div class="project-image">
-              <img
-                src="images/projet6.jpg"
-                alt="Réseaux d'Eau Bizerte"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div class="project-content">
-              <div class="project-category">Hydraulique</div>
-              <h3>Réseaux d'Eau Potable - Bizerte</h3>
-              <p>Modernisation des conduites hydrauliques</p>
-              <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Bizerte</span>
-                <span><i class="fas fa-calendar"></i> 2024</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 7: Construction Pont Kairouan -->
-          <div class="project-card">
-            <div class="project-image">
-              <img
-                src="images/projet7.jpg"
-                alt="Pont Kairouan"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div class="project-content">
-              <div class="project-category">Ouvrage d'art</div>
-              <h3>Construction d'un Pont - Kairouan</h3>
-              <p>Pont en béton armé de 120 mètres</p>
-              <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Kairouan</span>
-                <span><i class="fas fa-calendar"></i> 2023</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Project 8: Route Nationale Béja -->
-          <div class="project-card">
-            <div class="project-image">
-              <img
-                src="images/projet5.jpg"
-                alt="Route Nationale Béja"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-search-plus"></i
-                  ></a>
-                  <a href="#" class="project-link"
-                    ><i class="fas fa-external-link-alt"></i
-                  ></a>
-                </div>
-              </div>
-            </div>
-            <div class="project-content">
-              <div class="project-category">Route</div>
-              <h3>Réfection Route Nationale 3 - Béja</h3>
-              <p>Revêtement et sécurité routière</p>
-              <div class="project-meta">
-                <span><i class="fas fa-map-marker-alt"></i> Béja</span>
-                <span><i class="fas fa-calendar"></i> 2023</span>
-              </div>
-            </div>
-          </div>
-          <div class="project-card">
-            <div class="project-image">
-              <img
-                src="images/projets/souk-jdid/1.jpg"
-                alt="Embellissement Souk Jdid"
-                loading="lazy"
-              />
-              <div class="project-overlay">
-                <div class="project-links">
-                  <!-- Bouton Galerie -->
-                  <button
-                    type="button"
-                    class="project-link"
-                    onclick="openSoukJdidGallery(0)"
-                    style="
-                      background: white;
-                      border: none;
-                      cursor: pointer;
-                      width: 45px;
-                      height: 45px;
-                      border-radius: 50%;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                    "
-                  >
-                    <i class="fas fa-images"></i>
-                  </button>
-                  <!-- Bouton Info -->
-                  <button
-                    type="button"
-                    class="project-link"
-                    onclick="showProjectDetails('souk-jdid')"
-                    style="
-                      background: white;
-                      border: none;
-                      cursor: pointer;
-                      width: 45px;
-                      height: 45px;
-                      border-radius: 50%;
-                      display: flex;
-                      align-items: center;
-                      justify-content: center;
-                    "
-                  >
-                    <i class="fas fa-info-circle"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="project-content">
-              <div class="project-category">
-                Aménagement Urbain | Embellissement
-              </div>
-              <h3>Embellissement de l'entrée de la ville - Souk Jdid</h3>
-              <p>
-                Achèvement des travaux d'embellissement de l'entrée de la ville
-                <strong>Souk Jdid</strong>, gouvernorat de
-                <strong>Sidi Bouzid</strong>, Tunisie.
-              </p>
-              <div class="project-meta">
-                <span
-                  ><i class="fas fa-map-marker-alt"></i> Sidi Bouzid,
-                  Tunisie</span
-                >
-                <span><i class="fas fa-calendar"></i> 2025</span>
-                <span style="color: #00c851"
-                  ><i class="fas fa-check-circle"></i> Terminé</span
-                >
-                <span><i class="fas fa-camera"></i> 12 photos</span>
-              </div>
-            </div>
-          </div>
+          </article>
         </div>
       </div>
     </section>
@@ -1164,281 +871,141 @@
       <div class="before-after-container">
         <div class="section-header">
           <span class="section-subtitle">Notre impact</span>
-          <h1 class="heading">Avant / Après</h1>
+          <h2 class="heading">Nos chantiers, avant et apr&egrave;s</h2>
           <p class="section-description">
-            Découvrez la transformation de nos projets d'infrastructure
+            Comparez les photos r&eacute;elles de nos travaux. Chaque paire est pr&eacute;sent&eacute;e s&eacute;par&eacute;ment pour respecter son angle de prise de vue.
           </p>
         </div>
 
-        <!-- Filter Buttons -->
-        <div class="project-filters">
-          <button class="filter-btn active" data-filter="all">Tous</button>
-          <button class="filter-btn" data-filter="urbain">Urbain</button>
-          <button class="filter-btn" data-filter="route">Routes</button>
-          <button class="filter-btn" data-filter="hydraulique">
-            Hydraulique
-          </button>
+        <!-- Filters -->
+        <div class="project-filters" role="group" aria-label="Filtrer les r&eacute;alisations">
+          <button type="button" class="filter-btn active" data-filter="all" aria-pressed="true">Tous</button>
+          <button type="button" class="filter-btn" data-filter="urbain" aria-pressed="false">Quartiers</button>
+          <button type="button" class="filter-btn" data-filter="route" aria-pressed="false">Voirie</button>
         </div>
 
+        <!-- Real photo pairs shown separately so different camera angles stay easy to compare. -->
         <div class="before-after-slider-wrapper">
-          <div class="before-after-slider-container">
+          <div class="before-after-slider-container" role="region" aria-label="R&eacute;alisations avant et apr&egrave;s" tabindex="0">
             <div class="before-after-slider">
-              <!-- Project 1: Réhabilitation Urbaine - Tunis -->
-              <div class="before-after-card" data-category="urbain">
-                <div class="card-image">
-                  <img
-                    src="images/BA1.jpeg"
-                    alt="Réhabilitation Urbaine - Tunis"
-                    loading="lazy"
-                  />
-                  <div class="image-overlay">
-                    <button class="gallery-btn" data-image="images/BA1.jpeg">
-                      <i class="fas fa-search-plus"></i>
-                    </button>
-                  </div>
-                  <div class="image-tags">
-                    <span class="tag before-tag">AVANT</span>
-                    <span class="tag after-tag">APRÈS</span>
-                  </div>
+              <article class="before-after-card" data-category="urbain">
+                <div class="comparison-pair">
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/quarter-green-space-before.jpg" alt="Espace de quartier avant son r&eacute;am&eacute;nagement" loading="lazy" />
+                    <figcaption>Avant</figcaption>
+                  </figure>
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/quarter-green-space-after.jpg" alt="Espace vert am&eacute;nag&eacute; apr&egrave;s les travaux" loading="lazy" />
+                    <figcaption>Apr&egrave;s</figcaption>
+                  </figure>
                 </div>
                 <div class="card-content">
-                  <div class="project-year">2024</div>
-                  <h3>Réhabilitation Urbaine - Tunis</h3>
-                  <p>Aménagement d'espaces publics et zones vertes</p>
-                  <div class="impact-meter">
-                    <div class="impact-label">
-                      <span>Impact</span>
-                      <span class="impact-value">65%</span>
-                    </div>
-                    <div class="impact-bar">
-                      <div class="impact-fill" style="width: 65%"></div>
-                    </div>
-                  </div>
-                  <div class="card-meta">
-                    <span><i class="fas fa-map-marker-alt"></i> Tunis</span>
-                    <span
-                      ><i class="fas fa-ruler-combined"></i> 15 hectares</span
-                    >
-                  </div>
+                  <span class="comparison-category">Am&eacute;nagement urbain</span>
+                  <h3>Un espace public r&eacute;am&eacute;nag&eacute;</h3>
+                  <p>Transformation d&rsquo;un espace de quartier en promenade paysag&eacute;e.</p>
                 </div>
-              </div>
+              </article>
 
-              <!-- Project 2: Modernisation - Sousse -->
-              <div class="before-after-card" data-category="route">
-                <div class="card-image">
-                  <img
-                    src="images/BA2.jpeg"
-                    alt="Modernisation - Sousse"
-                    loading="lazy"
-                  />
-                  <div class="image-overlay">
-                    <button class="gallery-btn" data-image="images/BA2.jpeg">
-                      <i class="fas fa-search-plus"></i>
-                    </button>
-                  </div>
-                  <div class="image-tags">
-                    <span class="tag before-tag">AVANT</span>
-                    <span class="tag after-tag">APRÈS</span>
-                  </div>
+              <article class="before-after-card" data-category="urbain">
+                <div class="comparison-pair">
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/lane-rehabilitation-before.jpg" alt="Ruelle avant la r&eacute;fection de la chauss&eacute;e" loading="lazy" />
+                    <figcaption>Avant</figcaption>
+                  </figure>
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/lane-rehabilitation-after.jpg" alt="Ruelle apr&egrave;s la r&eacute;fection de la chauss&eacute;e" loading="lazy" />
+                    <figcaption>Apr&egrave;s</figcaption>
+                  </figure>
                 </div>
                 <div class="card-content">
-                  <div class="project-year">2023</div>
-                  <h3>Modernisation des Quartiers - Sousse</h3>
-                  <p>Rénovation des voiries et éclairage public</p>
-                  <div class="impact-meter">
-                    <div class="impact-label">
-                      <span>Impact</span>
-                      <span class="impact-value">80%</span>
-                    </div>
-                    <div class="impact-bar">
-                      <div class="impact-fill" style="width: 80%"></div>
-                    </div>
-                  </div>
-                  <div class="card-meta">
-                    <span><i class="fas fa-map-marker-alt"></i> Sousse</span>
-                    <span><i class="fas fa-road"></i> 12 km</span>
-                  </div>
+                  <span class="comparison-category">Quartiers</span>
+                  <h3>R&eacute;habilitation d&rsquo;une ruelle</h3>
+                  <p>Une chauss&eacute;e remise en &eacute;tat pour faciliter l&rsquo;acc&egrave;s aux habitations.</p>
                 </div>
-              </div>
+              </article>
 
-              <!-- Project 3: Assainissement - Monastir -->
-              <div class="before-after-card" data-category="hydraulique">
-                <div class="card-image">
-                  <img
-                    src="images/BA3.jpeg"
-                    alt="Assainissement - Monastir"
-                    loading="lazy"
-                  />
-                  <div class="image-overlay">
-                    <button class="gallery-btn" data-image="images/BA3.jpeg">
-                      <i class="fas fa-search-plus"></i>
-                    </button>
-                  </div>
-                  <div class="image-tags">
-                    <span class="tag before-tag">AVANT</span>
-                    <span class="tag after-tag">APRÈS</span>
-                  </div>
+              <article class="before-after-card" data-category="route">
+                <div class="comparison-pair">
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/road-resurfacing-before.jpg" alt="Route en travaux avant la pose de la chauss&eacute;e" loading="lazy" />
+                    <figcaption>Avant</figcaption>
+                  </figure>
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/road-resurfacing-after.jpg" alt="Route termin&eacute;e apr&egrave;s le rev&ecirc;tement" loading="lazy" />
+                    <figcaption>Apr&egrave;s</figcaption>
+                  </figure>
                 </div>
                 <div class="card-content">
-                  <div class="project-year">2024</div>
-                  <h3>Assainissement - Monastir</h3>
-                  <p>Installation de réseaux d'égouts modernes</p>
-                  <div class="impact-meter">
-                    <div class="impact-label">
-                      <span>Impact</span>
-                      <span class="impact-value">100%</span>
-                    </div>
-                    <div class="impact-bar">
-                      <div class="impact-fill" style="width: 100%"></div>
-                    </div>
-                  </div>
-                  <div class="card-meta">
-                    <span><i class="fas fa-map-marker-alt"></i> Monastir</span>
-                    <span><i class="fas fa-water"></i> 8 km de réseau</span>
-                  </div>
+                  <span class="comparison-category">Voirie</span>
+                  <h3>Modernisation d&rsquo;une voie</h3>
+                  <p>Travaux de nivellement et r&eacute;alisation d&rsquo;une chauss&eacute;e neuve.</p>
                 </div>
-              </div>
+              </article>
 
-              <!-- Project 4: Réhabilitation des Quartiers -->
-              <div class="before-after-card" data-category="urbain">
-                <div class="card-image">
-                  <img
-                    src="images/BA4.jpeg"
-                    alt="Réhabilitation des Quartiers"
-                    loading="lazy"
-                  />
-                  <div class="image-overlay">
-                    <button class="gallery-btn" data-image="images/BA4.jpeg">
-                      <i class="fas fa-search-plus"></i>
-                    </button>
-                  </div>
-                  <div class="image-tags">
-                    <span class="tag before-tag">AVANT</span>
-                    <span class="tag after-tag">APRÈS</span>
-                  </div>
+              <article class="before-after-card" data-category="urbain">
+                <div class="comparison-pair">
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/neighborhood-access-before.jpg" alt="Acc&egrave;s de quartier avant son am&eacute;nagement" loading="lazy" />
+                    <figcaption>Avant</figcaption>
+                  </figure>
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/neighborhood-access-after.jpg" alt="Acc&egrave;s de quartier apr&egrave;s son am&eacute;nagement" loading="lazy" />
+                    <figcaption>Apr&egrave;s</figcaption>
+                  </figure>
                 </div>
                 <div class="card-content">
-                  <div class="project-year">2024</div>
-                  <h3>Réhabilitation des Quartiers d'Habitation</h3>
-                  <p>Création d'espaces verts et aires de jeux</p>
-                  <div class="impact-meter">
-                    <div class="impact-label">
-                      <span>Impact</span>
-                      <span class="impact-value">70%</span>
-                    </div>
-                    <div class="impact-bar">
-                      <div class="impact-fill" style="width: 70%"></div>
-                    </div>
-                  </div>
-                  <div class="card-meta">
-                    <span><i class="fas fa-map-marker-alt"></i> Tunis</span>
-                    <span><i class="fas fa-tree"></i> 5 parcs</span>
-                  </div>
+                  <span class="comparison-category">Quartiers</span>
+                  <h3>Am&eacute;nagement d&rsquo;un acc&egrave;s local</h3>
+                  <p>Passage d&rsquo;une voie en terre &agrave; un acc&egrave;s rev&ecirc;tu et praticable.</p>
                 </div>
-              </div>
+              </article>
 
-              <!-- Project 5: Zones Industrielles - Nabeul -->
-              <div class="before-after-card" data-category="route">
-                <div class="card-image">
-                  <img
-                    src="images/BA5.jpeg"
-                    alt="Zones Industrielles - Nabeul"
-                    loading="lazy"
-                  />
-                  <div class="image-overlay">
-                    <button class="gallery-btn" data-image="images/BA5.jpeg">
-                      <i class="fas fa-search-plus"></i>
-                    </button>
-                  </div>
-                  <div class="image-tags">
-                    <span class="tag before-tag">AVANT</span>
-                    <span class="tag after-tag">APRÈS</span>
-                  </div>
+              <article class="before-after-card" data-category="route">
+                <div class="comparison-pair">
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/road-lighting-before.jpg" alt="Voie de quartier avant les travaux de chauss&eacute;e et d&rsquo;&eacute;clairage" loading="lazy" />
+                    <figcaption>Avant</figcaption>
+                  </figure>
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/road-lighting-after.jpg" alt="Voie de quartier &eacute;clair&eacute;e apr&egrave;s les travaux" loading="lazy" />
+                    <figcaption>Apr&egrave;s</figcaption>
+                  </figure>
                 </div>
                 <div class="card-content">
-                  <div class="project-year">2023</div>
-                  <h3>Zones Industrielles - Nabeul</h3>
-                  <p>Infrastructures routières et réseaux divers</p>
-                  <div class="impact-meter">
-                    <div class="impact-label">
-                      <span>Impact</span>
-                      <span class="impact-value">95%</span>
-                    </div>
-                    <div class="impact-bar">
-                      <div class="impact-fill" style="width: 95%"></div>
-                    </div>
-                  </div>
-                  <div class="card-meta">
-                    <span><i class="fas fa-map-marker-alt"></i> Nabeul</span>
-                    <span><i class="fas fa-industry"></i> 50 entreprises</span>
-                  </div>
+                  <span class="comparison-category">Voirie</span>
+                  <h3>Voirie et &eacute;clairage public</h3>
+                  <p>Am&eacute;lioration d&rsquo;une voie locale et de son &eacute;clairage nocturne.</p>
                 </div>
-              </div>
+              </article>
 
-              <!-- Project 6: Réseaux d'Eau - Bizerte -->
-              <div class="before-after-card" data-category="hydraulique">
-                <div class="card-image">
-                  <img
-                    src="images/BA6.jpeg"
-                    alt="Réseaux d'Eau - Bizerte"
-                    loading="lazy"
-                  />
-                  <div class="image-overlay">
-                    <button class="gallery-btn" data-image="images/BA6.jpeg">
-                      <i class="fas fa-search-plus"></i>
-                    </button>
-                  </div>
-                  <div class="image-tags">
-                    <span class="tag before-tag">AVANT</span>
-                    <span class="tag after-tag">APRÈS</span>
-                  </div>
+              <article class="before-after-card" data-category="urbain">
+                <div class="comparison-pair">
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/local-road-before.jpg" alt="Voie locale avant son am&eacute;nagement" loading="lazy" />
+                    <figcaption>Avant</figcaption>
+                  </figure>
+                  <figure class="comparison-image">
+                    <img src="images/comparisons/local-road-after.jpg" alt="Voie locale apr&egrave;s son am&eacute;nagement" loading="lazy" />
+                    <figcaption>Apr&egrave;s</figcaption>
+                  </figure>
                 </div>
                 <div class="card-content">
-                  <div class="project-year">2024</div>
-                  <h3>Modernisation Réseaux d'Eau - Bizerte</h3>
-                  <p>Remplacement des conduites hydrauliques</p>
-                  <div class="impact-meter">
-                    <div class="impact-label">
-                      <span>Impact</span>
-                      <span class="impact-value">75%</span>
-                    </div>
-                    <div class="impact-bar">
-                      <div class="impact-fill" style="width: 75%"></div>
-                    </div>
-                  </div>
-                  <div class="card-meta">
-                    <span><i class="fas fa-map-marker-alt"></i> Bizerte</span>
-                    <span><i class="fas fa-tint"></i> 20k habitants</span>
-                  </div>
+                  <span class="comparison-category">Quartiers</span>
+                  <h3>R&eacute;am&eacute;nagement d&rsquo;une voie locale</h3>
+                  <p>Une rue plus propre et plus accessible pour les riverains.</p>
                 </div>
-              </div>
+              </article>
             </div>
           </div>
-          <button class="slider-nav prev-btn">
-            <i class="fas fa-chevron-left"></i>
+          <button type="button" class="slider-nav before-after-prev" aria-label="Afficher les r&eacute;alisations pr&eacute;c&eacute;dentes">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
           </button>
-          <button class="slider-nav next-btn">
-            <i class="fas fa-chevron-right"></i>
+          <button type="button" class="slider-nav before-after-next" aria-label="Afficher les r&eacute;alisations suivantes">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
           </button>
         </div>
-        <div class="slider-dots"></div>
       </div>
 
-      <!-- Gallery Modal -->
-      <div class="gallery-modal" id="galleryModal">
-        <div class="gallery-modal-content">
-          <button class="gallery-close"><i class="fas fa-times"></i></button>
-          <img src="" alt="Gallery Image" />
-          <div class="gallery-caption"></div>
-          <button class="gallery-prev">
-            <i class="fas fa-chevron-left"></i>
-          </button>
-          <button class="gallery-next">
-            <i class="fas fa-chevron-right"></i>
-          </button>
-          <div class="gallery-counter">1 / 6</div>
-        </div>
-      </div>
     </section>
 
     <!-- ============ CURRENT PROJECT SECTION ============ -->
@@ -1446,7 +1013,7 @@
       <div class="current-project-container">
         <div class="section-header">
           <span class="section-subtitle">Projet phare</span>
-          <h1 class="heading">Projet en cours</h1>
+          <h2 class="heading">Projet en cours</h2>
           <p class="section-description">
             Découvrez l'avancement de notre projet d'envergure
           </p>
@@ -1790,7 +1357,7 @@
       <div class="gallery-modal" id="projectGalleryModal">
         <div class="gallery-modal-content">
           <button class="gallery-close"><i class="fas fa-times"></i></button>
-          <img src="" alt="Gallery Image" />
+          <img alt="Project image" />
           <div class="gallery-caption"></div>
           <button class="gallery-prev">
             <i class="fas fa-chevron-left"></i>
@@ -1808,7 +1375,7 @@
       <div class="blogs-container">
         <div class="section-header">
           <span class="section-subtitle">Actualités & Événements</span>
-          <h1 class="heading">Dernières nouvelles</h1>
+          <h2 class="heading">Dernières nouvelles</h2>
           <p class="section-description">
             Restez informés des dernières actualités de SOIT
           </p>
@@ -2003,23 +1570,10 @@
             </div>
             <h3>Restez informés</h3>
             <p>Recevez nos actualités directement dans votre boîte mail</p>
-            <form class="newsletter-form">
-              <input type="email" placeholder="Votre adresse email" required />
-              <button type="submit">
-                S'abonner <i class="fas fa-paper-plane"></i>
-              </button>
-            </form>
             <p class="newsletter-note">
-              Aucun spam, désabonnement à tout moment.
+              L'inscription à notre lettre d'information sera bientôt disponible.
             </p>
           </div>
-        </div>
-
-        <!-- Load More Button -->
-        <div class="load-more">
-          <button class="load-more-btn">
-            <i class="fas fa-sync-alt"></i> Charger plus d'articles
-          </button>
         </div>
       </div>
 
@@ -2028,7 +1582,7 @@
         <div class="modal-content">
           <button class="modal-close"><i class="fas fa-times"></i></button>
           <div class="modal-body">
-            <img src="" alt="Article image" />
+            <img alt="Article image" />
             <div class="modal-text">
               <h2></h2>
               <div class="modal-meta"></div>
@@ -2044,7 +1598,7 @@
       <div class="reviews-container">
         <div class="section-header">
           <span class="section-subtitle">Témoignages</span>
-          <h1 class="heading">Ce que disent nos clients</h1>
+          <h2 class="heading">Ce que disent nos clients</h2>
           <p class="section-description">
             La satisfaction de nos clients, notre plus belle récompense
           </p>
@@ -2186,7 +1740,7 @@
       <div class="faq-container">
         <div class="section-header">
           <span class="section-subtitle">Questions fréquentes</span>
-          <h1 class="heading">Foire Aux Questions</h1>
+          <h2 class="heading">Foire Aux Questions</h2>
           <p class="section-description">
             Toutes les réponses à vos questions sur nos services
           </p>
@@ -2352,7 +1906,7 @@
       <div class="contact-container">
         <div class="contact-header">
           <span class="section-subtitle">Contactez-nous</span>
-          <h1 class="heading">Contactez-nous</h1>
+          <h2 class="heading">Contactez-nous</h2>
           <p class="section-description">
             Une question ? Un projet ? Notre équipe est à votre écoute
           </p>
@@ -2364,11 +1918,13 @@
             <div class="map-wrapper">
               <iframe
                 class="map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3231.9978137489047!2d10.550683474848261!3d35.898069218033704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12fd8986821cc149%3A0x473129e67fa70f08!2zU29jacOpdMOpIFNPSVQ!5e0!3m2!1sen!2stn!4v1776413143737!5m2!1sen!2stn"
-                allowfullscreen=""
+                src="https://maps.google.com/maps?q=La%20Route%20de%20Tunis%20Km%2012%20Akouda%20Sousse%20Tunisie&amp;output=embed"
+                allowfullscreen
                 loading="lazy"
-                title="SOIT Location Map"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Carte de localisation de SOIT ? Akouda, Sousse"
               ></iframe>
+              <a class="map-open-link" href="https://www.google.com/maps/search/?api=1&amp;query=La+Route+de+Tunis,+Km+12+Akouda+Sousse+Tunisie" target="_blank" rel="noopener noreferrer">Ouvrir dans Google Maps <i class="fas fa-external-link-alt" aria-hidden="true"></i></a>
             </div>
           </div>
 
@@ -2433,8 +1989,9 @@
         </div>
       </div>
     </section>
+    </main>
 
-    <button id="scroll-top" class="scroll-top">
+    <button id="scroll-top" class="scroll-top" type="button" aria-label="Retour en haut de page">
       <i class="fas fa-arrow-up"></i>
     </button>
     <div id="loading-spinner" class="loading-spinner">
@@ -2452,10 +2009,7 @@
               1997.
             </p>
             <div class="footer-social">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-linkedin-in"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/in/st%C3%A9-soit-s-a-r-l-1abb571a7/" target="_blank" rel="noopener noreferrer" aria-label="SOIT sur LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
             </div>
           </div>
 
@@ -2497,12 +2051,7 @@
       </div>
     </footer>
 
-    <button id="scroll-top" class="scroll-top">
-      <i class="fas fa-arrow-up"></i>
-    </button>
-    <div id="loading-spinner" class="loading-spinner">
-      <div class="spinner"></div>
-    </div>
+    <!-- ============ MODALE GALERIE SOUK JDID ============ -->
     <!-- ============ MODALE GALERIE SOUK JDID ============ -->
     <div
       id="galleryModalSoukJdid"
@@ -2573,7 +2122,6 @@
 
           <img
             id="galleryImageSoukJdid"
-            src=""
             alt="Galerie Souk Jdid"
             style="max-width: 70vw; max-height: 70vh; object-fit: contain"
           />
@@ -2603,7 +2151,6 @@
       </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightgallery-js/1.4.0/js/lightgallery.min.js"></script>
     <script src="script.js" defer></script>
   </body>
 </html>

@@ -19,7 +19,7 @@ function showMessage(message, type = "success") {
         : type === "warning"
           ? "⚠️"
           : "ℹ️";
-  messageDiv.innerHTML = `${icon} ${message}`;
+  messageDiv.textContent = `${icon} ${message}`;
   container.appendChild(messageDiv);
   setTimeout(() => {
     messageDiv.remove();
@@ -52,8 +52,74 @@ document.addEventListener("DOMContentLoaded", () => {
 document.addEventListener("DOMContentLoaded", () => {
   const menuBtn = document.querySelector("#menu-btn");
   const navbar = document.querySelector(".header .navbar");
-  if (menuBtn && navbar)
-    menuBtn.addEventListener("click", () => navbar.classList.toggle("active"));
+  if (menuBtn && navbar) {
+    const closeMenu = () => {
+      navbar.classList.remove("active");
+      menuBtn.setAttribute("aria-expanded", "false");
+    };
+    menuBtn.addEventListener("click", () => {
+      const isOpen = navbar.classList.toggle("active");
+      menuBtn.setAttribute("aria-expanded", String(isOpen));
+    });
+    navbar.querySelectorAll("a").forEach((link) =>
+      link.addEventListener("click", closeMenu),
+    );
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMenu();
+    });
+  }
+});
+
+// Keep one blue section marker in sync with the visible section.
+document.addEventListener("DOMContentLoaded", () => {
+  const links = [...document.querySelectorAll('.header .navbar a[href^="#"]')];
+  const sections = links
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+  if (!("IntersectionObserver" in window) || !sections.length) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      links.forEach((link) => {
+        const active = link.getAttribute("href") === `#${visible.target.id}`;
+        link.classList.toggle("is-active", active);
+        if (active) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    },
+    { rootMargin: "-25% 0px -60% 0px", threshold: [0, 0.1, 0.4] },
+  );
+  sections.forEach((section) => observer.observe(section));
+});
+
+// Load the muted looping About video only as it approaches the viewport.
+document.addEventListener("DOMContentLoaded", () => {
+  const video = document.querySelector(".about-video video[data-src]");
+  if (!video) return;
+  const startVideo = () => {
+    if (!video.src) {
+      video.src = video.dataset.src;
+      video.load();
+    }
+    video.play().catch(() => {});
+  };
+  if (!("IntersectionObserver" in window)) {
+    startVideo();
+    return;
+  }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) startVideo();
+        else video.pause();
+      });
+    },
+    { rootMargin: "300px 0px" },
+  );
+  observer.observe(video);
 });
 
 // ============ INFO SIDEBAR ============
@@ -145,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   function highlightText(term) {
     clearHighlights();
-    const regex = new RegExp(`(${term})`, "gi");
+    const regex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
     const walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
@@ -166,17 +232,21 @@ document.addEventListener("DOMContentLoaded", function () {
     while (walker.nextNode()) textNodes.push(walker.currentNode);
     textNodes.forEach((node) => {
       const text = node.textContent;
-      if (regex.test(text)) {
-        const span = document.createElement("span");
-        span.innerHTML = text.replace(
-          regex,
-          `<mark class="highlight">$1</mark>`,
-        );
-        node.parentNode.replaceChild(span, node);
-        span
-          .querySelectorAll(".highlight")
-          .forEach((el) => currentHighlights.push(el));
-      }
+      const matches = [...text.matchAll(regex)];
+      if (!matches.length) return;
+      const fragment = document.createDocumentFragment();
+      let lastIndex = 0;
+      matches.forEach((match) => {
+        fragment.append(document.createTextNode(text.slice(lastIndex, match.index)));
+        const mark = document.createElement("mark");
+        mark.className = "highlight";
+        mark.textContent = match[0];
+        fragment.append(mark);
+        currentHighlights.push(mark);
+        lastIndex = match.index + match[0].length;
+      });
+      fragment.append(document.createTextNode(text.slice(lastIndex)));
+      node.parentNode.replaceChild(fragment, node);
     });
     if (currentHighlights.length > 0) {
       currentIndex = 0;
@@ -205,6 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // ============ HOME SLIDER ============
 document.addEventListener("DOMContentLoaded", function () {
   const slides = document.querySelectorAll(".home .slide");
+  const home = document.querySelector(".home");
   const prevBtn = document.querySelector(".home-prev");
   const nextBtn = document.querySelector(".home-next");
   const dots = document.querySelectorAll(".home-dots .dot");
@@ -216,6 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
     slides.forEach((slide, i) => {
       slide.classList.toggle("active", i === index);
       dots[i]?.classList.toggle("active", i === index);
+      dots[i]?.setAttribute("aria-current", String(i === index));
     });
     currentIndex = index;
   }
@@ -233,7 +305,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   function resetInterval() {
     if (interval) clearInterval(interval);
-    interval = setInterval(nextSlide, 6000);
+    if (
+      !document.hidden &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      interval = setInterval(nextSlide, 7000);
   }
   prevBtn?.addEventListener("click", prevSlide);
   nextBtn?.addEventListener("click", nextSlide);
@@ -243,11 +319,18 @@ document.addEventListener("DOMContentLoaded", function () {
       resetInterval();
     }),
   );
-  document.addEventListener("keydown", (e) => {
+  home?.addEventListener("keydown", (e) => {
     if (e.key === "ArrowLeft") prevSlide();
     if (e.key === "ArrowRight") nextSlide();
   });
-  interval = setInterval(nextSlide, 6000);
+  home?.addEventListener("mouseenter", () => clearInterval(interval));
+  home?.addEventListener("mouseleave", resetInterval);
+  home?.addEventListener("focusin", () => clearInterval(interval));
+  home?.addEventListener("focusout", (event) => {
+    if (!home.contains(event.relatedTarget)) resetInterval();
+  });
+  document.addEventListener("visibilitychange", resetInterval);
+  resetInterval();
 });
 
 // ============ STATS COUNTER ANIMATION ============
@@ -260,6 +343,11 @@ function animateStats() {
         if (entry.isIntersecting) {
           const element = entry.target;
           const target = parseInt(element.getAttribute("data-target"));
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            element.textContent = target;
+            observer.unobserve(element);
+            return;
+          }
           const duration = 2000;
           const step = target / (duration / 16);
           let current = 0;
@@ -286,6 +374,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("login-form");
   const registerForm = document.getElementById("register-form");
   const forgotForm = document.getElementById("forgot-form");
+  const authContainer = document.querySelector(".login-form-container");
+  const authBackdrop = authContainer?.querySelector(".auth-backdrop");
   const showRegister = document.getElementById("show-register");
   const showLogin = document.getElementById("show-login");
   const forgotLink = document.getElementById("forgot-password-link");
@@ -295,31 +385,47 @@ document.addEventListener("DOMContentLoaded", function () {
     loginForm?.classList.remove("active");
     registerForm?.classList.remove("active");
     forgotForm?.classList.remove("active");
+    authContainer?.classList.remove("active");
+    document.body.classList.remove("auth-modal-open");
+    loginBtn?.setAttribute("aria-expanded", "false");
   }
 
-  loginBtn?.addEventListener("click", () => {
+  function openForm(form) {
+    if (!form) return;
     closeAllModals();
-    loginForm?.classList.add("active");
+    form.classList.add("active");
+    authContainer?.classList.add("active");
+    document.body.classList.add("auth-modal-open");
+    loginBtn?.setAttribute("aria-expanded", String(form === loginForm));
+    window.setTimeout(() => form.querySelector("input")?.focus({ preventScroll: true }), 100);
+  }
+
+  // Delegate from the document so this still works if the header is rebuilt.
+  // Ignore clicks from nested tooltip/icon nodes by resolving the button itself.
+  document.addEventListener("click", (event) => {
+    const clickedLoginButton = event.target.closest?.("#login-btn");
+    if (!clickedLoginButton) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (loginForm?.classList.contains("active")) closeAllModals();
+    else openForm(loginForm);
   });
+  authBackdrop?.addEventListener("click", closeAllModals);
   showRegister?.addEventListener("click", (e) => {
     e.preventDefault();
-    closeAllModals();
-    registerForm?.classList.add("active");
+    openForm(registerForm);
   });
   showLogin?.addEventListener("click", (e) => {
     e.preventDefault();
-    closeAllModals();
-    loginForm?.classList.add("active");
+    openForm(loginForm);
   });
   forgotLink?.addEventListener("click", (e) => {
     e.preventDefault();
-    closeAllModals();
-    forgotForm?.classList.add("active");
+    openForm(forgotForm);
   });
   backToLogin?.addEventListener("click", (e) => {
     e.preventDefault();
-    closeAllModals();
-    loginForm?.classList.add("active");
+    openForm(loginForm);
   });
 
   // Login submit
@@ -327,8 +433,8 @@ document.addEventListener("DOMContentLoaded", function () {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("login-email")?.value.trim();
-      const password = document.getElementById("login-password")?.value.trim();
-      if (!email || !password) {
+      const password = document.getElementById("login-password")?.value ?? "";
+      if (!email || !password.trim()) {
         showMessage("Veuillez entrer votre email et mot de passe", "warning");
         return;
       }
@@ -339,19 +445,28 @@ document.addEventListener("DOMContentLoaded", function () {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
         });
-        const data = await res.json();
-        if (data.success) {
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success) {
           localStorage.setItem("user", JSON.stringify(data.user));
+          if (data.token) localStorage.setItem("token", data.token);
           showMessage(data.message, "success");
-          loginForm.classList.remove("active");
+          closeAllModals();
           loginForm.reset();
-          document.querySelector("#login-btn").innerHTML =
-            '<i class="fas fa-user-check"></i>';
+          loginBtn?.setAttribute("aria-label", "Mon compte");
+          const icon = loginBtn?.querySelector("i");
+          if (icon) icon.className = data.user?.role === "admin" ? "fas fa-user-shield" : "fas fa-user-check";
         } else {
-          showMessage(data.message, "error");
+          showMessage(
+            data.message || `Échec de connexion (HTTP ${res.status}). Vérifiez le serveur API.`,
+            "error",
+          );
         }
       } catch (error) {
-        showMessage("Erreur de connexion au serveur", "error");
+        console.error("Login request failed:", error);
+        showMessage(
+          "Impossible de joindre le serveur de connexion. Vérifiez votre connexion ou réessayez dans quelques instants.",
+          "error",
+        );
       } finally {
         hideLoader();
       }
@@ -397,8 +512,7 @@ document.addEventListener("DOMContentLoaded", function () {
             "success",
           );
           registerForm.reset();
-          registerForm.classList.remove("active");
-          loginForm.classList.add("active");
+          openForm(loginForm);
           document.getElementById("login-email").value = email;
         } else {
           showMessage(data.message, "error");
@@ -451,13 +565,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // Close forms on outside click
   document.addEventListener("click", (event) => {
     const forms = [loginForm, registerForm, forgotForm];
-    if (
-      !loginBtn?.contains(event.target) &&
-      forms.some((f) => f?.classList.contains("active"))
-    ) {
-      if (!forms.some((f) => f?.contains(event.target)))
-        forms.forEach((f) => f?.classList.remove("active"));
-    }
+    const isOpen = forms.some((form) => form?.classList.contains("active"));
+    if (isOpen && !authContainer?.contains(event.target) && !loginBtn?.contains(event.target)) closeAllModals();
   });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") closeAllModals();
@@ -467,8 +576,11 @@ document.addEventListener("DOMContentLoaded", function () {
 // ============ LOGOUT ============
 function logout() {
   localStorage.removeItem("user");
-  document.querySelector("#login-btn").innerHTML =
-    '<i class="fas fa-user"></i>';
+  localStorage.removeItem("token");
+  const loginBtn = document.querySelector("#login-btn");
+  loginBtn?.setAttribute("aria-label", "Connexion");
+  const icon = loginBtn?.querySelector("i");
+  if (icon) icon.className = "fas fa-user";
   showMessage("Déconnexion réussie !", "success");
   setTimeout(() => location.reload(), 1000);
 }
@@ -479,10 +591,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (user) {
     try {
       const userData = JSON.parse(user);
-      document.querySelector("#login-btn").innerHTML =
-        userData.role === "admin"
-          ? '<i class="fas fa-user-shield"></i>'
-          : '<i class="fas fa-user-check"></i>';
+      const loginBtn = document.querySelector("#login-btn");
+      loginBtn?.setAttribute("aria-label", "Mon compte");
+      const icon = loginBtn?.querySelector("i");
+      if (icon) icon.className = userData.role === "admin" ? "fas fa-user-shield" : "fas fa-user-check";
     } catch (e) {}
   }
 });
@@ -666,120 +778,68 @@ document.addEventListener("DOMContentLoaded", () => {
   else updateLanguage("fr");
 });
 
-// ============ BEFORE/AFTER SLIDER ============
+// ============ FILTERS ============
 function initBeforeAfterSlider() {
+  const viewport = document.querySelector(".before-after-slider-container");
   const slider = document.querySelector(".before-after-slider");
-  const slides = document.querySelectorAll(".before-after-card");
-  const prevBtn = document.querySelector(".prev-btn");
-  const nextBtn = document.querySelector(".next-btn");
-  const dotsContainer = document.querySelector(".slider-dots");
-  if (!slider || slides.length === 0) return;
-  let currentIndex = 0;
-  let slidesToShow =
-    window.innerWidth <= 768 ? 1 : window.innerWidth <= 1200 ? 2 : 3;
-  let totalSlides = slides.length;
-  let maxIndex = totalSlides - slidesToShow;
-  function updateSlider() {
-    const slideWidth = slides[0]?.offsetWidth || 0;
-    slider.style.transform = `translateX(${-currentIndex * (slideWidth + 20)}px)`;
-    updateDots();
-    updateButtons();
-  }
-  function updateButtons() {
-    if (prevBtn) {
-      prevBtn.disabled = currentIndex === 0;
-      prevBtn.style.opacity = currentIndex === 0 ? "0.5" : "1";
-    }
-    if (nextBtn) {
-      nextBtn.disabled = currentIndex >= maxIndex;
-      nextBtn.style.opacity = currentIndex >= maxIndex ? "0.5" : "1";
-    }
-  }
-  function updateDots() {
-    if (!dotsContainer) return;
-    const dotIndex = Math.floor(currentIndex / slidesToShow);
-    const dots = dotsContainer.querySelectorAll(".dot");
-    dots.forEach((dot, index) =>
-      dot.classList.toggle("active", index === dotIndex),
-    );
-  }
-  function createDots() {
-    if (!dotsContainer) return;
-    const numberOfDots = Math.ceil(totalSlides / slidesToShow);
-    dotsContainer.innerHTML = "";
-    for (let i = 0; i < numberOfDots; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add("dot");
-      if (i === 0) dot.classList.add("active");
-      dot.addEventListener("click", () => {
-        currentIndex = i * slidesToShow;
-        if (currentIndex > maxIndex) currentIndex = maxIndex;
-        updateSlider();
-      });
-      dotsContainer.appendChild(dot);
-    }
-  }
-  function nextSlide() {
-    if (currentIndex < maxIndex) {
-      currentIndex++;
-      updateSlider();
-    }
-  }
-  function prevSlide() {
-    if (currentIndex > 0) {
-      currentIndex--;
-      updateSlider();
-    }
-  }
-  function refreshSlider() {
-    const newSlidesToShow =
-      window.innerWidth <= 768 ? 1 : window.innerWidth <= 1200 ? 2 : 3;
-    if (newSlidesToShow !== slidesToShow) {
-      slidesToShow = newSlidesToShow;
-      maxIndex = totalSlides - slidesToShow;
-      currentIndex = Math.min(currentIndex, maxIndex);
-      createDots();
-    }
-    updateSlider();
-  }
-  prevBtn?.addEventListener("click", prevSlide);
-  nextBtn?.addEventListener("click", nextSlide);
-  let resizeTimer;
-  window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(refreshSlider, 150);
-  });
-  createDots();
-  refreshSlider();
-  window.addEventListener("load", refreshSlider);
+  const previousButton = document.querySelector(".before-after-prev");
+  const nextButton = document.querySelector(".before-after-next");
+  if (!viewport || !slider || !previousButton || !nextButton) return;
+
+  const updateControls = () => {
+    const atStart = viewport.scrollLeft <= 2;
+    const atEnd = viewport.scrollLeft + viewport.clientWidth >= viewport.scrollWidth - 2;
+    previousButton.disabled = atStart;
+    nextButton.disabled = atEnd;
+  };
+  const scrollOneCard = (direction) => {
+    const firstCard = slider.querySelector(".before-after-card:not([hidden])");
+    if (!firstCard) return;
+    const gap = Number.parseFloat(getComputedStyle(slider).columnGap) || 0;
+    viewport.scrollBy({
+      left: direction * (firstCard.getBoundingClientRect().width + gap),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+    });
+  };
+
+  previousButton.addEventListener("click", () => scrollOneCard(-1));
+  nextButton.addEventListener("click", () => scrollOneCard(1));
+  viewport.addEventListener("scroll", updateControls, { passive: true });
+  window.addEventListener("resize", updateControls);
+  updateControls();
 }
 
-// ============ FILTERS ============
 function initFilters() {
   const filterBtns = document.querySelectorAll(".filter-btn");
   const cards = document.querySelectorAll(".before-after-card");
   if (!filterBtns.length) return;
   filterBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
-      filterBtns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
       const filter = btn.getAttribute("data-filter");
-      cards.forEach((card) => {
-        if (filter === "all" || card.getAttribute("data-category") === filter) {
-          card.style.display = "block";
-          setTimeout(() => {
-            card.style.opacity = "1";
-            card.style.transform = "scale(1)";
-          }, 10);
-        } else {
-          card.style.opacity = "0";
-          card.style.transform = "scale(0.8)";
-          setTimeout(() => {
-            card.style.display = "none";
-          }, 300);
-        }
+      filterBtns.forEach((filterBtn) => {
+        const active = filterBtn === btn;
+        filterBtn.classList.toggle("active", active);
+        filterBtn.setAttribute("aria-pressed", String(active));
       });
-      setTimeout(() => initBeforeAfterSlider(), 350);
+      cards.forEach((card) => {
+        card.hidden = filter !== "all" && card.dataset.category !== filter;
+      });
+      const visibleCount = [...cards].filter((card) => !card.hidden).length;
+      document
+        .querySelector(".before-after-slider")
+        ?.classList.toggle("is-short", visibleCount === 2);
+      const viewport = document.querySelector(".before-after-slider-container");
+      if (viewport) {
+        viewport.scrollTo({
+          left: 0,
+          behavior: window.matchMedia("(prefers-reduced-motion: reduce)")
+            .matches
+            ? "auto"
+            : "smooth",
+        });
+      }
     });
   });
 }
@@ -787,15 +847,103 @@ function initFilters() {
 // ============ FAQ ACCORDÉON ============
 function initFaq() {
   const faqItems = document.querySelectorAll(".faq-item");
-  faqItems.forEach((item) => {
+  faqItems.forEach((item, index) => {
     const question = item.querySelector(".faq-question");
-    question?.addEventListener("click", () => {
+    const answer = item.querySelector(".faq-answer");
+    if (!question) return;
+    if (answer && !answer.id) answer.id = `faq-answer-${index + 1}`;
+    question.setAttribute("role", "button");
+    question.setAttribute("tabindex", "0");
+    question.setAttribute("aria-expanded", String(item.classList.contains("active")));
+    if (answer) question.setAttribute("aria-controls", answer.id);
+    const toggleQuestion = () => {
       faqItems.forEach((otherItem) => {
-        if (otherItem !== item && otherItem.classList.contains("active"))
+        if (otherItem !== item && otherItem.classList.contains("active")) {
           otherItem.classList.remove("active");
+          otherItem
+            .querySelector(".faq-question")
+            ?.setAttribute("aria-expanded", "false");
+        }
       });
-      item.classList.toggle("active");
+      const isOpen = item.classList.toggle("active");
+      question.setAttribute("aria-expanded", String(isOpen));
+    };
+    question.addEventListener("click", toggleQuestion);
+    question.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        toggleQuestion();
+      }
     });
+  });
+}
+
+function initScrollReveal() {
+  if (
+    !("IntersectionObserver" in window) ||
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  )
+    return;
+  const revealTargets = document.querySelectorAll(
+    ".section-subtitle, .heading, .section-description, .stat-card, .service-card, .project-card, .before-after-card, .article-card, .faq-item, .form-card, .map-card",
+  );
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.12, rootMargin: "0px 0px -24px 0px" },
+  );
+  revealTargets.forEach((element, index) => {
+    element.style.setProperty("--reveal-index", String(index % 5));
+    element.classList.add("motion-reveal");
+    observer.observe(element);
+  });
+}
+
+function initPasswordControls() {
+  document.querySelectorAll(".toggle-password").forEach((button) => {
+    const input = document.getElementById(button.dataset.target);
+    const icon = button.querySelector("i");
+    if (!input) return;
+    button.setAttribute("aria-label", "Afficher le mot de passe");
+    button.setAttribute("aria-pressed", "false");
+    icon?.setAttribute("aria-hidden", "true");
+    button.addEventListener("click", () => {
+      const isVisible = input.type === "password";
+      input.type = isVisible ? "text" : "password";
+      button.setAttribute("aria-label", isVisible ? "Masquer le mot de passe" : "Afficher le mot de passe");
+      button.setAttribute("aria-pressed", String(isVisible));
+      icon?.classList.toggle("fa-eye", !isVisible);
+      icon?.classList.toggle("fa-eye-slash", isVisible);
+    });
+  });
+
+  const password = document.getElementById("reg-password");
+  const strength = document.getElementById("password-strength");
+  if (!password || !strength) return;
+  const bars = strength.querySelectorAll(".strength-bar");
+  const label = strength.querySelector(".strength-text");
+  label?.setAttribute("aria-live", "polite");
+  password.addEventListener("input", () => {
+    const value = password.value;
+    const score = value
+      ? [
+          value.length >= 12,
+          /[a-z]/.test(value) && /[A-Z]/.test(value),
+          /\d/.test(value),
+          /[^A-Za-z0-9]/.test(value),
+        ].filter(Boolean).length
+      : 0;
+    const level = score <= 1 ? "weak" : score <= 3 ? "medium" : "strong";
+    bars.forEach((bar, index) => {
+      bar.classList.remove("weak", "medium", "strong");
+      if (index < score) bar.classList.add(level);
+    });
+    if (label) label.textContent = score === 0 ? "" : score <= 1 ? "Faible" : score <= 3 ? "Moyen" : "Fort";
   });
 }
 
@@ -1002,6 +1150,33 @@ function escapeHtml(text) {
   div.textContent = text;
   return div.innerHTML;
 }
+function enableTouchSwipe(viewport, onPrevious, onNext) {
+  if (!viewport) return;
+  let start = null;
+  let ignoreClick = false;
+  viewport.addEventListener("pointerdown", (event) => {
+    if (event.pointerType === "mouse") return;
+    start = { x: event.clientX, y: event.clientY };
+    viewport.setPointerCapture?.(event.pointerId);
+  });
+  viewport.addEventListener("pointerup", (event) => {
+    if (!start) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    start = null;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      ignoreClick = true;
+      window.setTimeout(() => { ignoreClick = false; }, 350);
+      if (dx < 0) onNext(); else onPrevious();
+    }
+  });
+  viewport.addEventListener("pointercancel", () => { start = null; });
+  viewport.addEventListener("click", (event) => {
+    if (!ignoreClick) return;
+    event.preventDefault();
+    event.stopPropagation();
+  }, true);
+}
 function initReviewsSlider() {
   const slider = document.querySelector(".reviews-slider");
   const slides = document.querySelectorAll(".review-card");
@@ -1043,8 +1218,10 @@ function initReviewsSlider() {
     const numberOfDots = Math.ceil(totalSlides / slidesToShow);
     dotsContainer.innerHTML = "";
     for (let i = 0; i < numberOfDots; i++) {
-      const dot = document.createElement("div");
+      const dot = document.createElement("button");
+      dot.type = "button";
       dot.classList.add("review-dot");
+      dot.setAttribute("aria-label", `Afficher les avis ${i + 1}`);
       if (i === 0) dot.classList.add("active");
       dot.addEventListener("click", () => {
         currentIndex = i * slidesToShow;
@@ -1077,6 +1254,7 @@ function initReviewsSlider() {
     }
     updateSlider();
   }
+  enableTouchSwipe(document.querySelector(".reviews-slider-container"), prevSlide, nextSlide);
   prevBtn?.addEventListener("click", prevSlide);
   nextBtn?.addEventListener("click", nextSlide);
   let resizeTimer;
@@ -1362,8 +1540,10 @@ function initProjectSlider() {
     const numberOfDots = Math.ceil(totalSlides / slidesToShow);
     dotsContainer.innerHTML = "";
     for (let i = 0; i < numberOfDots; i++) {
-      const dot = document.createElement("div");
+      const dot = document.createElement("button");
+      dot.type = "button";
       dot.classList.add("project-dot");
+      dot.setAttribute("aria-label", `Afficher la diapositive ${i + 1}`);
       if (i === 0) dot.classList.add("active");
       dot.addEventListener("click", () => {
         currentIndex = i * slidesToShow;
@@ -1396,6 +1576,7 @@ function initProjectSlider() {
     }
     updateSlider();
   }
+  enableTouchSwipe(document.querySelector(".project-slider-container"), prevSlide, nextSlide);
   prevBtn?.addEventListener("click", prevSlide);
   nextBtn?.addEventListener("click", nextSlide);
   let resizeTimer;
@@ -1415,14 +1596,13 @@ document.addEventListener("DOMContentLoaded", function () {
   initBlogSlider();
   initProjectSlider();
   initFaq();
+  initScrollReveal();
+  initPasswordControls();
   loadReviews();
   initReviewModal();
   initReviewsSlider();
   initProjectGallery();
-  initLoadMore();
-  initNewsletter();
   initArticleModal();
-  console.log("✅ Tous les scripts sont chargés !");
 });
 
 // ============ PROJECT GALLERY ============
@@ -1435,21 +1615,42 @@ function initProjectGallery() {
   const nextBtn = modal?.querySelector(".gallery-next");
   const caption = modal?.querySelector(".gallery-caption");
   const counter = modal?.querySelector(".gallery-counter");
-  let images = [];
+  const currentProjectImages = [];
+  const portfolioImages = [];
+  let activeImages = currentProjectImages;
   let currentIndex = 0;
-  slides.forEach((slide, index) => {
+  slides.forEach((slide) => {
     const img = slide.querySelector("img");
     const imgSrc = img?.src;
     const imgCaption = slide.querySelector(".slide-caption")?.innerText || "";
-    if (imgSrc) images.push({ src: imgSrc, caption: imgCaption });
-    slide.addEventListener("click", () => openGallery(index));
+    if (imgSrc) {
+      const index = currentProjectImages.push({ src: imgSrc, caption: imgCaption }) - 1;
+      slide.addEventListener("click", () => openGallery(index, currentProjectImages));
+    }
   });
-  function openGallery(index) {
+  document.querySelectorAll(".projects-grid .project-card").forEach((card) => {
+    const img = card.querySelector("img");
+    if (!img) return;
+    const caption = card.querySelector("h3")?.textContent.trim() || img.alt;
+    const gallerySources = (card.dataset.gallery || img.getAttribute("src") || "").split("|").filter(Boolean);
+    const index = portfolioImages.length;
+    gallerySources.forEach((src, galleryIndex) => {
+      portfolioImages.push({
+        src: new URL(src, document.baseURI).href,
+        caption: galleryIndex ? caption + " - photo " + (galleryIndex + 1) : caption,
+      });
+    });
+    const button = card.querySelector(".project-link");
+    button?.setAttribute("aria-label", `Voir la photo : ${caption}`);
+    button?.addEventListener("click", () => openGallery(index, portfolioImages));
+  });
+  function openGallery(index, imageSet) {
     if (!modal || !modalImg) return;
+    activeImages = imageSet;
     currentIndex = index;
-    modalImg.src = images[currentIndex].src;
-    if (caption) caption.textContent = images[currentIndex].caption;
-    if (counter) counter.textContent = `${currentIndex + 1} / ${images.length}`;
+    modalImg.src = activeImages[currentIndex].src;
+    if (caption) caption.textContent = activeImages[currentIndex].caption;
+    if (counter) counter.textContent = `${currentIndex + 1} / ${activeImages.length}`;
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
   }
@@ -1460,17 +1661,17 @@ function initProjectGallery() {
   }
   function nextImage() {
     if (!modalImg) return;
-    currentIndex = (currentIndex + 1) % images.length;
-    modalImg.src = images[currentIndex].src;
-    if (caption) caption.textContent = images[currentIndex].caption;
-    if (counter) counter.textContent = `${currentIndex + 1} / ${images.length}`;
+    currentIndex = (currentIndex + 1) % activeImages.length;
+    modalImg.src = activeImages[currentIndex].src;
+    if (caption) caption.textContent = activeImages[currentIndex].caption;
+    if (counter) counter.textContent = `${currentIndex + 1} / ${activeImages.length}`;
   }
   function prevImage() {
     if (!modalImg) return;
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    modalImg.src = images[currentIndex].src;
-    if (caption) caption.textContent = images[currentIndex].caption;
-    if (counter) counter.textContent = `${currentIndex + 1} / ${images.length}`;
+    currentIndex = (currentIndex - 1 + activeImages.length) % activeImages.length;
+    modalImg.src = activeImages[currentIndex].src;
+    if (caption) caption.textContent = activeImages[currentIndex].caption;
+    if (counter) counter.textContent = `${currentIndex + 1} / ${activeImages.length}`;
   }
   closeBtn?.addEventListener("click", closeGallery);
   prevBtn?.addEventListener("click", prevImage);
@@ -1486,37 +1687,7 @@ function initProjectGallery() {
   });
 }
 
-// ============ LOAD MORE, NEWSLETTER, ARTICLE MODAL ============
-function initLoadMore() {
-  const loadMoreBtn = document.querySelector(".load-more-btn");
-  if (!loadMoreBtn) return;
-  let currentArticles = 6;
-  const totalArticles = 9;
-  loadMoreBtn.addEventListener("click", function () {
-    loadMoreBtn.innerHTML =
-      '<i class="fas fa-spinner fa-spin"></i> Chargement...';
-    setTimeout(() => {
-      currentArticles += 3;
-      loadMoreBtn.innerHTML =
-        '<i class="fas fa-sync-alt"></i> Charger plus d\'articles';
-      if (currentArticles >= totalArticles) loadMoreBtn.style.display = "none";
-    }, 1500);
-  });
-}
-function initNewsletter() {
-  const newsletterForm = document.querySelector(".newsletter-form");
-  if (!newsletterForm) return;
-  newsletterForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-    const email = this.querySelector("input")?.value;
-    if (email) {
-      alert(
-        `Merci pour votre inscription ! Vous recevrez nos actualités sur ${email}`,
-      );
-      this.reset();
-    }
-  });
-}
+// ============ ARTICLE MODAL ============
 function initArticleModal() {
   const readMoreBtns = document.querySelectorAll(".read-more, .btn-read-more");
   const modal = document.getElementById("articleModal");
@@ -1541,7 +1712,6 @@ function initArticleModal() {
         if (modalDesc) modalDesc.textContent = desc;
         modal.classList.add("active");
         document.body.style.overflow = "hidden";
-        0;
       }
     });
   });
