@@ -1973,6 +1973,17 @@ section {
   gap: 3rem;
 }
 
+.projects-empty-state {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 2.4rem;
+  border: 1px dashed #d8e1e7;
+  border-radius: 1rem;
+  color: #70808a;
+  text-align: center;
+  background: rgba(255,255,255,.72);
+}
+
 /* Project Card */
 .project-card {
   background: white;

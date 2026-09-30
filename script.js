@@ -1,5 +1,5 @@
 // ============ API CONFIGURATION ============
-const API_URL = "https://soit-backend.onrender.com/api";
+const API_URL = window.SOIT_CONFIG.apiBaseUrl;
 
 // ============ SHOW MESSAGE FUNCTION (UNIQUE) ============
 function showMessage(message, type = "success") {
@@ -144,18 +144,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchOverlay = document.querySelector(".search-overlay");
   const searchClose = document.querySelector("#search-close");
   const searchInput = document.getElementById("search-box");
+  const searchSuggestions = document.getElementById("search-suggestions");
   let currentHighlights = [];
   let currentIndex = -1;
 
   function openSearch() {
     searchForm?.classList.add("active");
     searchOverlay?.classList.add("active");
+    searchBtn?.setAttribute("aria-expanded", "true");
     searchInput?.focus();
   }
   function closeSearch() {
     searchForm?.classList.remove("active");
     searchOverlay?.classList.remove("active");
-    clearHighlights();
+    searchBtn?.setAttribute("aria-expanded", "false");
   }
   function clearHighlights() {
     currentHighlights.forEach((el) => {
@@ -166,64 +168,111 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
     currentHighlights = [];
+    currentIndex = -1;
     const bar = document.querySelector(".search-results-bar");
     bar?.remove();
   }
+  function normalizeForSearch(value) {
+    let normalized = "";
+    const starts = [];
+    const ends = [];
+    for (let offset = 0; offset < value.length;) {
+      const character = String.fromCodePoint(value.codePointAt(offset));
+      const start = offset;
+      const end = offset + character.length;
+      const folded = character.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase();
+      for (const foldedCharacter of folded) {
+        normalized += foldedCharacter;
+        starts.push(start);
+        ends.push(end);
+      }
+      offset = end;
+    }
+    return { normalized, starts, ends };
+  }
   function scrollToHighlight() {
-    if (currentHighlights[currentIndex]) {
-      currentHighlights[currentIndex].scrollIntoView({
+    currentHighlights.forEach((mark, index) => {
+      const isCurrent = index === currentIndex;
+      mark.classList.toggle("highlight-current", isCurrent);
+      if (isCurrent) mark.setAttribute("aria-current", "true");
+      else mark.removeAttribute("aria-current");
+    });
+    const current = currentHighlights[currentIndex];
+    if (current) {
+      current.scrollIntoView({
         behavior: "smooth",
         block: "center",
       });
-      currentHighlights[currentIndex].style.transition = "all 0.3s";
-      currentHighlights[currentIndex].style.boxShadow = "0 0 0 3px #2370f5";
-      setTimeout(() => {
-        if (currentHighlights[currentIndex])
-          currentHighlights[currentIndex].style.boxShadow = "";
-      }, 1000);
     }
   }
   function updateSearchBar() {
-    const bar = document.querySelector(".search-results-bar");
-    if (bar) {
-      bar.innerHTML = `<span>${currentHighlights.length} résultat(s) trouvé(s)</span>
-        <button id="prev-match" ${currentIndex === 0 ? "disabled" : ""}>◀ Précédent</button>
-        <button id="next-match" ${currentIndex >= currentHighlights.length - 1 ? "disabled" : ""}>Suivant ▶</button>
-        <button id="clear-matches">✕ Effacer</button>`;
-      document.getElementById("prev-match")?.addEventListener("click", () => {
-        if (currentIndex > 0) {
-          currentIndex--;
-          scrollToHighlight();
-          updateSearchBar();
-        }
-      });
-      document.getElementById("next-match")?.addEventListener("click", () => {
-        if (currentIndex < currentHighlights.length - 1) {
-          currentIndex++;
-          scrollToHighlight();
-          updateSearchBar();
-        }
-      });
-      document
-        .getElementById("clear-matches")
-        ?.addEventListener("click", clearHighlights);
+    let bar = document.querySelector(".search-results-bar");
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.className = "search-results-bar";
+      bar.setAttribute("role", "status");
+      bar.setAttribute("aria-live", "polite");
+      document.body.append(bar);
     }
+
+    const status = document.createElement("span");
+    status.className = "search-results-status";
+    status.textContent = currentHighlights.length
+      ? `Résultat ${currentIndex + 1} sur ${currentHighlights.length}`
+      : "Aucun résultat trouvé";
+    bar.replaceChildren(status);
+
+    if (currentHighlights.length > 1) {
+      const previous = document.createElement("button");
+      previous.type = "button";
+      previous.textContent = "← Précédent";
+      previous.disabled = currentIndex <= 0;
+      previous.addEventListener("click", () => {
+        if (currentIndex > 0) {
+          currentIndex -= 1;
+          scrollToHighlight();
+          updateSearchBar();
+        }
+      });
+
+      const next = document.createElement("button");
+      next.type = "button";
+      next.textContent = "Suivant →";
+      next.disabled = currentIndex >= currentHighlights.length - 1;
+      next.addEventListener("click", () => {
+        if (currentIndex < currentHighlights.length - 1) {
+          currentIndex += 1;
+          scrollToHighlight();
+          updateSearchBar();
+        }
+      });
+      bar.append(previous, next);
+    }
+
+    const clear = document.createElement("button");
+    clear.type = "button";
+    clear.className = "clear-search-results";
+    clear.textContent = "Effacer";
+    clear.addEventListener("click", clearHighlights);
+    bar.append(clear);
+    bar.classList.add("show");
   }
   function highlightText(term) {
     clearHighlights();
-    const regex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi");
+    const foldedTerm = normalizeForSearch(term).normalized;
+    if (!foldedTerm) return;
     const walker = document.createTreeWalker(
       document.body,
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: function (node) {
-          if (
-            node.parentElement.tagName === "SCRIPT" ||
-            node.parentElement.tagName === "STYLE" ||
-            node.parentElement.classList?.contains("search-results-bar") ||
-            node.parentElement.classList?.contains("search-form")
-          )
+          const parent = node.parentElement;
+          if (!parent || parent.closest("script, style, noscript, .search-results-bar, .search-form, [hidden], [aria-hidden='true']")) {
             return NodeFilter.FILTER_REJECT;
+          }
+          if (parent.getClientRects().length === 0) {
+            return NodeFilter.FILTER_REJECT;
+          }
           return NodeFilter.FILTER_ACCEPT;
         },
       },
@@ -232,18 +281,28 @@ document.addEventListener("DOMContentLoaded", function () {
     while (walker.nextNode()) textNodes.push(walker.currentNode);
     textNodes.forEach((node) => {
       const text = node.textContent;
-      const matches = [...text.matchAll(regex)];
+      const foldedText = normalizeForSearch(text);
+      const matches = [];
+      let searchFrom = 0;
+      let matchAt = foldedText.normalized.indexOf(foldedTerm, searchFrom);
+      while (matchAt !== -1) {
+        const start = foldedText.starts[matchAt];
+        const end = foldedText.ends[matchAt + foldedTerm.length - 1];
+        if (Number.isInteger(start) && Number.isInteger(end)) matches.push({ start, end });
+        searchFrom = matchAt + Math.max(foldedTerm.length, 1);
+        matchAt = foldedText.normalized.indexOf(foldedTerm, searchFrom);
+      }
       if (!matches.length) return;
       const fragment = document.createDocumentFragment();
       let lastIndex = 0;
-      matches.forEach((match) => {
-        fragment.append(document.createTextNode(text.slice(lastIndex, match.index)));
+      matches.forEach(({ start, end }) => {
+        fragment.append(document.createTextNode(text.slice(lastIndex, start)));
         const mark = document.createElement("mark");
         mark.className = "highlight";
-        mark.textContent = match[0];
+        mark.textContent = text.slice(start, end);
         fragment.append(mark);
         currentHighlights.push(mark);
-        lastIndex = match.index + match[0].length;
+        lastIndex = end;
       });
       fragment.append(document.createTextNode(text.slice(lastIndex)));
       node.parentNode.replaceChild(fragment, node);
@@ -251,23 +310,39 @@ document.addEventListener("DOMContentLoaded", function () {
     if (currentHighlights.length > 0) {
       currentIndex = 0;
       scrollToHighlight();
-      updateSearchBar();
-    } else {
-      showMessage(`Aucun résultat trouvé pour "${term}"`, "info");
     }
+    updateSearchBar();
   }
   searchBtn?.addEventListener("click", openSearch);
   searchClose?.addEventListener("click", closeSearch);
   searchOverlay?.addEventListener("click", closeSearch);
+  searchSuggestions?.addEventListener("click", (event) => {
+    const suggestion = event.target.closest(".suggestion-chip");
+    if (!suggestion || !searchInput || !searchForm) return;
+    searchInput.value = suggestion.textContent.trim();
+    searchForm.requestSubmit();
+  });
   searchForm?.addEventListener("submit", function (e) {
     e.preventDefault();
-    const term = searchInput?.value;
-    if (term && term.trim() !== "") {
+    const term = searchInput?.value?.trim();
+    if (term) {
       highlightText(term);
       closeSearch();
     } else showMessage("Veuillez entrer un terme de recherche", "warning");
   });
   document.addEventListener("keydown", function (e) {
+    const target = e.target;
+    const isTyping = target instanceof HTMLElement && (
+      target.isContentEditable ||
+      ["INPUT", "TEXTAREA", "SELECT"].includes(target.tagName)
+    );
+    const openWithShortcut = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k";
+    const openWithSlash = e.key === "/" && !e.ctrlKey && !e.metaKey && !e.altKey && !isTyping;
+    if (openWithShortcut || openWithSlash) {
+      e.preventDefault();
+      openSearch();
+      return;
+    }
     if (e.key === "Escape") closeSearch();
   });
 });
@@ -549,7 +624,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         const result = await res.json();
         if (result.success) {
-          showMessage(result.message, "success");
+          showMessage(result.message, result.emailSent ? "success" : "warning");
           contactForm.reset();
         } else {
           showMessage(result.message, "error");
@@ -1591,6 +1666,13 @@ function initProjectSlider() {
 
 // ============ INITIALISATIONS ============
 document.addEventListener("DOMContentLoaded", function () {
+  loadPublicProjects().then((updated) => {
+    if (updated) {
+      initProjectGallery();
+      initScrollReveal();
+    }
+    initProjectCategoryFilters();
+  });
   initBeforeAfterSlider();
   initFilters();
   initBlogSlider();
@@ -1604,6 +1686,166 @@ document.addEventListener("DOMContentLoaded", function () {
   initProjectGallery();
   initArticleModal();
 });
+
+// ============ MANAGED PROJECTS ============
+async function loadPublicProjects() {
+  const grid = document.querySelector("#projects .projects-grid");
+  if (!grid) return false;
+
+  try {
+    const response = await fetch(`${API_URL}/projects`);
+    const data = await response.json();
+    if (!response.ok || !data.success || !Array.isArray(data.projects)) return false;
+
+    if (data.projects.length === 0) {
+      grid.replaceChildren(createProjectEmptyState());
+      const count = document.querySelector(".projects-count strong");
+      if (count) count.textContent = "00";
+      return true;
+    }
+
+    const createTextElement = (tag, className, text) => {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      element.textContent = text;
+      return element;
+    };
+
+    const cards = data.projects.map((project) => {
+      const sources = [project.image, ...(Array.isArray(project.galleryImages) ? project.galleryImages : [])]
+        .filter((source, index, all) => typeof source === "string" && source && all.indexOf(source) === index);
+      if (!sources.length) return null;
+
+      const card = document.createElement("article");
+      card.className = "project-card motion-reveal";
+      card.dataset.gallery = sources.join("|");
+      card.dataset.projectCategory = project.category || "Projet SOIT";
+
+      const imageWrap = document.createElement("div");
+      imageWrap.className = "project-image";
+      const image = document.createElement("img");
+      image.src = sources[0];
+      image.alt = project.title || "Projet SOIT";
+      image.loading = "lazy";
+      imageWrap.append(image);
+
+      const overlay = document.createElement("div");
+      overlay.className = "project-overlay";
+      const links = document.createElement("div");
+      links.className = "project-links";
+      const viewButton = document.createElement("button");
+      viewButton.type = "button";
+      viewButton.className = "project-link";
+      viewButton.setAttribute("aria-label", `Voir les photos du projet ${project.title || "SOIT"}`);
+      viewButton.innerHTML = '<i class="fas fa-expand" aria-hidden="true"></i>';
+      links.append(viewButton);
+      overlay.append(links);
+      imageWrap.append(overlay);
+
+      const imageLabel = document.createElement("span");
+      imageLabel.className = "project-image-label";
+      imageLabel.innerHTML = '<i class="fas fa-camera" aria-hidden="true"></i> Photos du chantier SOIT';
+      imageWrap.append(imageLabel);
+      card.append(imageWrap);
+
+      const content = document.createElement("div");
+      content.className = "project-content";
+      content.append(createTextElement("span", "project-category", project.category || "Projet SOIT"));
+      content.append(createTextElement("h3", "", project.title || "Projet SOIT"));
+      content.append(createTextElement("p", "", project.description || ""));
+
+      const meta = document.createElement("div");
+      meta.className = "project-meta";
+      const location = document.createElement("span");
+      location.innerHTML = '<i class="fas fa-map-marker-alt" aria-hidden="true"></i>';
+      location.append(document.createTextNode(` ${project.location || "Tunisie"}`));
+      const year = document.createElement("span");
+      year.innerHTML = project.year
+        ? '<i class="fas fa-calendar-alt" aria-hidden="true"></i>'
+        : '<i class="fas fa-images" aria-hidden="true"></i>';
+      year.append(document.createTextNode(project.year || "Chantier en images"));
+      meta.append(location, year);
+      content.append(meta);
+      card.append(content);
+      return card;
+    }).filter(Boolean);
+
+    if (!cards.length) return false;
+    grid.replaceChildren(...cards);
+    const count = document.querySelector(".projects-count strong");
+    if (count) count.textContent = String(cards.length).padStart(2, "0");
+    return true;
+  } catch {
+    // Keep the hand-authored project cards visible if the API is temporarily unavailable.
+    return false;
+  }
+}
+
+function initProjectCategoryFilters() {
+  const filterBar = document.getElementById("projectFilters");
+  const grid = document.querySelector("#projects .projects-grid");
+  if (!filterBar || !grid) return;
+
+  const cards = Array.from(grid.querySelectorAll(".project-card"));
+  if (!cards.length) {
+    filterBar.replaceChildren();
+    filterBar.hidden = true;
+    return;
+  }
+
+  const normalize = (value) => String(value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLocaleLowerCase("fr");
+  const categories = [...new Set(cards.map((card) => {
+    const categoryElement = card.querySelector(".project-category");
+    const category = card.dataset.projectCategory || categoryElement?.textContent || "Projet SOIT";
+    card.dataset.projectCategory = category.trim();
+    return category.trim();
+  }).filter(Boolean))];
+
+  filterBar.hidden = categories.length < 2;
+  if (filterBar.hidden) {
+    filterBar.replaceChildren();
+    return;
+  }
+
+  const count = document.querySelector(".projects-count strong");
+  const buttons = [{ label: "Tous", value: "*" }, ...categories.map((category) => ({ label: category, value: category }))];
+  filterBar.replaceChildren(...buttons.map(({ label, value }, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "project-filter-btn";
+    button.textContent = label;
+    button.setAttribute("aria-pressed", index === 0 ? "true" : "false");
+    if (index === 0) button.classList.add("active");
+    button.addEventListener("click", () => {
+      const selected = normalize(value);
+      let visibleCount = 0;
+      cards.forEach((card) => {
+        const matches = value === "*" || normalize(card.dataset.projectCategory) === selected;
+        card.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+      buttons.forEach((item, buttonIndex) => {
+        const active = buttonIndex === index;
+        const filterButton = filterBar.children[buttonIndex];
+        filterButton.classList.toggle("active", active);
+        filterButton.setAttribute("aria-pressed", String(active));
+      });
+      if (count) count.textContent = String(visibleCount).padStart(2, "0");
+    });
+    return button;
+  }));
+}
+
+function createProjectEmptyState() {
+  const message = document.createElement("p");
+  message.className = "projects-empty-state";
+  message.textContent = "Nos prochains projets seront bientôt présentés ici.";
+  return message;
+}
 
 // ============ PROJECT GALLERY ============
 function initProjectGallery() {

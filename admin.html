@@ -306,16 +306,26 @@
       }
     </style>
     <link rel="stylesheet" href="modern.css" />
+    <link rel="stylesheet" href="admin-modern.css" />
+    <script src="config.js"></script>
   </head>
   <body class="admin-page">
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
       <div class="login-box">
-        <h1>📊 SOIT Admin</h1>
-        <p>Connectez-vous pour accéder au tableau de bord</p>
-        <input type="password" id="adminPassword" placeholder="Mot de passe" />
-        <button onclick="checkAdminLogin()">Se connecter</button>
-        <div id="loginError" class="error-message">Mot de passe incorrect</div>
+        <div class="login-brand-mark" aria-hidden="true"><i class="fas fa-city"></i></div>
+        <p class="login-eyebrow">SOIT · ESPACE DE GESTION</p>
+        <h1>Administration</h1>
+        <p class="login-description">Connectez-vous pour gérer les messages, les avis et les utilisateurs.</p>
+        <form onsubmit="event.preventDefault(); checkAdminLogin()">
+          <label for="adminEmail">Adresse e-mail</label>
+          <input type="email" id="adminEmail" placeholder="nom@entreprise.com" autocomplete="username" required />
+          <label for="adminPassword">Mot de passe</label>
+          <input type="password" id="adminPassword" placeholder="Votre mot de passe" autocomplete="current-password" required />
+          <button type="submit"><span>Se connecter</span><i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+        </form>
+        <div id="loginError" class="error-message" role="alert" aria-live="polite">Identifiants invalides</div>
+        <p class="login-footnote"><i class="fas fa-lock" aria-hidden="true"></i> Accès réservé à l’équipe SOIT</p>
       </div>
     </div>
 
@@ -324,57 +334,99 @@
       <!-- Sidebar -->
       <div class="sidebar">
         <div class="sidebar-header">
-          <h2>SOIT</h2>
-          <p>Administration</p>
+          <div class="sidebar-brand-mark" aria-hidden="true"><i class="fas fa-city"></i></div>
+          <div class="sidebar-brand-copy"><h2>SOIT</h2><p>ESPACE ADMIN</p></div>
         </div>
         <div class="sidebar-menu">
-          <div class="menu-item active" data-page="dashboard">
+          <button type="button" class="menu-item active" data-page="dashboard" aria-label="Tableau de bord" aria-current="page" title="Tableau de bord">
             <i class="fas fa-chart-line"></i>
             <span>Tableau de bord</span>
-          </div>
-          <div class="menu-item" data-page="contacts">
+          </button>
+          <button type="button" class="menu-item" data-page="contacts" aria-label="Messages" title="Messages">
             <i class="fas fa-envelope"></i>
             <span>Messages</span>
-          </div>
-          <div class="menu-item" data-page="reviews">
+          </button>
+          <button type="button" class="menu-item" data-page="projects" aria-label="Projets" title="Projets">
+            <i class="fas fa-building"></i>
+            <span>Projets</span>
+          </button>
+          <button type="button" class="menu-item" data-page="reviews" aria-label="Avis clients" title="Avis clients">
             <i class="fas fa-star"></i>
             <span>Avis clients</span>
-          </div>
-          <div class="menu-item" data-page="users">
+          </button>
+          <button type="button" class="menu-item" data-page="users" aria-label="Utilisateurs" title="Utilisateurs">
             <i class="fas fa-users"></i>
             <span>Utilisateurs</span>
-          </div>
+          </button>
         </div>
+        <div class="sidebar-footer"><span class="sidebar-online-dot"></span> Portail de gestion</div>
       </div>
 
       <!-- Main Content -->
       <div class="main-content">
         <div class="top-bar">
-          <div class="page-title" id="pageTitle">Tableau de bord</div>
-          <button class="logout-btn" onclick="adminLogout()">
-            Déconnexion
-          </button>
+          <div class="top-bar-heading"><span class="top-bar-kicker">SOIT · ADMINISTRATION</span><div class="page-title" id="pageTitle">Tableau de bord</div></div>
+          <div class="top-bar-actions"><div class="admin-session"><span class="session-avatar"><i class="fas fa-user-shield" aria-hidden="true"></i></span><span><strong>Administrateur</strong><small>Session active</small></span></div><button class="logout-btn" onclick="adminLogout()"><i class="fas fa-sign-out-alt" aria-hidden="true"></i><span>Déconnexion</span></button></div>
         </div>
 
         <!-- Dashboard Page -->
         <div id="dashboard" class="section active">
+          <div class="overview-intro"><div><span class="overview-eyebrow">VOTRE ESPACE DE PILOTAGE</span><h1>Vue d’ensemble</h1><p>Retrouvez ici les indicateurs et les activités de votre site.</p></div><div class="overview-mark" aria-hidden="true"><i class="fas fa-chart-line"></i></div></div>
           <div class="stats-grid">
             <div class="stat-card">
-              <h3>📧 Messages reçus</h3>
+              <div class="stat-card-top"><span class="stat-icon messages-icon"><i class="fas fa-envelope" aria-hidden="true"></i></span><span class="stat-context">SITE WEB</span></div>
+              <h3>Messages reçus</h3>
               <div class="value" id="statMessages">0</div>
+              <p class="stat-caption">Demandes envoyées par vos visiteurs</p>
             </div>
             <div class="stat-card">
-              <h3>⭐ Avis clients</h3>
+              <div class="stat-card-top"><span class="stat-icon reviews-icon"><i class="fas fa-star" aria-hidden="true"></i></span><span class="stat-context">RÉPUTATION</span></div>
+              <h3>Avis clients</h3>
               <div class="value" id="statReviews">0</div>
+              <p class="stat-caption">Retours publiés par vos clients</p>
             </div>
             <div class="stat-card">
-              <h3>👥 Utilisateurs</h3>
+              <div class="stat-card-top"><span class="stat-icon users-icon"><i class="fas fa-users" aria-hidden="true"></i></span><span class="stat-context">COMMUNAUTÉ</span></div>
+              <h3>Utilisateurs</h3>
               <div class="value" id="statUsers">0</div>
+              <p class="stat-caption">Comptes enregistrés sur le site</p>
             </div>
             <div class="stat-card">
-              <h3>⭐ Note moyenne</h3>
+              <div class="stat-card-top"><span class="stat-icon rating-icon"><i class="fas fa-award" aria-hidden="true"></i></span><span class="stat-context">SATISFACTION</span></div>
+              <h3>Note moyenne</h3>
               <div class="value" id="statAvgRating">0</div>
+              <p class="stat-caption">Sur 5 étoiles</p>
             </div>
+          </div>
+        </div>
+
+        <!-- Projects Page -->
+        <div id="projects" class="section">
+          <div class="section-header project-manager-header">
+            <div><h2>Portfolio projets</h2><p>Gérez les projets visibles sur le site public.</p></div>
+            <button type="button" class="project-add-btn" id="addProjectBtn"><i class="fas fa-plus" aria-hidden="true"></i><span>Ajouter un projet</span></button>
+          </div>
+          <div id="projectFeedback" class="project-feedback" role="status" aria-live="polite" hidden></div>
+          <form id="projectForm" class="project-editor" hidden>
+            <div class="project-editor-heading"><div><span class="overview-eyebrow">CONTENU DU PORTFOLIO</span><h3 id="projectFormTitle">Nouveau projet</h3></div><button type="button" class="project-close-btn" id="cancelProjectBtn" aria-label="Fermer le formulaire"><i class="fas fa-times" aria-hidden="true"></i></button></div>
+            <input type="hidden" id="projectId" />
+            <div class="project-form-grid">
+              <div class="project-field"><label for="projectTitle">Titre</label><input id="projectTitle" maxlength="120" required /></div>
+              <div class="project-field"><label for="projectCategory">Catégorie</label><input id="projectCategory" maxlength="80" placeholder="Ex. Infrastructures routières" required /></div>
+              <div class="project-field"><label for="projectLocation">Lieu</label><input id="projectLocation" maxlength="120" placeholder="Ex. Siliana, Tunisie" required /></div>
+              <div class="project-field"><label for="projectYear">Année</label><input id="projectYear" type="number" min="1900" max="2100" placeholder="2026" /></div>
+              <div class="project-field project-field-wide"><label for="projectDescription">Description</label><textarea id="projectDescription" maxlength="1000" rows="3" required></textarea></div>
+              <div class="project-field project-field-wide"><label for="projectImage">Photo principale</label><input id="projectImage" list="projectImageOptions" placeholder="images/current-project/8.jpg" required /><datalist id="projectImageOptions"><option value="images/current-project/8.jpg"></option><option value="images/projets/souk-jdid/1.jpg"></option><option value="images/chantier-routier.jpg"></option></datalist><small>Utilisez un chemin du dossier frontend (commençant par images/) ou une URL https.</small></div>
+              <div class="project-field project-field-wide"><label for="projectGalleryImages">Photos de la galerie <span>(facultatif)</span></label><textarea id="projectGalleryImages" rows="3" placeholder="Une photo par ligne, par exemple :&#10;images/current-project/1.jpg&#10;images/current-project/2.jpeg"></textarea><small>Maximum 20 photos. Les chemins doivent commencer par images/ ou être des URL https.</small></div>
+              <label class="project-publish-toggle" for="projectPublished"><input id="projectPublished" type="checkbox" checked /><span>Publier ce projet sur le site</span></label>
+            </div>
+            <div class="project-editor-actions"><button type="button" class="project-cancel-btn" id="cancelProjectBtnBottom">Annuler</button><button type="submit" class="project-save-btn"><i class="fas fa-check" aria-hidden="true"></i><span>Enregistrer le projet</span></button></div>
+          </form>
+          <div class="table-container">
+            <table id="projectsTable">
+              <thead><tr><th>Projet</th><th>Lieu</th><th>Année</th><th>Visibilité</th><th>Actions</th></tr></thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
 
@@ -445,70 +497,246 @@
     </div>
 
     <script>
-      const API_URL = "https://soit-backend.onrender.com/api";
-      let adminToken = null;
+      const API_URL = window.SOIT_CONFIG.apiBaseUrl;
+      let adminToken = sessionStorage.getItem("soitAdminToken");
+      let projectsCache = [];
+
+      async function adminRequest(path, options = {}) {
+        const headers = new Headers(options.headers || {});
+        if (adminToken) headers.set("Authorization", `Bearer ${adminToken}`);
+        const response = await fetch(`${API_URL}${path}`, { ...options, headers });
+        if (response.status === 401 && !path.endsWith("/login")) {
+          adminLogout();
+          throw new Error("Votre session a expiré. Reconnectez-vous.");
+        }
+        return response;
+      }
+
+      function showAdminDashboard() {
+        document.getElementById("loginPage").style.display = "none";
+        document.getElementById("adminDashboard").style.display = "block";
+        loadDashboard();
+      }
 
       // Check admin login
-      function checkAdminLogin() {
+      async function checkAdminLogin() {
+        const email = document.getElementById("adminEmail").value.trim();
         const password = document.getElementById("adminPassword").value;
-        if (password === "admin123") {
-          document.getElementById("loginPage").style.display = "none";
-          document.getElementById("adminDashboard").style.display = "block";
-          loadDashboard();
-        } else {
-          document.getElementById("loginError").style.display = "block";
+        const loginError = document.getElementById("loginError");
+        loginError.style.display = "none";
+        try {
+          const response = await fetch(`${API_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok || !data.success || !data.token) {
+            throw new Error(data.message || "Connexion impossible. Vérifiez vos identifiants.");
+          }
+          if (data.user?.role !== "admin") {
+            throw new Error("Ce compte ne possède pas les droits administrateur.");
+          }
+          adminToken = data.token;
+          sessionStorage.setItem("soitAdminToken", adminToken);
+          showAdminDashboard();
+        } catch (error) {
+          loginError.textContent = error.message || "Serveur indisponible. Réessayez.";
+          loginError.style.display = "block";
         }
       }
 
       function adminLogout() {
+        adminToken = null;
+        sessionStorage.removeItem("soitAdminToken");
         document.getElementById("loginPage").style.display = "flex";
         document.getElementById("adminDashboard").style.display = "none";
+        document.getElementById("adminEmail").value = "";
         document.getElementById("adminPassword").value = "";
+      }
+
+      async function restoreAdminSession() {
+        if (!adminToken) return;
+        try {
+          const response = await adminRequest("/me");
+          const data = await response.json();
+          if (!response.ok || !data.success || data.user?.role !== "admin") {
+            throw new Error("Session invalide");
+          }
+          showAdminDashboard();
+        } catch (error) {
+          adminLogout();
+        }
       }
 
       // Load all data
       async function loadDashboard() {
-        await loadStats();
-        await loadContacts();
-        await loadReviews();
-        await loadUsers();
+        await Promise.all([loadStats(), loadContacts(), loadProjects(), loadReviews(), loadUsers()]);
+      }
+
+      function showProjectFeedback(message, type = "success") {
+        const feedback = document.getElementById("projectFeedback");
+        feedback.textContent = message;
+        feedback.className = `project-feedback ${type}`;
+        feedback.hidden = false;
+      }
+
+      function hideProjectFeedback() {
+        const feedback = document.getElementById("projectFeedback");
+        feedback.hidden = true;
+        feedback.textContent = "";
+      }
+
+      async function loadProjects() {
+        const tbody = document.querySelector("#projectsTable tbody");
+        if (!tbody) return;
+        try {
+          const response = await adminRequest("/admin/projects");
+          const data = await response.json();
+          if (!response.ok || !data.success) throw new Error(data.message || "Impossible de charger les projets.");
+          projectsCache = data.projects || [];
+          tbody.replaceChildren();
+
+          if (!projectsCache.length) {
+            const row = tbody.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 5;
+            cell.className = "project-empty-state";
+            cell.textContent = "Aucun projet pour le moment. Ajoutez le premier projet du portfolio.";
+            return;
+          }
+
+          projectsCache.forEach((project) => {
+            const row = tbody.insertRow();
+            const projectCell = row.insertCell();
+            const title = document.createElement("strong");
+            title.textContent = project.title;
+            const category = document.createElement("small");
+            category.textContent = project.category;
+            projectCell.append(title, category);
+            row.insertCell().textContent = project.location;
+            row.insertCell().textContent = project.year || "—";
+
+            const visibilityCell = row.insertCell();
+            const badge = document.createElement("span");
+            badge.className = `status-badge ${project.isPublished ? "status-approved" : "status-pending"}`;
+            badge.textContent = project.isPublished ? "Publié" : "Brouillon";
+            visibilityCell.append(badge);
+
+            const actions = row.insertCell();
+            const editButton = document.createElement("button");
+            editButton.type = "button";
+            editButton.className = "action-btn edit";
+            editButton.setAttribute("aria-label", `Modifier ${project.title}`);
+            editButton.title = "Modifier";
+            editButton.innerHTML = '<i class="fas fa-pen" aria-hidden="true"></i>';
+            editButton.addEventListener("click", () => showProjectEditor(project));
+
+            const deleteButton = document.createElement("button");
+            deleteButton.type = "button";
+            deleteButton.className = "action-btn delete";
+            deleteButton.setAttribute("aria-label", `Supprimer ${project.title}`);
+            deleteButton.title = "Supprimer";
+            deleteButton.innerHTML = '<i class="fas fa-trash" aria-hidden="true"></i>';
+            deleteButton.addEventListener("click", () => deleteProject(project._id, project.title));
+            actions.append(editButton, deleteButton);
+          });
+        } catch (error) {
+          showProjectFeedback(error.message || "Erreur lors du chargement des projets.", "error");
+        }
+      }
+
+      function showProjectEditor(project = null) {
+        const form = document.getElementById("projectForm");
+        hideProjectFeedback();
+        form.reset();
+        document.getElementById("projectId").value = project?._id || "";
+        document.getElementById("projectFormTitle").textContent = project ? "Modifier le projet" : "Nouveau projet";
+        document.getElementById("projectTitle").value = project?.title || "";
+        document.getElementById("projectCategory").value = project?.category || "";
+        document.getElementById("projectLocation").value = project?.location || "";
+        document.getElementById("projectYear").value = project?.year || "";
+        document.getElementById("projectDescription").value = project?.description || "";
+        document.getElementById("projectImage").value = project?.image || "";
+        document.getElementById("projectGalleryImages").value = (project?.galleryImages || []).join("\n");
+        document.getElementById("projectPublished").checked = project?.isPublished !== false;
+        form.hidden = false;
+        form.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById("projectTitle").focus({ preventScroll: true });
+      }
+
+      function hideProjectEditor() {
+        const form = document.getElementById("projectForm");
+        form.reset();
+        form.hidden = true;
+        document.getElementById("projectId").value = "";
+      }
+
+      async function saveProject(event) {
+        event.preventDefault();
+        const id = document.getElementById("projectId").value;
+        const project = {
+          title: document.getElementById("projectTitle").value.trim(),
+          category: document.getElementById("projectCategory").value.trim(),
+          location: document.getElementById("projectLocation").value.trim(),
+          year: document.getElementById("projectYear").value || null,
+          description: document.getElementById("projectDescription").value.trim(),
+          image: document.getElementById("projectImage").value.trim(),
+          galleryImages: document.getElementById("projectGalleryImages").value
+            .split(/\r?\n/)
+            .map((image) => image.trim())
+            .filter(Boolean),
+          isPublished: document.getElementById("projectPublished").checked,
+        };
+
+        try {
+          const response = await adminRequest(id ? `/admin/projects/${encodeURIComponent(id)}` : "/admin/projects", {
+            method: id ? "PUT" : "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(project),
+          });
+          const data = await response.json();
+          if (!response.ok || !data.success) throw new Error(data.message || "Impossible d’enregistrer le projet.");
+          hideProjectEditor();
+          await loadProjects();
+          showProjectFeedback(id ? "Projet mis à jour." : "Projet ajouté au portfolio.");
+        } catch (error) {
+          showProjectFeedback(error.message || "Erreur lors de l’enregistrement.", "error");
+        }
+      }
+
+      async function deleteProject(id, title) {
+        if (!confirm(`Supprimer « ${title} » ? Le projet ne sera plus affiché sur le site.`)) return;
+        try {
+          const response = await adminRequest(`/admin/projects/${encodeURIComponent(id)}`, { method: "DELETE" });
+          const data = await response.json();
+          if (!response.ok || !data.success) throw new Error(data.message || "Impossible de supprimer le projet.");
+          await loadProjects();
+          showProjectFeedback("Projet supprimé.");
+        } catch (error) {
+          showProjectFeedback(error.message || "Erreur lors de la suppression.", "error");
+        }
       }
 
       async function loadStats() {
         try {
-          const response = await fetch(`${API_URL}/stats`);
+          const response = await adminRequest("/stats");
           const data = await response.json();
-          if (data.success) {
-            document.getElementById("statMessages").innerText =
-              data.stats.totalMessages || 0;
-            document.getElementById("statUsers").innerText =
-              data.stats.totalUsers || 0;
+          if (response.ok && data.success) {
+            document.getElementById("statMessages").textContent = data.stats.totalMessages || 0;
+            document.getElementById("statUsers").textContent = data.stats.totalUsers || 0;
+            document.getElementById("statReviews").textContent = data.stats.totalReviews || 0;
+            document.getElementById("statAvgRating").textContent =
+              data.stats.averageRating ? data.stats.averageRating.toFixed(1) : "0";
           }
         } catch (error) {
           console.error("Error loading stats:", error);
-        }
-
-        try {
-          const response = await fetch(`${API_URL}/reviews`);
-          const data = await response.json();
-          if (data.success) {
-            document.getElementById("statReviews").innerText =
-              data.reviews.length;
-            const avgRating =
-              data.reviews.reduce((sum, r) => sum + r.rating, 0) /
-              data.reviews.length;
-            document.getElementById("statAvgRating").innerText = avgRating
-              ? avgRating.toFixed(1)
-              : "0";
-          }
-        } catch (error) {
-          console.error("Error loading reviews:", error);
         }
       }
 
       async function loadContacts() {
         try {
-          const response = await fetch(`${API_URL}/contacts`);
+          const response = await adminRequest("/contacts");
           const data = await response.json();
           if (data.success) {
             const tbody = document.querySelector("#contactsTable tbody");
@@ -535,7 +763,7 @@
 
       async function loadReviews() {
         try {
-          const response = await fetch(`${API_URL}/reviews`);
+          const response = await adminRequest("/admin/reviews");
           const data = await response.json();
           if (data.success) {
             const tbody = document.querySelector("#reviewsTable tbody");
@@ -567,7 +795,7 @@
 
       async function loadUsers() {
         try {
-          const response = await fetch(`${API_URL}/users`);
+          const response = await adminRequest("/users");
           const data = await response.json();
           if (data.success) {
             const tbody = document.querySelector("#usersTable tbody");
@@ -591,7 +819,7 @@
       async function deleteContact(id) {
         if (confirm("Supprimer ce message ?")) {
           try {
-            const response = await fetch(`${API_URL}/contacts/${id}`, {
+            const response = await adminRequest(`/contacts/${id}`, {
               method: "DELETE",
             });
             const data = await response.json();
@@ -608,7 +836,7 @@
       async function deleteReview(id) {
         if (confirm("Supprimer cet avis ?")) {
           try {
-            const response = await fetch(`${API_URL}/admin/reviews/${id}`, {
+            const response = await adminRequest(`/admin/reviews/${id}`, {
               method: "DELETE",
             });
             const data = await response.json();
@@ -624,20 +852,31 @@
 
       // Navigation
       document.querySelectorAll(".menu-item").forEach((item) => {
-        item.addEventListener("click", () => {
-          document
-            .querySelectorAll(".menu-item")
-            .forEach((m) => m.classList.remove("active"));
+          item.addEventListener("click", () => {
+            document
+              .querySelectorAll(".menu-item")
+              .forEach((m) => {
+                m.classList.remove("active");
+                m.removeAttribute("aria-current");
+              });
           document
             .querySelectorAll(".section")
             .forEach((s) => s.classList.remove("active"));
           item.classList.add("active");
+          item.setAttribute("aria-current", "page");
           const page = item.dataset.page;
           document.getElementById(page).classList.add("active");
           document.getElementById("pageTitle").innerText =
             item.querySelector("span").innerText;
         });
       });
+
+      document.getElementById("addProjectBtn").addEventListener("click", () => showProjectEditor());
+      document.getElementById("cancelProjectBtn").addEventListener("click", hideProjectEditor);
+      document.getElementById("cancelProjectBtnBottom").addEventListener("click", hideProjectEditor);
+      document.getElementById("projectForm").addEventListener("submit", saveProject);
+
+      restoreAdminSession();
     </script>
   </body>
 </html>

@@ -70,6 +70,7 @@
       rel="canonical"
       href="https://hamabenhalima.github.io/SOIT-Infrastructure-Website/"
     />
+    <script src="config.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Aller au contenu principal</a>
@@ -124,7 +125,7 @@
           <i class="fas fa-info-circle"></i>
           <span class="tooltip">Infos</span>
         </button>
-        <button type="button" id="search-btn" class="icon-btn" aria-label="Rechercher">
+        <button type="button" id="search-btn" class="icon-btn" aria-label="Rechercher" aria-expanded="false" aria-controls="search-form">
           <i class="fas fa-search"></i>
           <span class="tooltip">Rechercher</span>
         </button>
@@ -163,27 +164,31 @@
     <div class="search-overlay" id="search-overlay"></div>
 
     <!-- Search Form -->
-    <form action="#" class="search-form" id="search-form">
+    <form action="#" class="search-form" id="search-form" role="search" aria-label="Rechercher sur le site">
       <div class="search-container">
-        <i class="fas fa-search search-icon"></i>
+        <i class="fas fa-search search-icon" aria-hidden="true"></i>
         <input
           type="search"
           placeholder="Rechercher un projet, un service..."
           id="search-box"
           autocomplete="off"
+          aria-label="Rechercher un projet, un service ou une information"
         />
-        <button type="button" class="search-close" id="search-close">
-          <i class="fas fa-times"></i>
+        <button type="button" class="search-close" id="search-close" aria-label="Fermer la recherche">
+          <i class="fas fa-times" aria-hidden="true"></i>
         </button>
       </div>
       <div class="search-suggestions" id="search-suggestions">
         <div class="suggestion-group">
-          <span class="suggestion-title">Suggestions populaires</span>
+          <div class="suggestion-heading">
+            <span class="suggestion-title">Suggestions populaires</span>
+            <span class="search-key-hint" aria-label="Raccourci clavier Ctrl ou Commande plus K"><kbd>Ctrl</kbd> + <kbd>K</kbd></span>
+          </div>
           <div class="suggestion-tags">
-            <span>Construction routes</span>
-            <span>VRD</span>
-            <span>Terrassement</span>
-            <span>Ponts</span>
+            <button type="button" class="suggestion-chip">Construction routes</button>
+            <button type="button" class="suggestion-chip">VRD</button>
+            <button type="button" class="suggestion-chip">Terrassement</button>
+            <button type="button" class="suggestion-chip">Ponts</button>
           </div>
         </div>
       </div>
@@ -416,9 +421,9 @@
           </div>
           <div class="info-content">
             <h4>E-mail</h4>
-            <a href="mailto:groupesoit@gmail.com">groupesoit@gmail.com</a>
-            <a href="mailto:groupesoit.comercial@gmail.com"
-              >groupesoit.comercial@gmail.com</a
+            <a href="mailto:contactsoitinfo@gmail.com">contactsoitinfo@gmail.com</a>
+            <a href="mailto:contactsoitinfo@gmail.com"
+              >contactsoitinfo@gmail.com</a
             >
           </div>
         </div>
@@ -811,6 +816,7 @@
           <span class="projects-count"><strong>03</strong> projets document&eacute;s</span>
         </div>
 
+        <div class="project-filter-bar" id="projectFilters" role="group" aria-label="Filtrer les projets"></div>
         <div class="projects-grid">
           <article class="project-card" data-gallery="images/current-project/8.jpg|images/current-project/1.jpg|images/current-project/2.jpeg|images/current-project/3.jpeg">
             <div class="project-image">
@@ -1787,7 +1793,7 @@
                 </li>
                 <li>
                   Envoyez-nous un email à
-                  <a href="mailto:groupesoit@gmail.com">groupesoit@gmail.com</a>
+                  <a href="mailto:contactsoitinfo@gmail.com">contactsoitinfo@gmail.com</a>
                 </li>
               </ol>
               <p>
@@ -1880,8 +1886,8 @@
               </p>
               <p>
                 <i class="fas fa-envelope"></i>
-                <a href="mailto:groupesoit.comercial@gmail.com"
-                  >groupesoit.comercial@gmail.com</a
+                <a href="mailto:contactsoitinfo@gmail.com"
+                  >contactsoitinfo@gmail.com</a
                 >
               </p>
               <p>
@@ -2036,7 +2042,7 @@
           <div class="footer-col">
             <h4>Contact</h4>
             <p><i class="fas fa-phone"></i> +216 70 45 70 85</p>
-            <p><i class="fas fa-envelope"></i> groupesoit@gmail.com</p>
+            <p><i class="fas fa-envelope"></i> contactsoitinfo@gmail.com</p>
             <p><i class="fas fa-map-marker-alt"></i> Sousse, Tunisie</p>
           </div>
         </div>
