@@ -240,6 +240,16 @@ body.admin-page {
 .admin-page .project-publish-toggle { display: inline-flex; grid-column: 1 / -1; align-items: center; gap: .55rem; color: #526570; font-size: .75rem; cursor: pointer; }
 .admin-page .project-publish-toggle input { width: 1rem; height: 1rem; accent-color: var(--admin-blue); }
 .admin-page .project-editor-actions { display: flex; justify-content: flex-end; gap: .55rem; margin-top: 1rem; padding-top: .9rem; border-top: 1px solid #e5edf2; }
+.admin-page .project-update-editor { display: grid; gap: .8rem; padding: 1rem; border: 1px solid #dbe8f0; border-radius: .75rem; background: linear-gradient(135deg, #f2f8fb, #fbfdff); }
+.admin-page .project-update-heading { display: flex; align-items: center; gap: .75rem; }
+.admin-page .project-update-icon { display: grid; flex: 0 0 2.25rem; width: 2.25rem; height: 2.25rem; place-items: center; border-radius: .65rem; color: #246df5; background: #e7efff; }
+.admin-page .project-update-heading h4 { margin: 0; color: #263d4b; font-size: .82rem; }
+.admin-page .project-update-heading p { margin: .2rem 0 0; color: #70818b; font-size: .68rem; line-height: 1.45; }
+.admin-page .project-update-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; padding-top: .3rem; }
+.admin-page .project-field select { width: 100%; min-height: 2.55rem; padding: .65rem .75rem; border: 1px solid #dfe7ec; border-radius: .55rem; outline: 0; color: var(--admin-ink); font-size: .76rem; background: #fff; }
+.admin-page .project-field select:focus { border-color: #7ca8f5; box-shadow: 0 0 0 3px rgba(36,109,245,.1); }
+.admin-page .project-publish-toggle.current-project-toggle { padding: .65rem .75rem; border: 1px solid #d9e7f0; border-radius: .55rem; color: #31546a; background: #fff; }
+.admin-page .current-project-tag { display: inline-flex; width: fit-content; margin-top: .35rem; padding: .2rem .45rem; border-radius: 99px; color: #176848; font-size: .61rem; font-weight: 700; background: #e8f7ef; }
 .admin-page .project-cancel-btn { padding: .63rem .85rem; border: 1px solid #dce4e9; border-radius: .55rem; color: #586a75; font-size: .75rem; font-weight: 600; background: white; cursor: pointer; }
 .admin-page .project-empty-state { padding: 2rem; color: #84929a; text-align: center; }
 .admin-page #projectsTable td:first-child strong, .admin-page #projectsTable td:first-child small { display: block; }
@@ -297,6 +307,7 @@ body.admin-page {
   .admin-page .project-form-grid { grid-template-columns: 1fr; }
   .admin-page .project-field-wide { grid-column: auto; }
   .admin-page .project-publish-toggle { grid-column: auto; }
+  .admin-page .project-update-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   .admin-page *, .admin-page *::before, .admin-page *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

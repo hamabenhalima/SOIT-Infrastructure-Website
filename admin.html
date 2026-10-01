@@ -418,6 +418,19 @@
               <div class="project-field project-field-wide"><label for="projectDescription">Description</label><textarea id="projectDescription" maxlength="1000" rows="3" required></textarea></div>
               <div class="project-field project-field-wide"><label for="projectImage">Photo principale</label><input id="projectImage" list="projectImageOptions" placeholder="images/current-project/8.jpg" required /><datalist id="projectImageOptions"><option value="images/current-project/8.jpg"></option><option value="images/projets/souk-jdid/1.jpg"></option><option value="images/chantier-routier.jpg"></option></datalist><small>Utilisez un chemin du dossier frontend (commençant par images/) ou une URL https.</small></div>
               <div class="project-field project-field-wide"><label for="projectGalleryImages">Photos de la galerie <span>(facultatif)</span></label><textarea id="projectGalleryImages" rows="3" placeholder="Une photo par ligne, par exemple :&#10;images/current-project/1.jpg&#10;images/current-project/2.jpeg"></textarea><small>Maximum 20 photos. Les chemins doivent commencer par images/ ou être des URL https.</small></div>
+              <div class="project-update-editor project-field-wide">
+                <div class="project-update-heading"><span class="project-update-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></span><div><h4>Suivi du chantier</h4><p>Un seul projet peut alimenter la section publique « Projet en cours ».</p></div></div>
+                <label class="project-publish-toggle current-project-toggle" for="projectIsCurrent"><input id="projectIsCurrent" type="checkbox" /><span>Afficher ce projet comme le projet en cours</span></label>
+                <div class="project-update-grid">
+                  <div class="project-field"><label for="projectProgress">Avancement (%)</label><input id="projectProgress" type="number" min="0" max="100" step="1" value="0" /></div>
+                  <div class="project-field"><label for="projectStage">Étape actuelle</label><select id="projectStage"><option value="">Choisir une étape</option><option>Étude</option><option>Terrassement</option><option>VRD</option><option>Voirie</option><option>Espaces verts</option><option>Livraison</option></select></div>
+                  <div class="project-field"><label for="projectUpdateDate">Date de mise à jour</label><input id="projectUpdateDate" type="date" /></div>
+                  <div class="project-field project-field-wide"><label for="projectUpdateFr">Mise à jour en français</label><textarea id="projectUpdateFr" maxlength="500" rows="2" placeholder="Ex. Pose des réseaux hydrauliques en cours."></textarea></div>
+                  <div class="project-field project-field-wide"><label for="projectUpdateEn">Mise à jour en anglais <span>(facultatif)</span></label><textarea id="projectUpdateEn" maxlength="500" rows="2"></textarea></div>
+                  <div class="project-field project-field-wide"><label for="projectUpdateAr">Mise à jour en arabe <span>(facultatif)</span></label><textarea id="projectUpdateAr" maxlength="500" rows="2" dir="rtl"></textarea></div>
+                </div>
+                <small>La photo principale et les photos de la galerie ci-dessus alimenteront les photos du projet en cours.</small>
+              </div>
               <label class="project-publish-toggle" for="projectPublished"><input id="projectPublished" type="checkbox" checked /><span>Publier ce projet sur le site</span></label>
             </div>
             <div class="project-editor-actions"><button type="button" class="project-cancel-btn" id="cancelProjectBtnBottom">Annuler</button><button type="submit" class="project-save-btn"><i class="fas fa-check" aria-hidden="true"></i><span>Enregistrer le projet</span></button></div>
@@ -614,6 +627,12 @@
             const category = document.createElement("small");
             category.textContent = project.category;
             projectCell.append(title, category);
+            if (project.isCurrent) {
+              const currentTag = document.createElement("span");
+              currentTag.className = "current-project-tag";
+              currentTag.textContent = "Projet en cours";
+              projectCell.append(currentTag);
+            }
             row.insertCell().textContent = project.location;
             row.insertCell().textContent = project.year || "—";
 
@@ -660,6 +679,16 @@
         document.getElementById("projectImage").value = project?.image || "";
         document.getElementById("projectGalleryImages").value = (project?.galleryImages || []).join("\n");
         document.getElementById("projectPublished").checked = project?.isPublished !== false;
+        document.getElementById("projectIsCurrent").checked = project?.isCurrent === true;
+        document.getElementById("projectProgress").value = project?.progressPercent ?? 0;
+        document.getElementById("projectStage").value = project?.currentStage || "";
+        document.getElementById("projectUpdateDate").value = project?.latestUpdateAt
+          ? new Date(project.latestUpdateAt).toISOString().slice(0, 10)
+          : "";
+        document.getElementById("projectUpdateFr").value = project?.latestUpdate || "";
+        document.getElementById("projectUpdateEn").value = project?.latestUpdateEn || "";
+        document.getElementById("projectUpdateAr").value = project?.latestUpdateAr || "";
+        syncCurrentProjectRequirements();
         form.hidden = false;
         form.scrollIntoView({ behavior: "smooth", block: "start" });
         document.getElementById("projectTitle").focus({ preventScroll: true });
@@ -670,6 +699,13 @@
         form.reset();
         form.hidden = true;
         document.getElementById("projectId").value = "";
+      }
+
+      function syncCurrentProjectRequirements() {
+        const enabled = document.getElementById("projectIsCurrent").checked;
+        ["projectProgress", "projectStage", "projectUpdateDate", "projectUpdateFr"].forEach((id) => {
+          document.getElementById(id).required = enabled;
+        });
       }
 
       async function saveProject(event) {
@@ -686,6 +722,13 @@
             .split(/\r?\n/)
             .map((image) => image.trim())
             .filter(Boolean),
+          isCurrent: document.getElementById("projectIsCurrent").checked,
+          progressPercent: document.getElementById("projectProgress").value,
+          currentStage: document.getElementById("projectStage").value,
+          latestUpdateAt: document.getElementById("projectUpdateDate").value || null,
+          latestUpdate: document.getElementById("projectUpdateFr").value.trim(),
+          latestUpdateEn: document.getElementById("projectUpdateEn").value.trim(),
+          latestUpdateAr: document.getElementById("projectUpdateAr").value.trim(),
           isPublished: document.getElementById("projectPublished").checked,
         };
 
@@ -872,6 +915,7 @@
       });
 
       document.getElementById("addProjectBtn").addEventListener("click", () => showProjectEditor());
+      document.getElementById("projectIsCurrent").addEventListener("change", syncCurrentProjectRequirements);
       document.getElementById("cancelProjectBtn").addEventListener("click", hideProjectEditor);
       document.getElementById("cancelProjectBtnBottom").addEventListener("click", hideProjectEditor);
       document.getElementById("projectForm").addEventListener("submit", saveProject);

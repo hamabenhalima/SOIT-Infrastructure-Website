@@ -653,6 +653,47 @@
             <a href="#services" class="btn">Découvrir nos services →</a>
           </div>
         </div>
+
+        <section class="leadership-card" aria-labelledby="leadership-heading">
+          <div class="leadership-identity">
+            <div class="leadership-monogram" aria-hidden="true">BW</div>
+            <div>
+              <span class="leadership-eyebrow">Direction générale</span>
+              <h3 id="leadership-heading">M. Boubaker Wannes</h3>
+              <p>Gérant · Société El Oukhoua d'Infrastructure et de Travaux Publics (SOIT)</p>
+            </div>
+          </div>
+          <div class="leadership-message">
+            <span class="leadership-message-title"><i class="fas fa-compass" aria-hidden="true"></i> Engagement de la direction</span>
+            <p>Depuis 1997, SOIT contribue au développement des infrastructures tunisiennes. La direction place la qualité d'exécution, la sécurité et le respect des engagements au cœur de chaque projet.</p>
+          </div>
+        </section>
+
+        <section class="credentials-panel" aria-labelledby="credentials-heading">
+          <div class="credentials-heading">
+            <span class="credentials-eyebrow">SOIT en bref</span>
+            <h3 id="credentials-heading">Repères & qualifications</h3>
+            <p>Les informations essentielles sur l'entreprise et ses domaines d'activité.</p>
+          </div>
+          <div class="credentials-grid">
+            <article class="credential-item">
+              <span class="credential-icon"><i class="fas fa-calendar-check" aria-hidden="true"></i></span>
+              <div><span>Fondée le</span><strong>14 avril 1997</strong></div>
+            </article>
+            <article class="credential-item">
+              <span class="credential-icon"><i class="fas fa-certificate" aria-hidden="true"></i></span>
+              <div><span>Agrément de l'État</span><strong>Catégorie 5</strong></div>
+            </article>
+            <article class="credential-item">
+              <span class="credential-icon"><i class="fas fa-building" aria-hidden="true"></i></span>
+              <div><span>Statut juridique</span><strong>Société à responsabilité limitée</strong></div>
+            </article>
+            <article class="credential-item">
+              <span class="credential-icon"><i class="fas fa-road" aria-hidden="true"></i></span>
+              <div><span>Domaines</span><strong>Routes · VRD · Travaux publics</strong></div>
+            </article>
+          </div>
+        </section>
       </div>
 
       <div class="stats-container">
@@ -1092,7 +1133,7 @@
               </div>
             </div>
             <div class="metric-card">
-              <div class="metric-icon"><i class="fas fa-euro-sign"></i></div>
+              <div class="metric-icon"><i class="fas fa-coins"></i></div>
               <div class="metric-info">
                 <span class="metric-label">Budget</span>
                 <strong class="metric-value">21.46 M DT </strong>
@@ -1111,7 +1152,7 @@
             <div class="progress-percentage">65%</div>
           </div>
           <div class="progress-bar-container">
-            <div class="progress-bar-track">
+            <div class="progress-bar-track" role="progressbar" aria-label="Avancement des travaux" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65">
               <div class="progress-bar-fill" style="width: 65%">
                 <span class="progress-glow"></span>
               </div>
@@ -1151,8 +1192,18 @@
           </div>
         </div>
 
+        <section class="current-update-card" id="currentProjectUpdate" aria-live="polite" hidden>
+          <div class="current-update-mark"><i class="fas fa-bullhorn" aria-hidden="true"></i></div>
+          <div class="current-update-copy">
+            <span class="current-update-eyebrow">Dernière actualité du chantier</span>
+            <div class="current-update-meta"><span id="currentProjectStageLabel">Étape actuelle</span><strong id="currentProjectStage"></strong><span id="currentProjectDateLabel">Mis à jour le</span><time id="currentProjectUpdateDate"></time></div>
+            <p id="currentProjectUpdateText"></p>
+          </div>
+          <a class="current-update-link" href="#current-project-gallery">Voir les photos <i class="fas fa-arrow-down" aria-hidden="true"></i></a>
+        </section>
+
         <!-- Gallery Section -->
-        <div class="gallery-section">
+        <div class="gallery-section" id="current-project-gallery">
           <div class="gallery-header">
             <h3><i class="fas fa-images"></i> Galerie du projet</h3>
             <p>Découvrez l'évolution du chantier en images</p>
@@ -1359,19 +1410,42 @@
         </div>
       </div>
 
+      <!-- Project details dialog -->
+      <div class="project-details-modal" id="projectDetailsModal" aria-hidden="true">
+        <section class="project-details-dialog" role="dialog" aria-modal="true" aria-labelledby="projectDetailsTitle" tabindex="-1">
+          <button class="project-details-close" type="button" aria-label="Fermer les détails du projet">
+            <i class="fas fa-times" aria-hidden="true"></i>
+          </button>
+          <div class="project-details-image"><img alt="" /></div>
+          <div class="project-details-copy">
+            <span class="project-details-eyebrow">Étude de cas terrain</span>
+            <span class="project-details-category"></span>
+            <h2 id="projectDetailsTitle"></h2>
+            <p class="project-details-description"></p>
+            <div class="project-details-meta" aria-label="Informations sur le projet"></div>
+            <div class="project-details-actions">
+              <button class="project-details-gallery" type="button"><i class="fas fa-images" aria-hidden="true"></i> Voir les photos</button>
+              <a class="project-details-contact" href="#contact">Parler d'un projet similaire <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            </div>
+          </div>
+        </section>
+        <button class="project-details-backdrop" type="button" aria-label="Fermer les détails du projet"></button>
+      </div>
+
       <!-- Gallery Modal -->
-      <div class="gallery-modal" id="projectGalleryModal">
+      <div class="gallery-modal" id="projectGalleryModal" role="dialog" aria-modal="true" aria-label="Galerie photos du projet" aria-hidden="true">
         <div class="gallery-modal-content">
-          <button class="gallery-close"><i class="fas fa-times"></i></button>
-          <img alt="Project image" />
+          <button type="button" class="gallery-close" aria-label="Fermer la galerie"><i class="fas fa-times" aria-hidden="true"></i></button>
+          <img alt="Photo du projet" />
+          <div class="gallery-thumbnails" role="group" aria-label="Choisir une photo du projet"></div>
           <div class="gallery-caption"></div>
-          <button class="gallery-prev">
-            <i class="fas fa-chevron-left"></i>
+          <button type="button" class="gallery-prev" aria-label="Photo précédente">
+            <i class="fas fa-chevron-left" aria-hidden="true"></i>
           </button>
-          <button class="gallery-next">
-            <i class="fas fa-chevron-right"></i>
+          <button type="button" class="gallery-next" aria-label="Photo suivante">
+            <i class="fas fa-chevron-right" aria-hidden="true"></i>
           </button>
-          <div class="gallery-counter">1 / 10</div>
+          <div class="gallery-counter" aria-live="polite"></div>
         </div>
       </div>
     </section>
